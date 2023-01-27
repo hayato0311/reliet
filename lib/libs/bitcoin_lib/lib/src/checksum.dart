@@ -12,4 +12,6 @@ class Checksum {
 
     return Checksum._internal(checksum);
   }
+
+  Uint8List serialize() => value;
 }
