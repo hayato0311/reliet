@@ -11,7 +11,7 @@ void main() {
       final Uint8List checksum = Uint8List.fromList([112, 193, 27, 119]);
 
       expect(
-        Checksum.fromPayload(payload).value,
+        Checksum.fromPayload(payload).bytes,
         checksum,
       );
     });

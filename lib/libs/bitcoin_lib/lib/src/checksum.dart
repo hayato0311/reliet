@@ -3,9 +3,9 @@ import "dart:typed_data";
 import 'hash.dart';
 
 class Checksum {
-  late final Uint8List value;
+  late final Uint8List bytes;
 
-  Checksum._internal(this.value);
+  Checksum._internal(this.bytes);
 
   factory Checksum.fromPayload(Uint8List payload) {
     final checksum = Uint8List.fromList(hash256(payload).bytes.sublist(0, 4));
@@ -13,5 +13,5 @@ class Checksum {
     return Checksum._internal(checksum);
   }
 
-  Uint8List serialize() => value;
+  Uint8List serialize() => bytes;
 }
