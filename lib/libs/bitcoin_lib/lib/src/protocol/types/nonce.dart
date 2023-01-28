@@ -5,12 +5,12 @@ class Nonce {
 
   Nonce._internal(this.bytes);
 
-  factory Nonce(List<int> input) {
-    if (input.length != 8) {
+  factory Nonce(List<int> bytes) {
+    if (bytes.length != 8) {
       throw const FormatException("the length must be 8");
     }
 
-    return Nonce._internal(input);
+    return Nonce._internal(bytes);
   }
 
   Uint8List serialize() => Uint8List.fromList(bytes.reversed.toList());
