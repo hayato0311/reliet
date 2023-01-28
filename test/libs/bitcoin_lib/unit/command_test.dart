@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 
@@ -10,7 +11,8 @@ void main() {
       const Command command = Command.version;
 
       expect(command.value, "version");
-      expect(command.serialize(), [...utf8.encode("version"), 0, 0, 0, 0, 0]);
+      expect(command.serialize(),
+          Uint8List.fromList([...utf8.encode("version"), 0, 0, 0, 0, 0]));
     });
   });
 }
