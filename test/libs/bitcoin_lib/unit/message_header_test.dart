@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/checksum.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/checksum.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/command.dart';
 
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/message_header.dart';

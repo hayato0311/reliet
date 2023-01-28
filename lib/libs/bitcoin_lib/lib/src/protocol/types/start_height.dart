@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'dart:math';
 
-import '../../encode.dart';
+import '../../utils/encode.dart';
 
 class StartHeight {
   final int value;

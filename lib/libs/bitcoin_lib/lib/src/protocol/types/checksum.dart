@@ -1,6 +1,6 @@
 import "dart:typed_data";
 
-import 'hash.dart';
+import '../../utils/hash.dart';
 
 class Checksum {
   late final Uint8List bytes;

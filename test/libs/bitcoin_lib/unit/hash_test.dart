@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:reliet/libs/bitcoin_lib/lib/src/hash.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/utils/hash.dart';
 
 void main() {
   test('generate hash256 value', () {

@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:reliet/libs/bitcoin_lib/lib/src/checksum.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/checksum.dart';
 
 void main() {
   group('generate checksum of payload', () {

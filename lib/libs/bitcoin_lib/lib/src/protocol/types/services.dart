@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../../encode.dart';
+import '../../utils/encode.dart';
 import 'service.dart';
 
 class Services {

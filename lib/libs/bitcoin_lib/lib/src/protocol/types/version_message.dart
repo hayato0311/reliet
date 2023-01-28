@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../../encode.dart';
+import '../../utils/encode.dart';
 import 'network_address.dart';
 import 'variable_length_string.dart';
 import 'services.dart';

@@ -12,7 +12,7 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/service.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/services.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/nonce.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/start_height.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/encode.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/utils/encode.dart';
 
 void main() {
   group('create and serialize Version instance', () {

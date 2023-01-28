@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:reliet/libs/bitcoin_lib/lib/src/encode.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/utils/encode.dart';
 
 void main() {
   group('convert integer into bytes', () {

@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../../checksum.dart';
+import 'checksum.dart';
 import 'magic.dart';
 import 'command.dart';
 import 'payload_length.dart';
