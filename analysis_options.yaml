@@ -14,6 +14,9 @@ analyzer:
     included_file_warning: ignore
     # false positive when using Freezed
     invalid_annotation_target: ignore
+    # Ignore because we can't handle the errors caused by the third party libraries.
+    # We will remove this ignore, if we can find how to fix.
+    inference_failure_on_untyped_parameter: ignore
 
 linter:
   rules:
