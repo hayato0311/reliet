@@ -90,3 +90,6 @@ linter:
 
     # Disabled for now until we have NNBD as it otherwise conflicts with `missing_return`
     no_default_cases: false
+
+    # Too verbose for current project status, but we might change this setting in the future.
+    public_member_api_docs: false
