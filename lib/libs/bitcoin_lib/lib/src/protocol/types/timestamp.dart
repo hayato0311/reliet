@@ -3,9 +3,8 @@ import 'dart:typed_data';
 import '../../utils/encode.dart';
 
 class Timestamp {
-  final int unixtime;
-
   Timestamp(this.unixtime);
+  final int unixtime;
 
   Uint8List serialize() => int64leBytes(unixtime);
 }

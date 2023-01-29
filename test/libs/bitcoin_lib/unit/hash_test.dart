@@ -1,12 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:reliet/libs/bitcoin_lib/lib/src/utils/hash.dart';
 
 void main() {
   test('generate hash256 value', () {
-    final List<int> input = [113, 17, 1, 0];
+    final input = <int>[113, 17, 1, 0];
 
-    final List<int> ans = [
+    final ans = <int>[
       170,
       129,
       213,

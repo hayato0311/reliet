@@ -33,8 +33,9 @@ enum Version {
   // "wtxidrelay" command for wtxid-based relay starts with this version
   wtxidRelayVersion(70016);
 
-  final int value;
   const Version(this.value);
+
+  final int value;
 
   Uint8List serialize() => int32leBytes(value);
 }
