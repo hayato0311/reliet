@@ -1,0 +1,33 @@
+name: flutter_analyze
+
+on: pull_request
+
+jobs:
+  run_flutter_analyze:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: flutter cache
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.3.10"
+          channel: "stable"
+          cache: true
+          cache-key: flutter
+          cache-path: ${{ runner.tool_cache }}/flutter
+
+      - name: install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.3.10"
+          channel: "stable"
+
+      - name: run flutter pub get
+        run: flutter pub get
+
+      - name: run flutter analyze
+        run: flutter analyze
