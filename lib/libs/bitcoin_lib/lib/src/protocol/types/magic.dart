@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import '../../utils/encode.dart';
 
 enum Magic {
-  main(0xd9b4bef9),
+  mainnet(0xd9b4bef9),
   testnet(0x0709110b);
 
   const Magic(this.value);

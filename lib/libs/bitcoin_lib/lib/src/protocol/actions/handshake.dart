@@ -87,7 +87,7 @@ Future<String> handshake({bool testnet = false}) async {
   ).serialize();
 
   const command = Command.version;
-  final magic = testnet ? Magic.testnet : Magic.main;
+  final magic = testnet ? Magic.testnet : Magic.mainnet;
 
   final header = MessageHeader.create(
     magic: magic,
