@@ -1,14 +1,13 @@
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/service.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/services.dart';
 
 void main() {
   group('create and serialize Services instance', () {
     test('with single service', () {
-      Services services = Services([Service.nodeNetwork]);
+      final services = Services([Service.nodeNetwork]);
 
       expect(services.value, 1);
       expect(
@@ -18,7 +17,7 @@ void main() {
     });
 
     test('with multi service', () {
-      Services services = Services([
+      final services = Services([
         Service.nodeNetwork,
         Service.nodeGetutxo,
         Service.nodeBloom,

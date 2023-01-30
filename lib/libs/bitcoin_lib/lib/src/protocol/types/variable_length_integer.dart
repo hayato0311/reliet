@@ -3,10 +3,6 @@ import 'dart:typed_data';
 import '../../utils/encode.dart';
 
 class VarInt {
-  late final int length;
-  late final int headByte;
-  late final int value;
-
   VarInt(this.value) {
     if (value < 0xfd) {
       length = 1;
@@ -22,9 +18,12 @@ class VarInt {
       headByte = 0xff;
     }
   }
+  late final int length;
+  late final int headByte;
+  late final int value;
 
   Uint8List serialize() {
-    List<int> byteList = [];
+    var byteList = <int>[];
     if (headByte == 0) {
       byteList = int8Bytes(value).toList();
     } else if (headByte == 0xfd) {

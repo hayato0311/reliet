@@ -1,13 +1,12 @@
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/payload_length.dart';
 
 void main() {
   group('create and serialize StartHeight instance', () {
     test('with vaild value', () {
-      final PayloadLength payloadLength = PayloadLength(0xffffffff);
+      final payloadLength = PayloadLength(0xffffffff);
       expect(payloadLength.value, 0xffffffff);
       expect(
         payloadLength.serialize(),

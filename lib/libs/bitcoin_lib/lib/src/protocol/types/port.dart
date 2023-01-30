@@ -7,8 +7,9 @@ enum Port {
   testnet(18333),
   zero(0);
 
-  final int value;
   const Port(this.value);
+
+  final int value;
 
   Uint8List serialize() => uint16beBytes(value);
 }

@@ -1,8 +1,7 @@
-import 'dart:typed_data';
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:reliet/libs/bitcoin_lib/lib/src/utils/encode.dart';
 
 void main() {
@@ -21,7 +20,9 @@ void main() {
         expect(uint16beBytes(10), Uint8List.fromList([0, 10]));
         expect(uint32beBytes(10), Uint8List.fromList([0, 0, 0, 10]));
         expect(
-            uint64beBytes(10), Uint8List.fromList([0, 0, 0, 0, 0, 0, 0, 10]));
+          uint64beBytes(10),
+          Uint8List.fromList([0, 0, 0, 0, 0, 0, 0, 10]),
+        );
       });
     });
     group('as little endian', () {
@@ -34,7 +35,9 @@ void main() {
         expect(uint16leBytes(10), Uint8List.fromList([10, 0]));
         expect(uint32leBytes(10), Uint8List.fromList([10, 0, 0, 0]));
         expect(
-            uint64leBytes(10), Uint8List.fromList([10, 0, 0, 0, 0, 0, 0, 0]));
+          uint64leBytes(10),
+          Uint8List.fromList([10, 0, 0, 0, 0, 0, 0, 0]),
+        );
       });
     });
   });
@@ -45,14 +48,6 @@ void main() {
     });
     test('with invalid length', () {
       expect(stringBytes('a', 2), [...utf8.encode('a'), 0]);
-    });
-  });
-  group('convert boolean into integer', () {
-    test('when true', () {
-      expect(boolToint(true), 1);
-    });
-    test('when false', () {
-      expect(boolToint(false), 0);
     });
   });
 }

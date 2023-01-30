@@ -8,7 +8,6 @@ enum Service {
   nodeCompactFilters(64),
   nodeNetworkLimited(1024);
 
-  final int value;
-
   const Service(this.value);
+  final int value;
 }

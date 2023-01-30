@@ -1,37 +1,15 @@
 import 'dart:typed_data';
 
-import '../../utils/encode.dart';
+import '../../extensions/bool_extentions.dart';
 import 'network_address.dart';
-import 'variable_length_string.dart';
-import 'services.dart';
-import 'version.dart';
 import 'nonce.dart';
-import 'timestamp.dart';
+import 'services.dart';
 import 'start_height.dart';
+import 'timestamp.dart';
+import 'variable_length_string.dart';
+import 'version.dart';
 
 class VersionMessage {
-  final Version version;
-  final Services services;
-  final Timestamp timestamp;
-  final NetAddr addrRecv;
-  final NetAddr addrFrom;
-  final Nonce nonce;
-  final VarStr userAgent;
-  final StartHeight startHeight;
-  final bool relay;
-
-  VersionMessage._internal({
-    required this.version,
-    required this.services,
-    required this.timestamp,
-    required this.addrRecv,
-    required this.addrFrom,
-    required this.nonce,
-    required this.userAgent,
-    required this.startHeight,
-    required this.relay,
-  });
-
   factory VersionMessage.create({
     required Version version,
     required Services services,
@@ -42,7 +20,7 @@ class VersionMessage {
     required StartHeight startHeight,
     required bool relay,
   }) {
-    final int unixtime = (DateTime.now().millisecondsSinceEpoch / 1000).floor();
+    final unixtime = (DateTime.now().millisecondsSinceEpoch / 1000).floor();
 
     return VersionMessage._internal(
       version: version,
@@ -57,8 +35,29 @@ class VersionMessage {
     );
   }
 
+  VersionMessage._internal({
+    required this.version,
+    required this.services,
+    required this.timestamp,
+    required this.addrRecv,
+    required this.addrFrom,
+    required this.nonce,
+    required this.userAgent,
+    required this.startHeight,
+    required this.relay,
+  });
+  final Version version;
+  final Services services;
+  final Timestamp timestamp;
+  final NetAddr addrRecv;
+  final NetAddr addrFrom;
+  final Nonce nonce;
+  final VarStr userAgent;
+  final StartHeight startHeight;
+  final bool relay;
+
   Uint8List serialize() {
-    List<int> byteList = [
+    final byteList = <int>[
       ...version.serialize(),
       ...services.serialize(),
       ...timestamp.serialize(),
@@ -67,7 +66,7 @@ class VersionMessage {
       ...nonce.serialize(),
       ...userAgent.serialize(),
       ...startHeight.serialize(),
-      boolToint(relay),
+      relay.toInt(),
     ];
 
     return Uint8List.fromList(byteList);
