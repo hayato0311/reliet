@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../../extensions/bool_extentions.dart';
+import '../../extensions/bool_extensions.dart';
 import 'network_address.dart';
 import 'nonce.dart';
 import 'services.dart';

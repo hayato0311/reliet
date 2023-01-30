@@ -18,5 +18,19 @@ void main() {
         ),
       );
     });
+
+    test('with IPv6 address', () {
+      final ipAddr = IpAddr([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]);
+      expect(
+        ipAddr.bytes,
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      );
+      expect(
+        ipAddr.serialize(),
+        Uint8List.fromList(
+          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        ),
+      );
+    });
   });
 }

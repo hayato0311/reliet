@@ -15,9 +15,10 @@ void main() {
       final string = 'a' * 0xfc;
       final varStr = VarStr(string);
 
-      final serializedVarStr = [0xfc] + utf8.encode(string).toList();
-
-      expect(varStr.serialize(), Uint8List.fromList(serializedVarStr));
+      expect(
+        varStr.serialize(),
+        Uint8List.fromList([0xfc, ...utf8.encode(string)]),
+      );
     });
   });
 }

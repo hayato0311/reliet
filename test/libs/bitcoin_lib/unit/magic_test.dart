@@ -13,7 +13,7 @@ void main() {
       expect(magic.serialize(), Uint8List.fromList([0x0b, 0x11, 0x09, 0x07]));
     });
     test('for mainnet', () {
-      const magic = Magic.main;
+      const magic = Magic.mainnet;
 
       expect(magic.value, 0xd9b4bef9);
       expect(magic.serialize(), Uint8List.fromList([0xf9, 0xbe, 0xb4, 0xd9]));

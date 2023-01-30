@@ -1,16 +1,16 @@
-import 'dart:typed_data';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/timestamp.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/utils/encode.dart';
 
 void main() {
   group('create and serialize StartHeight instance', () {
-    test('with vaild value', () {
-      final timestamp = Timestamp(0x7fffffffffffffff);
-      expect(timestamp.unixtime, 0x7fffffffffffffff);
+    test('with a vaild value', () {
+      const unixtime = 0x7fffffffffffffff;
+      final timestamp = Timestamp(unixtime);
+      expect(timestamp.unixtime, unixtime);
       expect(
         timestamp.serialize(),
-        Uint8List.fromList([0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x7f]),
+        int64leBytes(unixtime),
       );
     });
   });

@@ -1,8 +1,6 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/command.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/utils/encode.dart';
 
 void main() {
   group('create and serialize Command instance', () {
@@ -10,9 +8,17 @@ void main() {
       const command = Command.version;
 
       expect(command.value, 'version');
+
+      final actualSerializedCommand = command.serialize();
+
       expect(
-        command.serialize(),
-        Uint8List.fromList([...utf8.encode('version'), 0, 0, 0, 0, 0]),
+        actualSerializedCommand,
+        stringBytes('version', 12),
+      );
+
+      expect(
+        actualSerializedCommand.length,
+        12,
       );
     });
   });

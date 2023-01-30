@@ -25,16 +25,16 @@ class VarInt {
   Uint8List serialize() {
     var byteList = <int>[];
     if (headByte == 0) {
-      byteList = int8Bytes(value).toList();
+      byteList = int8Bytes(value);
     } else if (headByte == 0xfd) {
       byteList += [headByte];
-      byteList += int16leBytes(value).toList();
+      byteList += int16leBytes(value);
     } else if (headByte == 0xfe) {
       byteList += [headByte];
-      byteList += int32leBytes(value).toList();
+      byteList += int32leBytes(value);
     } else {
       byteList += [headByte];
-      byteList += int64leBytes(value).toList();
+      byteList += int64leBytes(value);
     }
 
     return Uint8List.fromList(byteList);

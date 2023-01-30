@@ -10,16 +10,20 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/services.dart';
 void main() {
   group('serialize network address', () {
     test('with valid params', () {
+      final services = Services([Service.nodeNetwork]);
+      final ipAddr =
+          IpAddr([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 127, 0, 0, 1]);
+      const port = Port.testnet;
       final netAddr = NetAddr(
-        services: Services([Service.nodeNetwork]),
-        ipAddr: IpAddr([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 127, 0, 0, 1]),
-        port: Port.testnet,
+        services: services,
+        ipAddr: ipAddr,
+        port: port,
       );
 
       final byteList = <int>[
-        ...[1, 0, 0, 0, 0, 0, 0, 0],
-        ...[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 127, 0, 0, 1],
-        ...[71, 157],
+        ...services.serialize(),
+        ...ipAddr.serialize(),
+        ...port.serialize(),
       ];
 
       expect(netAddr.serialize(), Uint8List.fromList(byteList));
