@@ -3,7 +3,7 @@ name: flutter_test
 on: pull_request
 
 jobs:
-  run_flutter_analyze:
+  run_flutter_test:
 
     runs-on: ubuntu-latest
 
