@@ -56,8 +56,31 @@ Future<String> handshake({bool testnet = false}) async {
     },
   );
 
-  // create payload and header
+  await _sendVersion(
+    socket,
+    testnet,
+  );
 
+  return result;
+}
+
+Future<void> _sendMessage(
+  Socket socket,
+  Uint8List header,
+  Uint8List payload,
+  Command command,
+) async {
+  final message = Uint8List.fromList([...header, ...payload]);
+  socket.add(message);
+  developer.log('$message');
+  developer.log('Send: ${command.value} ${payload.length}');
+  await Future<void>.delayed(const Duration(seconds: 2));
+}
+
+Future<void> _sendVersion(
+  Socket socket,
+  bool testnet,
+) async {
   final addrRecv = NetAddr(
     services: Services([Service.nodeZero]),
     ipAddr: IpAddr([0, 0, 0, 0]),
@@ -95,22 +118,5 @@ Future<String> handshake({bool testnet = false}) async {
     payload: payload,
   ).serialize();
 
-  // send
-
   await _sendMessage(socket, header, payload, command);
-
-  return result;
-}
-
-Future<void> _sendMessage(
-  Socket socket,
-  Uint8List header,
-  Uint8List payload,
-  Command command,
-) async {
-  final message = Uint8List.fromList([...header, ...payload]);
-  socket.add(message);
-  developer.log('$message');
-  developer.log('Send: ${command.value} ${payload.length}');
-  await Future<void>.delayed(const Duration(seconds: 2));
 }
