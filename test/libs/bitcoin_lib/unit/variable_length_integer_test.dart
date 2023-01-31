@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/extensions/int_extensions.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/variable_length_integer.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/utils/encode.dart';
 
 void main() {
   group('create and serialize VarInt instance', () {
@@ -11,7 +11,7 @@ void main() {
 
       expect(varInt.length, 1);
       expect(varInt.headByte, 0);
-      expect(varInt.serialize(), int8Bytes(varIntValue));
+      expect(varInt.serialize(), varIntValue.toInt8Bytes());
     });
     test('which value is less than 0x10000', () {
       const varIntValue = 0xfffd;
@@ -21,7 +21,7 @@ void main() {
       expect(varInt.headByte, 0xfd);
       expect(
         varInt.serialize(),
-        Uint8List.fromList([0xfd, ...int16leBytes(varIntValue)]),
+        Uint8List.fromList([0xfd, ...varIntValue.toInt16leBytes()]),
       );
     });
 
@@ -33,7 +33,7 @@ void main() {
       expect(varInt.headByte, 0xfe);
       expect(
         varInt.serialize(),
-        Uint8List.fromList([0xfe, ...int32leBytes(varIntValue)]),
+        Uint8List.fromList([0xfe, ...varIntValue.toInt32leBytes()]),
       );
     });
 
@@ -45,7 +45,7 @@ void main() {
       expect(varInt.headByte, 0xff);
       expect(
         varInt.serialize(),
-        Uint8List.fromList([0xff, ...int64leBytes(varIntValue)]),
+        Uint8List.fromList([0xff, ...varIntValue.toInt64leBytes()]),
       );
     });
   });

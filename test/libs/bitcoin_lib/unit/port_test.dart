@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/extensions/int_extensions.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/port.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/utils/encode.dart';
 
 void main() {
   group('create and serialize Port instance', () {
@@ -8,20 +8,20 @@ void main() {
       const port = Port.zero;
 
       expect(port.value, 0);
-      expect(port.serialize(), uint16beBytes(0));
+      expect(port.serialize(), 0.toUint16beBytes());
     });
     test('for testnet', () {
       const port = Port.testnet;
 
       expect(port.value, 18333);
-      expect(port.serialize(), uint16beBytes(18333));
+      expect(port.serialize(), 18333.toUint16beBytes());
     });
 
     test('for mainnet', () {
       const port = Port.main;
 
       expect(port.value, 8333);
-      expect(port.serialize(), uint16beBytes(8333));
+      expect(port.serialize(), 8333.toUint16beBytes());
     });
   });
 }

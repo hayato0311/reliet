@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../../utils/encode.dart';
+import '../../extensions/int_extensions.dart';
 
 enum Version {
   // in Bitcoin Core, this value is 70016
@@ -37,5 +37,5 @@ enum Version {
 
   final int value;
 
-  Uint8List serialize() => int32leBytes(value);
+  Uint8List serialize() => value.toInt32leBytes();
 }
