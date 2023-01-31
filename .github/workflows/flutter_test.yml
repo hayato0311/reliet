@@ -1,9 +1,9 @@
-name: flutter_analyze
+name: flutter_test
 
 on: pull_request
 
 jobs:
-  run_flutter_analyze:
+  run_flutter_test:
 
     runs-on: ubuntu-latest
 
@@ -29,5 +29,5 @@ jobs:
       - name: run flutter pub get
         run: flutter pub get
 
-      - name: run flutter analyze
-        run: flutter analyze
+      - name: run flutter test
+        run: flutter test
