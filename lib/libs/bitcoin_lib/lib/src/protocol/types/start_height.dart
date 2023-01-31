@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../../utils/encode.dart';
+import '../../extensions/int_extensions.dart';
 
 class StartHeight {
   factory StartHeight(int value) {
@@ -15,5 +15,5 @@ class StartHeight {
   StartHeight._internal(this.value);
   final int value;
 
-  Uint8List serialize() => int32leBytes(value);
+  Uint8List serialize() => value.toInt32leBytes();
 }

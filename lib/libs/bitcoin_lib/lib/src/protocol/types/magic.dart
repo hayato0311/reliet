@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../../utils/encode.dart';
+import '../../extensions/int_extensions.dart';
 
 enum Magic {
   mainnet(0xd9b4bef9),
@@ -9,5 +9,5 @@ enum Magic {
   const Magic(this.value);
   final int value;
 
-  Uint8List serialize() => uint32leBytes(value);
+  Uint8List serialize() => value.toUint32leBytes();
 }

@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/extensions/int_extensions.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/service.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/services.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/utils/encode.dart';
 
 void main() {
   group('create and serialize Services instance', () {
@@ -11,7 +11,7 @@ void main() {
       expect(services.value, Service.nodeNetwork.value);
       expect(
         services.serialize(),
-        uint64leBytes(Service.nodeNetwork.value),
+        Service.nodeNetwork.value.toUint64leBytes(),
       );
     });
 
@@ -40,7 +40,7 @@ void main() {
       );
       expect(
         services.serialize(),
-        uint64leBytes(servicesValueSum),
+        servicesValueSum.toUint64leBytes(),
       );
     });
   });

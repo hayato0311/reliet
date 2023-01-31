@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/extensions/int_extensions.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/start_height.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/utils/encode.dart';
 
 void main() {
   group('create and serialize StartHeight instance', () {
@@ -10,7 +10,7 @@ void main() {
       expect(startHeight.value, startHeightValue);
       expect(
         startHeight.serialize(),
-        int32leBytes(startHeightValue),
+        startHeightValue.toInt32leBytes(),
       );
     });
 

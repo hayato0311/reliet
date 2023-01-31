@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../../utils/encode.dart';
+import '../../extensions/int_extensions.dart';
 import 'service.dart';
 
 class Services {
@@ -21,5 +21,5 @@ class Services {
   Services._internal(this.value);
   final int value;
 
-  Uint8List serialize() => uint64leBytes(value);
+  Uint8List serialize() => value.toUint64leBytes();
 }

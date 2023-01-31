@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/extensions/int_extensions.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/version.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/utils/encode.dart';
 
 void main() {
   group('create and serialize Version instance', () {
@@ -9,7 +9,7 @@ void main() {
       const versionValue = 70015;
 
       expect(version.value, versionValue);
-      expect(version.serialize(), int32leBytes(versionValue));
+      expect(version.serialize(), versionValue.toInt32leBytes());
     });
 
     test('for initProtoVersion', () {
@@ -17,7 +17,7 @@ void main() {
       const versionValue = 209;
 
       expect(version.value, versionValue);
-      expect(version.serialize(), int32leBytes(versionValue));
+      expect(version.serialize(), versionValue.toInt32leBytes());
     });
 
     test('for minPeerProtoVersion', () {
@@ -25,7 +25,7 @@ void main() {
       const versionValue = 31800;
 
       expect(version.value, versionValue);
-      expect(version.serialize(), int32leBytes(versionValue));
+      expect(version.serialize(), versionValue.toInt32leBytes());
     });
 
     test('for bip0031Version', () {
@@ -33,7 +33,7 @@ void main() {
       const versionValue = 60000;
 
       expect(version.value, versionValue);
-      expect(version.serialize(), int32leBytes(versionValue));
+      expect(version.serialize(), versionValue.toInt32leBytes());
     });
 
     test('for noBloomVersion', () {
@@ -41,7 +41,7 @@ void main() {
       const versionValue = 70011;
 
       expect(version.value, versionValue);
-      expect(version.serialize(), int32leBytes(versionValue));
+      expect(version.serialize(), versionValue.toInt32leBytes());
     });
 
     test('for sendHeadersVersion', () {
@@ -49,7 +49,7 @@ void main() {
       const versionValue = 70012;
 
       expect(version.value, versionValue);
-      expect(version.serialize(), int32leBytes(versionValue));
+      expect(version.serialize(), versionValue.toInt32leBytes());
     });
 
     test('for feeFilterVersion', () {
@@ -57,7 +57,7 @@ void main() {
       const versionValue = 70013;
 
       expect(version.value, versionValue);
-      expect(version.serialize(), int32leBytes(versionValue));
+      expect(version.serialize(), versionValue.toInt32leBytes());
     });
 
     test('for shortIdsBlocksVersion', () {
@@ -65,7 +65,7 @@ void main() {
       const versionValue = 70014;
 
       expect(version.value, versionValue);
-      expect(version.serialize(), int32leBytes(versionValue));
+      expect(version.serialize(), versionValue.toInt32leBytes());
     });
 
     test('for invalidCbNoBanVersion', () {
@@ -73,7 +73,7 @@ void main() {
       const versionValue = 70015;
 
       expect(version.value, versionValue);
-      expect(version.serialize(), int32leBytes(versionValue));
+      expect(version.serialize(), versionValue.toInt32leBytes());
     });
 
     test('for wtxidRelayVersion', () {
@@ -81,7 +81,7 @@ void main() {
       const versionValue = 70016;
 
       expect(version.value, versionValue);
-      expect(version.serialize(), int32leBytes(versionValue));
+      expect(version.serialize(), versionValue.toInt32leBytes());
     });
   });
 }

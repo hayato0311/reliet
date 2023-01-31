@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/extensions/string_extensions.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/command.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/utils/encode.dart';
 
 void main() {
   group('create and serialize Command instance', () {
@@ -13,7 +13,7 @@ void main() {
 
       expect(
         actualSerializedCommand,
-        stringBytes('version', 12),
+        'version'.toBytes(12),
       );
 
       expect(

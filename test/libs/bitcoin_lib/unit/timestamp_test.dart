@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/extensions/int_extensions.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/timestamp.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/utils/encode.dart';
 
 void main() {
   group('create and serialize StartHeight instance', () {
@@ -10,7 +10,7 @@ void main() {
       expect(timestamp.unixtime, unixtime);
       expect(
         timestamp.serialize(),
-        int64leBytes(unixtime),
+        unixtime.toInt64leBytes(),
       );
     });
   });

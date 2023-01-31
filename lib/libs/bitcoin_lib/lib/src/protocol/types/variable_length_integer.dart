@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../../utils/encode.dart';
+import '../../extensions/int_extensions.dart';
 
 class VarInt {
   VarInt(this.value) {
@@ -25,16 +25,16 @@ class VarInt {
   Uint8List serialize() {
     var byteList = <int>[];
     if (headByte == 0) {
-      byteList = int8Bytes(value);
+      byteList = value.toInt8Bytes();
     } else if (headByte == 0xfd) {
       byteList += [headByte];
-      byteList += int16leBytes(value);
+      byteList += value.toInt16leBytes();
     } else if (headByte == 0xfe) {
       byteList += [headByte];
-      byteList += int32leBytes(value);
+      byteList += value.toInt32leBytes();
     } else {
       byteList += [headByte];
-      byteList += int64leBytes(value);
+      byteList += value.toInt64leBytes();
     }
 
     return Uint8List.fromList(byteList);

@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../../utils/encode.dart';
+import '../../extensions/int_extensions.dart';
 
 class PayloadLength {
   factory PayloadLength(int value) {
@@ -15,5 +15,5 @@ class PayloadLength {
   PayloadLength._internal(this.value);
   final int value;
 
-  Uint8List serialize() => uint32leBytes(value);
+  Uint8List serialize() => value.toUint32leBytes();
 }

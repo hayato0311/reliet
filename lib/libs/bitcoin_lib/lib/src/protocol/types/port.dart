@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../../utils/encode.dart';
+import '../../extensions/int_extensions.dart';
 
 enum Port {
   main(8333),
@@ -11,5 +11,5 @@ enum Port {
 
   final int value;
 
-  Uint8List serialize() => uint16beBytes(value);
+  Uint8List serialize() => value.toUint16beBytes();
 }

@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../../utils/encode.dart';
+import '../../extensions/string_extensions.dart';
 
 enum Command {
   version('version');
@@ -9,5 +9,5 @@ enum Command {
 
   final String value;
 
-  Uint8List serialize() => stringBytes(value, 12);
+  Uint8List serialize() => value.toBytes(12);
 }
