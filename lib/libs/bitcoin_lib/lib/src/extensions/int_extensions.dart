@@ -47,3 +47,106 @@ extension IntExtensions on int {
   Uint8List toUint64leBytes() =>
       Uint8List(8)..buffer.asByteData().setUint64(0, this, Endian.little);
 }
+
+extension CreateInt on int {
+  // of 1 byte
+  static int fromInt8Bytes(Uint8List bytes) {
+    if (bytes.length != 1) {
+      throw ArgumentError();
+    }
+
+    return bytes.buffer.asByteData().getInt8(0);
+  }
+
+  static int fromUint8Bytes(Uint8List bytes) {
+    if (bytes.length != 1) {
+      throw ArgumentError();
+    }
+
+    return bytes.buffer.asByteData().getUint8(0);
+  }
+
+  // int big endian
+  static int fromInt16beBytes(Uint8List bytes) {
+    if (bytes.length != 2) {
+      throw ArgumentError();
+    }
+
+    return bytes.buffer.asByteData().getInt16(0);
+  }
+
+  static int fromInt32beBytes(Uint8List bytes) {
+    if (bytes.length != 4) {
+      throw ArgumentError();
+    }
+
+    return bytes.buffer.asByteData().getInt32(0);
+  }
+
+  static int fromInt64beBytes(Uint8List bytes) {
+    if (bytes.length != 8) {
+      throw ArgumentError();
+    }
+
+    return bytes.buffer.asByteData().getInt64(0);
+  }
+
+  // uint big endian
+  static int fromUint16beBytes(Uint8List bytes) {
+    if (bytes.length != 2) {
+      throw ArgumentError();
+    }
+
+    return bytes.buffer.asByteData().getUint16(0);
+  }
+
+  static int fromUint32beBytes(Uint8List bytes) {
+    if (bytes.length != 4) {
+      throw ArgumentError();
+    }
+
+    return bytes.buffer.asByteData().getUint32(0);
+  }
+
+  // int little endian
+  static int fromInt16leBytes(Uint8List bytes) {
+    if (bytes.length != 2) {
+      throw ArgumentError();
+    }
+
+    return bytes.buffer.asByteData().getInt16(0, Endian.little);
+  }
+
+  static int fromInt32leBytes(Uint8List bytes) {
+    if (bytes.length != 4) {
+      throw ArgumentError();
+    }
+
+    return bytes.buffer.asByteData().getInt32(0, Endian.little);
+  }
+
+  static int fromInt64leBytes(Uint8List bytes) {
+    if (bytes.length != 8) {
+      throw ArgumentError();
+    }
+
+    return bytes.buffer.asByteData().getInt64(0, Endian.little);
+  }
+
+  // uint little endian
+  static int fromUint16leBytes(Uint8List bytes) {
+    if (bytes.length != 2) {
+      throw ArgumentError();
+    }
+
+    return bytes.buffer.asByteData().getUint16(0, Endian.little);
+  }
+
+  static int fromUint32leBytes(Uint8List bytes) {
+    if (bytes.length != 4) {
+      throw ArgumentError();
+    }
+
+    return bytes.buffer.asByteData().getUint32(0, Endian.little);
+  }
+}
