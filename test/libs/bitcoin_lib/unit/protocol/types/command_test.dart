@@ -29,9 +29,8 @@ void main() {
   group('deserialize bytes to Command instance', () {
     test('of version', () {
       final versionCommandBytes = Command.version.serialize();
-      final deserializedCommand = Command.deserialize(versionCommandBytes);
 
-      expect(deserializedCommand.value, 'version');
+      expect(Command.deserialize(versionCommandBytes), Command.version);
     });
 
     test('with invalid bytes', () {
