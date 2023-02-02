@@ -4,22 +4,25 @@ import '../../extensions/int_extensions.dart';
 import 'service.dart';
 
 class Services {
-  factory Services(List<Service> services) {
-    if (services.isEmpty) {
+  factory Services(List<Service> serviceList) {
+    if (serviceList.isEmpty) {
       throw const FormatException('Services is empty');
     }
-    if (services.length != services.toSet().length) {
+    if (serviceList.length != serviceList.toSet().length) {
       throw const FormatException('Services should only have unique elements');
     }
 
-    final value =
-        services.map((service) => service.value).reduce((v, e) => v + e);
-
-    return Services._internal(value);
+    return Services._internal(serviceList);
   }
 
-  Services._internal(this.value);
-  final int value;
+  Services._internal(this.serviceList);
 
-  Uint8List serialize() => value.toUint64leBytes();
+  final List<Service> serviceList;
+
+  Uint8List serialize() {
+    final value =
+        serviceList.map((service) => service.value).reduce((v, e) => v + e);
+
+    return value.toUint64leBytes();
+  }
 }
