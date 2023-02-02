@@ -7,6 +7,16 @@ enum Command {
 
   const Command(this.value);
 
+  factory Command.deserialize(Uint8List bytes) {
+    final commandValue = CreateString.fromBytes(bytes);
+
+    if (commandValue == 'version') {
+      return Command.version;
+    } else {
+      throw ArgumentError('Undefined command');
+    }
+  }
+
   final String value;
 
   Uint8List serialize() => value.toBytes(12);

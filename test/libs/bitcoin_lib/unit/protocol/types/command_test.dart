@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/extensions/string_extensions.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/command.dart';
@@ -20,6 +23,21 @@ void main() {
         actualSerializedCommand.length,
         12,
       );
+    });
+  });
+
+  group('deserialize bytes to Command instance', () {
+    test('of version', () {
+      final versionCommandBytes = Command.version.serialize();
+      final deserializedCommand = Command.deserialize(versionCommandBytes);
+
+      expect(deserializedCommand.value, 'version');
+    });
+
+    test('with invalid bytes', () {
+      final bytes = Uint8List.fromList(utf8.encode('invalid'));
+
+      expect(() => Command.deserialize(bytes), throwsArgumentError);
     });
   });
 }
