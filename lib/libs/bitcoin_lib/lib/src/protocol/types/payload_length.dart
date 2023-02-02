@@ -12,6 +12,9 @@ class PayloadLength {
     return PayloadLength._internal(value);
   }
 
+  factory PayloadLength.deserialize(Uint8List bytes) =>
+      PayloadLength(CreateInt.fromUint32leBytes(bytes));
+
   PayloadLength._internal(this.value);
   final int value;
 
