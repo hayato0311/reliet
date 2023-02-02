@@ -202,6 +202,15 @@ extension CreateInt on int {
     return bytes.buffer.asByteData().getUint32(0);
   }
 
+  // deprecated
+  static int fromUint64beBytes(Uint8List bytes) {
+    if (bytes.length != 8) {
+      throw ArgumentError('the length of bytes must be 4');
+    }
+
+    return bytes.buffer.asByteData().getUint64(0);
+  }
+
   // int little endian
   static int fromInt16leBytes(Uint8List bytes) {
     if (bytes.length != 2) {
@@ -242,5 +251,14 @@ extension CreateInt on int {
     }
 
     return bytes.buffer.asByteData().getUint32(0, Endian.little);
+  }
+
+  // deprecated
+  static int fromUint64leBytes(Uint8List bytes) {
+    if (bytes.length != 8) {
+      throw ArgumentError('the length of bytes must be 4');
+    }
+
+    return bytes.buffer.asByteData().getUint64(0, Endian.little);
   }
 }

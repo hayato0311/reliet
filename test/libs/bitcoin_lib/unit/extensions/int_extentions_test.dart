@@ -132,7 +132,9 @@ void main() {
     test('of 8 bytes', () {
       final bytes1 = Uint8List.fromList([0, 0, 0, 0, 0, 0, 0, 128]);
       final bytes2 = Uint8List.fromList([128, 0, 0, 0, 0, 0, 0, 0]);
-      final bytes3 = Uint8List.fromList([1, 0, 0, 0]);
+      final bytes3 = Uint8List.fromList([0, 0, 0, 0, 0, 0, 0, 1]);
+      final bytes4 = Uint8List.fromList([1, 0, 0, 0, 0, 0, 0, 0]);
+      final bytes5 = Uint8List.fromList([1, 0, 0, 0]);
 
       expect(CreateInt.fromInt64beBytes(bytes1), 128);
       expect(CreateInt.fromInt64leBytes(bytes1), -9223372036854775808);
@@ -140,8 +142,16 @@ void main() {
       expect(CreateInt.fromInt64beBytes(bytes2), -9223372036854775808);
       expect(CreateInt.fromInt64leBytes(bytes2), 128);
 
-      expect(() => CreateInt.fromInt64beBytes(bytes3), throwsArgumentError);
-      expect(() => CreateInt.fromInt64leBytes(bytes3), throwsArgumentError);
+      expect(CreateInt.fromUint64beBytes(bytes3), 1);
+      expect(CreateInt.fromUint64leBytes(bytes3), 72057594037927936);
+
+      expect(CreateInt.fromUint64beBytes(bytes4), 72057594037927936);
+      expect(CreateInt.fromUint64leBytes(bytes4), 1);
+
+      expect(() => CreateInt.fromInt64beBytes(bytes5), throwsArgumentError);
+      expect(() => CreateInt.fromUint64beBytes(bytes5), throwsArgumentError);
+      expect(() => CreateInt.fromInt64leBytes(bytes5), throwsArgumentError);
+      expect(() => CreateInt.fromUint64leBytes(bytes5), throwsArgumentError);
     });
   });
 }
