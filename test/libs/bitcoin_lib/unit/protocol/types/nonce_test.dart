@@ -18,13 +18,13 @@ void main() {
   });
 
   group('deserialize bytes to Nonce instance', () {
-    test('with valid input', () {
+    test('with valid bytes', () {
       final bytes = [0, 0, 0, 0, 0, 0, 0, 1];
       final serializedBytes = Nonce(bytes).serialize();
 
       expect(Nonce.deserialize(serializedBytes).bytes, bytes);
     });
-    test('with invalid input', () {
+    test('with invalid bytes', () {
       expect(
         () => Nonce.deserialize(Uint8List.fromList([0, 0, 0, 1])),
         throwsFormatException,
