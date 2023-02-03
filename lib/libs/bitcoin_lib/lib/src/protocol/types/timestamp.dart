@@ -4,6 +4,10 @@ import '../../extensions/int_extensions.dart';
 
 class Timestamp {
   Timestamp(this.unixtime);
+
+  factory Timestamp.deserialize(Uint8List bytes) =>
+      Timestamp(CreateInt.fromInt64leBytes(bytes));
+
   final int unixtime;
 
   Uint8List serialize() => unixtime.toInt64leBytes();
