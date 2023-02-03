@@ -6,7 +6,7 @@ enum Version {
   // in Bitcoin Core, this value is 70016
   protocolVersion(70015),
 
-  //  initial proto version, to be increased after version/verack negotiation
+  // initial proto version, to be increased after version/verack negotiation
   initProtoVersion(209),
 
   // disconnect from peers older than this proto version
@@ -34,6 +34,31 @@ enum Version {
   wtxidRelayVersion(70016);
 
   const Version(this.value);
+
+  factory Version.deserialize(Uint8List bytes) {
+    final commandValue = CreateInt.fromInt32leBytes(bytes);
+    if (commandValue == 209) {
+      return Version.initProtoVersion;
+    } else if (commandValue == 31800) {
+      return Version.minPeerProtoVersion;
+    } else if (commandValue == 60000) {
+      return Version.bip0031Version;
+    } else if (commandValue == 70011) {
+      return Version.noBloomVersion;
+    } else if (commandValue == 70012) {
+      return Version.sendHeadersVersion;
+    } else if (commandValue == 70013) {
+      return Version.feeFilterVersion;
+    } else if (commandValue == 70014) {
+      return Version.shortIdsBlocksVersion;
+    } else if (commandValue == 70015) {
+      return Version.invalidCbNoBanVersion;
+    } else if (commandValue == 70016) {
+      return Version.wtxidRelayVersion;
+    } else {
+      throw ArgumentError('Undefined version');
+    }
+  }
 
   final int value;
 
