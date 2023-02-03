@@ -20,12 +20,10 @@ class VersionMessage {
     required StartHeight startHeight,
     required bool relay,
   }) {
-    final unixtime = (DateTime.now().millisecondsSinceEpoch / 1000).floor();
-
     return VersionMessage._internal(
       version: version,
       services: services,
-      timestamp: Timestamp(unixtime),
+      timestamp: Timestamp.create(),
       addrRecv: addrRecv,
       addrFrom: addrFrom,
       nonce: nonce,

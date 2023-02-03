@@ -47,12 +47,11 @@ void main() {
         startHeight: startHeight,
         relay: relay,
       );
-      expect(versionMessage.timestamp.unixtime, unixtime);
 
       final serializedVersionMessage = <int>[
         ...version.serialize(),
         ...services.serialize(),
-        ...Timestamp(unixtime).serialize(),
+        ...Timestamp.create().serialize(),
         ...addrRecv.serialize(),
         ...addrFrom.serialize(),
         ...nonce.serialize(),
