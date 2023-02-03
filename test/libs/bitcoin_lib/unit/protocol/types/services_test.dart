@@ -49,7 +49,7 @@ void main() {
     });
   });
 
-  group('deserialize bytes to Port instance', () {
+  group('deserialize bytes to Services instance', () {
     group('with valid bytes', () {
       test('with all services bytes', () {
         final serviceList = [
