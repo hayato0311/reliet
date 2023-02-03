@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/extensions/int_extensions.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/service.dart';
@@ -44,6 +46,35 @@ void main() {
         services.serialize(),
         servicesValueSum.toUint64leBytes(),
       );
+    });
+  });
+
+  group('deserialize bytes to Port instance', () {
+    group('with valid bytes', () {
+      test('with all services bytes', () {
+        final serviceList = [
+          Service.nodeNetwork,
+          Service.nodeGetutxo,
+          Service.nodeBloom,
+          Service.nodeWitness,
+          Service.nodeXthin,
+          Service.nodeCompactFilters,
+          Service.nodeNetworkLimited,
+        ];
+        final serializedServicesBytes = Services(serviceList).serialize();
+        expect(
+          Services.deserialize(serializedServicesBytes).serviceList.toSet(),
+          serviceList.toSet(),
+        );
+      });
+    });
+    group('with invalid bytes', () {
+      test('with empty bytes', () {
+        expect(
+          () => Services.deserialize(Uint8List.fromList([])).serviceList,
+          throwsArgumentError,
+        );
+      });
     });
   });
 }
