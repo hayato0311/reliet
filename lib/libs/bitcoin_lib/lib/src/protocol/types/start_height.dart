@@ -12,6 +12,9 @@ class StartHeight {
     return StartHeight._internal(value);
   }
 
+  factory StartHeight.deserialize(Uint8List bytes) =>
+      StartHeight(CreateInt.fromInt32leBytes(bytes));
+
   StartHeight._internal(this.value);
   final int value;
 
