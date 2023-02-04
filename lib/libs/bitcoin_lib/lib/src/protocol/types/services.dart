@@ -16,6 +16,7 @@ class Services {
 
     return Services._internal(serviceList);
   }
+
   factory Services.deserialize(Uint8List bytes) {
     var servicesValueSum = CreateInt.fromUint64leBytes(bytes);
     var serviceList = <Service>[];
@@ -59,7 +60,10 @@ class Services {
 
     return Services(serviceList);
   }
+
   Services._internal(this.serviceList);
+
+  static int bytesLength() => 8;
 
   final List<Service> serviceList;
 

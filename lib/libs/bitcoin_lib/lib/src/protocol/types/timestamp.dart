@@ -15,6 +15,8 @@ class Timestamp {
   factory Timestamp.deserialize(Uint8List bytes) =>
       Timestamp._internal(CreateInt.fromInt64leBytes(bytes));
 
+  static int bytesLength() => 8;
+
   final int secondsUnixtime;
 
   Uint8List serialize() => secondsUnixtime.toInt64leBytes();

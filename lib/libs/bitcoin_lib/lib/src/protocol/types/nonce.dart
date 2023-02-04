@@ -13,6 +13,8 @@ class Nonce {
 
   Nonce._internal(this.bytes);
 
+  static int bytesLength() => 8;
+
   // uint64be
   final List<int> bytes;
 

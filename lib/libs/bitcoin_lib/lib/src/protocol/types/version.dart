@@ -60,6 +60,8 @@ enum Version {
     }
   }
 
+  static int bytesLength() => 4;
+
   final int value;
 
   Uint8List serialize() => value.toInt32leBytes();

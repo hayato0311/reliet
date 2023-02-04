@@ -27,6 +27,13 @@ class MessageHeader {
     this.payloadLength,
     this.checksum,
   );
+
+  static int bytesLength() =>
+      Magic.bytesLength() +
+      Command.bytesLength() +
+      PayloadLength.bytesLength() +
+      Checksum.bytesLength();
+
   final Magic magic;
   final Command command;
   final PayloadLength payloadLength;

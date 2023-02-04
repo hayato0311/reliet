@@ -16,6 +16,9 @@ class PayloadLength {
       PayloadLength(CreateInt.fromUint32leBytes(bytes));
 
   PayloadLength._internal(this.value);
+
+  static int bytesLength() => 4;
+
   final int value;
 
   Uint8List serialize() => value.toUint32leBytes();

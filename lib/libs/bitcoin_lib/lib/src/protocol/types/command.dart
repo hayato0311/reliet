@@ -17,6 +17,8 @@ enum Command {
     }
   }
 
+  static int bytesLength() => 12;
+
   final String value;
 
   Uint8List serialize() => value.toBytes(12);

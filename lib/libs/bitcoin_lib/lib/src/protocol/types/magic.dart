@@ -20,6 +20,8 @@ enum Magic {
     }
   }
 
+  static int bytesLength() => 4;
+
   final int value;
 
   Uint8List serialize() => value.toUint32leBytes();

@@ -6,6 +6,7 @@ class IpAddr {
 
     return IpAddr._internal(bytes);
   }
+  IpAddr._internal(this.bytes);
 
   factory IpAddr.deserialize(Uint8List bytes) {
     if (bytes.length != 16) {
@@ -14,7 +15,8 @@ class IpAddr {
     return IpAddr._internal(bytes);
   }
 
-  IpAddr._internal(this.bytes);
+  static int bytesLength() => 16;
+
   final List<int> bytes;
 
   static List<int> _convertToIPv4MappedIPv6Addr(List<int> bytes) {

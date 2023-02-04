@@ -12,6 +12,8 @@ class Checksum {
     return Checksum._internal(checksum);
   }
 
+  static int bytesLength() => 4;
+
   bool isValid(Uint8List checksum) => checksum.equals(bytes);
 
   late final Uint8List bytes;

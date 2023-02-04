@@ -23,6 +23,8 @@ enum Port {
     }
   }
 
+  static int bytesLength() => 2;
+
   final int value;
 
   Uint8List serialize() => value.toUint16beBytes();

@@ -5,14 +5,15 @@ import 'port.dart';
 import 'services.dart';
 
 class NetAddr {
-  factory NetAddr({
-    required Services services,
-    required IpAddr ipAddr,
-    required Port port,
-  }) =>
-      NetAddr._internal(services, ipAddr, port);
+  NetAddr({
+    required this.services,
+    required this.ipAddr,
+    required this.port,
+  });
 
-  const NetAddr._internal(this.services, this.ipAddr, this.port);
+  static int bytesLength() =>
+      Services.bytesLength() + IpAddr.bytesLength() + Port.bytesLength();
+
   final Services services;
   final IpAddr ipAddr;
   final Port port;

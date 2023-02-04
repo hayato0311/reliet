@@ -16,6 +16,9 @@ class StartHeight {
       StartHeight(CreateInt.fromInt32leBytes(bytes));
 
   StartHeight._internal(this.value);
+
+  static int bytesLength() => 4;
+
   final int value;
 
   Uint8List serialize() => value.toInt32leBytes();
