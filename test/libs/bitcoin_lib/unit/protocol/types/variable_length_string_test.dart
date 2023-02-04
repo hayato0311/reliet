@@ -44,7 +44,7 @@ void main() {
       const varStrLength = 0xfd;
       final varInt = VarInt(varStrLength);
 
-      expect(VarStr.bytesLength(varInt), 1 + varInt.length + varInt.value);
+      expect(VarStr.bytesLength(varInt), varInt.length + varInt.value);
     });
   });
 }

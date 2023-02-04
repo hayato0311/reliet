@@ -28,7 +28,7 @@ class VarStr {
   }
 
   static int bytesLength(VarInt varInt) {
-    return 1 + varInt.length + varInt.value;
+    return varInt.length + varInt.value;
   }
 
   late final VarInt length;
