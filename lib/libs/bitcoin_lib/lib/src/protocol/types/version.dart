@@ -64,5 +64,7 @@ enum Version {
 
   final int value;
 
+  Map<String, dynamic> toJson() => {'value': value};
+
   Uint8List serialize() => value.toInt32leBytes();
 }

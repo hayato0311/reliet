@@ -21,5 +21,7 @@ class PayloadLength {
 
   final int value;
 
+  Map<String, dynamic> toJson() => {'value': value};
+
   Uint8List serialize() => value.toUint32leBytes();
 }

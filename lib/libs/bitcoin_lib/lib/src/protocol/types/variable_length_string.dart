@@ -34,6 +34,9 @@ class VarStr {
   late final VarInt length;
   final String string;
 
+  Map<String, dynamic> toJson() =>
+      {'length': length.toJson(), 'string': string};
+
   Uint8List serialize() {
     final byteList = length.serialize().toList();
 

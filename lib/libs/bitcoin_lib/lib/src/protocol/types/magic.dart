@@ -24,5 +24,7 @@ enum Magic {
 
   final int value;
 
+  Map<String, dynamic> toJson() => {'value': this};
+
   Uint8List serialize() => value.toUint32leBytes();
 }

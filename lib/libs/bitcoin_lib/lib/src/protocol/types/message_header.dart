@@ -95,6 +95,13 @@ class MessageHeader {
   final PayloadLength payloadLength;
   final Checksum checksum;
 
+  Map<String, dynamic> toJson() => {
+        'magic': magic.toJson(),
+        'command': command.toJson(),
+        'payloadLength': payloadLength.toJson(),
+        'checksum': checksum.toJson(),
+      };
+
   Uint8List serialize() {
     final byteList = <int>[
       ...magic.serialize(),

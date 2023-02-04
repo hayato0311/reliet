@@ -29,5 +29,7 @@ class IpAddr {
     throw const FormatException('Given input is not IPv4 or IPv6 address.');
   }
 
+  Map<String, dynamic> toJson() => {'bytes': bytes};
+
   Uint8List serialize() => Uint8List.fromList(bytes);
 }

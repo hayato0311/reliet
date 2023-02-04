@@ -67,6 +67,12 @@ class Services {
 
   final List<Service> serviceList;
 
+  Map<String, dynamic> toJson() => {
+        'serviceList': [
+          for (int i = 0; i < serviceList.length; i++) serviceList[i]
+        ]
+      };
+
   Uint8List serialize() {
     final value =
         serviceList.map((service) => service.value).reduce((v, e) => v + e);

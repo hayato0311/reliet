@@ -45,6 +45,12 @@ class NetAddr {
   final IpAddr ipAddr;
   final Port port;
 
+  Map<String, dynamic> toJson() => {
+        'services': services.toJson(),
+        'ipAddr': ipAddr.toJson(),
+        'port': port.toJson(),
+      };
+
   Uint8List serialize() {
     final byteList = <int>[
       ...services.serialize(),

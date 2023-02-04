@@ -18,6 +18,8 @@ class Nonce {
   // uint64be
   final List<int> bytes;
 
+  Map<String, dynamic> toJson() => {'bytes': bytes};
+
   // to uint64le
   Uint8List serialize() => Uint8List.fromList(bytes.reversed.toList());
 }

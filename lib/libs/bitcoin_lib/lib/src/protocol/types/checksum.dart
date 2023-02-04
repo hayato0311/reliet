@@ -18,5 +18,7 @@ class Checksum {
 
   late final Uint8List bytes;
 
+  Map<String, dynamic> toJson() => {'bytes': bytes};
+
   Uint8List serialize() => bytes;
 }

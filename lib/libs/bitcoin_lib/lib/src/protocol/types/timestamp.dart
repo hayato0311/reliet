@@ -19,5 +19,7 @@ class Timestamp {
 
   final int secondsUnixtime;
 
+  Map<String, dynamic> toJson() => {'secondsUnixtime': secondsUnixtime};
+
   Uint8List serialize() => secondsUnixtime.toInt64leBytes();
 }

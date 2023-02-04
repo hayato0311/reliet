@@ -55,6 +55,9 @@ class VarInt {
   late final int headByte;
   late final int value;
 
+  Map<String, dynamic> toJson() =>
+      {'length': length, 'headByte': headByte, 'value': value};
+
   Uint8List serialize() {
     var byteList = <int>[];
     if (headByte == 0) {

@@ -161,6 +161,18 @@ class VersionMessage {
   final StartHeight startHeight;
   final bool relay;
 
+  Map<String, dynamic> toJson() => {
+        'version': version.toJson(),
+        'services': services.toJson(),
+        'timestamp': timestamp.toJson(),
+        'addrRecv': addrRecv.toJson(),
+        'addrFrom': addrFrom.toJson(),
+        'nonce': nonce.toJson(),
+        'userAgent': userAgent.toJson(),
+        'startHeight': startHeight.toJson(),
+        'relay': relay,
+      };
+
   Uint8List serialize() {
     final byteList = <int>[
       ...version.serialize(),
