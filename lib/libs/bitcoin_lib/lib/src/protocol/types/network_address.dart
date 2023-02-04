@@ -11,6 +11,33 @@ class NetAddr {
     required this.port,
   });
 
+  factory NetAddr.deserialize(Uint8List bytes) {
+    if (bytes.length != bytesLength()) {
+      throw ArgumentError('the length of given bytes is invalid');
+    }
+
+    final services = Services.deserialize(
+      bytes.sublist(
+        0,
+        Services.bytesLength(),
+      ),
+    );
+    final ipAddr = IpAddr.deserialize(
+      bytes.sublist(
+        Services.bytesLength(),
+        Services.bytesLength() + IpAddr.bytesLength(),
+      ),
+    );
+    final port = Port.deserialize(
+      bytes.sublist(
+        Services.bytesLength() + IpAddr.bytesLength(),
+        Services.bytesLength() + IpAddr.bytesLength() + Port.bytesLength(),
+      ),
+    );
+
+    return NetAddr(services: services, ipAddr: ipAddr, port: port);
+  }
+
   static int bytesLength() =>
       Services.bytesLength() + IpAddr.bytesLength() + Port.bytesLength();
 
