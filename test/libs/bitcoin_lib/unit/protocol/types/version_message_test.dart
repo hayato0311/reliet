@@ -15,7 +15,7 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/version.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/version_message.dart';
 
 void main() {
-  group('create and serialize Version instance', () {
+  group('create and serialize VersionMessage instance', () {
     test('with valid args', () {
       const version = Version.protocolVersion;
       final services = Services([Service.nodeZero]);
@@ -34,8 +34,6 @@ void main() {
       final userAgent = VarStr('userAgentString');
       final startHeight = StartHeight(0);
       const relay = false;
-
-      final unixtime = (DateTime.now().millisecondsSinceEpoch / 1000).floor();
 
       final versionMessage = VersionMessage.create(
         version: version,
@@ -63,6 +61,52 @@ void main() {
       expect(
         versionMessage.serialize(),
         Uint8List.fromList(serializedVersionMessage),
+      );
+    });
+  });
+
+  group('deserialize bytes to VersionMessage instance', () {
+    test('with valid bytes', () {
+      const version = Version.protocolVersion;
+      final services = Services([Service.nodeNetwork]);
+      final ipAddr = IpAddr([0, 0, 0, 0]);
+      final addrRecv = NetAddr(
+        services: services,
+        ipAddr: ipAddr,
+        port: Port.zero,
+      );
+      final addrFrom = NetAddr(
+        services: services,
+        ipAddr: ipAddr,
+        port: Port.zero,
+      );
+      final nonce = Nonce(<int>[0, 0, 0, 0, 0, 0, 0, 0]);
+      final userAgent = VarStr('userAgentString');
+      final startHeight = StartHeight(0);
+      const relay = false;
+
+      final versionMessage = VersionMessage.create(
+        version: version,
+        services: services,
+        addrRecv: addrRecv,
+        addrFrom: addrFrom,
+        nonce: nonce,
+        userAgent: userAgent,
+        startHeight: startHeight,
+        relay: relay,
+      );
+
+      final serializedVersionMessage = versionMessage.serialize();
+
+      expect(
+        VersionMessage.deserialize(serializedVersionMessage),
+        isA<VersionMessage>(),
+      );
+    });
+    test('with invalid bytes', () {
+      expect(
+        () => VersionMessage.deserialize(Uint8List.fromList([0, 0, 0, 1])),
+        throwsArgumentError,
       );
     });
   });

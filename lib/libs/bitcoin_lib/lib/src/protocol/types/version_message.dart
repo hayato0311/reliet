@@ -6,10 +6,23 @@ import 'nonce.dart';
 import 'services.dart';
 import 'start_height.dart';
 import 'timestamp.dart';
+import 'variable_length_integer.dart';
 import 'variable_length_string.dart';
 import 'version.dart';
 
 class VersionMessage {
+  VersionMessage._internal({
+    required this.version,
+    required this.services,
+    required this.timestamp,
+    required this.addrRecv,
+    required this.addrFrom,
+    required this.nonce,
+    required this.userAgent,
+    required this.startHeight,
+    required this.relay,
+  });
+
   factory VersionMessage.create({
     required Version version,
     required Services services,
@@ -33,17 +46,111 @@ class VersionMessage {
     );
   }
 
-  VersionMessage._internal({
-    required this.version,
-    required this.services,
-    required this.timestamp,
-    required this.addrRecv,
-    required this.addrFrom,
-    required this.nonce,
-    required this.userAgent,
-    required this.startHeight,
-    required this.relay,
-  });
+  factory VersionMessage.deserialize(Uint8List bytes) {
+    var startIndex = 0;
+    final version = Version.deserialize(
+      bytes.sublist(
+        startIndex,
+        startIndex + Version.bytesLength(),
+      ),
+    );
+
+    startIndex += Version.bytesLength();
+
+    final services = Services.deserialize(
+      bytes.sublist(
+        startIndex,
+        startIndex + Services.bytesLength(),
+      ),
+    );
+
+    startIndex += Services.bytesLength();
+
+    final timestamp = Timestamp.deserialize(
+      bytes.sublist(
+        startIndex,
+        startIndex + Timestamp.bytesLength(),
+      ),
+    );
+
+    startIndex += Timestamp.bytesLength();
+
+    final addrRecv = NetAddr.deserialize(
+      bytes.sublist(
+        startIndex,
+        startIndex + NetAddr.bytesLength(),
+      ),
+    );
+
+    startIndex += NetAddr.bytesLength();
+
+    final addrFrom = NetAddr.deserialize(
+      bytes.sublist(
+        startIndex,
+        startIndex + NetAddr.bytesLength(),
+      ),
+    );
+
+    startIndex += NetAddr.bytesLength();
+
+    final nonce = Nonce.deserialize(
+      bytes.sublist(
+        startIndex,
+        startIndex + Nonce.bytesLength(),
+      ),
+    );
+
+    startIndex += Nonce.bytesLength();
+
+    final userAgentStringLength =
+        _bytesToUserAgentStringLength(bytes.sublist(startIndex));
+
+    final userAgent = VarStr.deserialize(
+      bytes.sublist(
+        startIndex,
+        startIndex + VarStr.bytesLength(userAgentStringLength),
+      ),
+    );
+
+    startIndex += VarStr.bytesLength(userAgentStringLength);
+
+    final startHeight = StartHeight.deserialize(
+      bytes.sublist(
+        startIndex,
+        startIndex + StartHeight.bytesLength(),
+      ),
+    );
+
+    startIndex += StartHeight.bytesLength();
+
+    final relay = bytes[startIndex] == 1;
+
+    startIndex += 1;
+
+    if (bytes.length != startIndex) {
+      throw ArgumentError('Given bytes is invalid');
+    }
+
+    return VersionMessage._internal(
+      version: version,
+      services: services,
+      timestamp: timestamp,
+      addrRecv: addrRecv,
+      addrFrom: addrFrom,
+      nonce: nonce,
+      userAgent: userAgent,
+      startHeight: startHeight,
+      relay: relay,
+    );
+  }
+
+  static VarInt _bytesToUserAgentStringLength(Uint8List bytes) {
+    final headByte = bytes[0];
+    final varIntLength = VarInt.bytesLength(headByte);
+
+    return VarInt.deserialize(bytes.sublist(0, varIntLength));
+  }
+
   final Version version;
   final Services services;
   final Timestamp timestamp;
