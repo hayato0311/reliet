@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
+
 import '../../utils/hash.dart';
 
 class Checksum {
@@ -9,6 +11,8 @@ class Checksum {
 
     return Checksum._internal(checksum);
   }
+
+  bool isValid(Uint8List checksum) => checksum.equals(bytes);
 
   late final Uint8List bytes;
 
