@@ -26,33 +26,42 @@ class MessageHeader {
       throw ArgumentError('the length of given bytes is invalid');
     }
 
+    var startIndex = 0;
+
     final magic = Magic.deserialize(
       bytes.sublist(
-        0,
-        Magic.bytesLength(),
+        startIndex,
+        startIndex + Magic.bytesLength(),
       ),
     );
+    startIndex += Magic.bytesLength();
+
     final command = Command.deserialize(
       bytes.sublist(
-        Magic.bytesLength(),
-        Magic.bytesLength() + Command.bytesLength(),
+        startIndex,
+        startIndex + Command.bytesLength(),
       ),
     );
+    startIndex += Command.bytesLength();
+
     final payloadLength = PayloadLength.deserialize(
       bytes.sublist(
-        Magic.bytesLength() + Command.bytesLength(),
-        Magic.bytesLength() +
-            Command.bytesLength() +
-            PayloadLength.bytesLength(),
+        startIndex,
+        startIndex + PayloadLength.bytesLength(),
       ),
     );
+    startIndex += PayloadLength.bytesLength();
+
     final checksumBytes = bytes.sublist(
-      Magic.bytesLength() + Command.bytesLength() + PayloadLength.bytesLength(),
-      Magic.bytesLength() +
-          Command.bytesLength() +
-          PayloadLength.bytesLength() +
-          Checksum.bytesLength(),
+      startIndex,
+      startIndex + Checksum.bytesLength(),
     );
+
+    startIndex += Checksum.bytesLength();
+
+    if (bytes.length != startIndex) {
+      throw ArgumentError('The length of given bytes is invalid');
+    }
 
     final checksum = Checksum.fromPayload(payload);
 
