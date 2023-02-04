@@ -11,16 +11,13 @@ enum Magic {
   factory Magic.deserialize(Uint8List bytes) {
     final magicValue = CreateInt.fromUint32leBytes(bytes);
 
-    if (magicValue != Magic.mainnet.value &&
-        magicValue != Magic.testnet.value) {
-      throw ArgumentError();
-    }
-
     if (magicValue == Magic.mainnet.value) {
       return Magic.mainnet;
+    } else if (magicValue == Magic.testnet.value) {
+      return Magic.testnet;
+    } else {
+      throw ArgumentError('Undefined magic value');
     }
-
-    return Magic.testnet;
   }
 
   final int value;
