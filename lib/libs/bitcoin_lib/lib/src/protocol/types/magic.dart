@@ -16,7 +16,9 @@ enum Magic {
     } else if (magicValue == Magic.testnet.value) {
       return Magic.testnet;
     } else {
-      throw ArgumentError('Undefined magic value');
+      throw ArgumentError(
+        '${magicValue.toRadixString(16)} is undefined magic value.',
+      );
     }
   }
 
