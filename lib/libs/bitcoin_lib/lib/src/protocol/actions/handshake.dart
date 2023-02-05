@@ -32,50 +32,82 @@ Future<String> handshake({bool testnet = false}) async {
     'Connected to: ${socket.remoteAddress.address}:${socket.remotePort}',
   );
 
+  var connecting = true;
+
   var result = 'failed to connect to node';
 
   var validVersionRecieved = false;
+  var validVerackRecieved = false;
 
   // listen for responses from the server
   socket.listen(
     // handle data from the server
     (data) {
-      print('Server: Successfully received version');
-      print('$data');
-
       final messageHeader = MessageHeader.deserialize(data);
 
-      if (messageHeader.command == Command.version) {
-        validVersionRecieved = _receiveVersionMessage(
-          messageHeader,
-          data.sublist(
-            MessageHeader.bytesLength(),
-            MessageHeader.bytesLength() + messageHeader.payloadLength.value,
-          ),
-        );
+      print('Recv: ${messageHeader.command.string}');
+
+      switch (messageHeader.command) {
+        case Command.version:
+          validVersionRecieved = _receiveVersionMessage(
+            messageHeader,
+            data.sublist(
+              MessageHeader.bytesLength(),
+              MessageHeader.bytesLength() + messageHeader.payloadLength.value,
+            ),
+          );
+          break;
+
+        case Command.verack:
+          validVerackRecieved = true;
+          break;
+
+        case Command.sendheaders:
+          validVerackRecieved = true;
+          break;
+
+        case Command.sendcmpct:
+          validVerackRecieved = true;
+          break;
+
+        default:
+          print('${messageHeader.command} is not supported yet');
       }
     },
 
     // handle errors
     onError: (error) {
       print('$error');
+      connecting = false;
       socket.destroy();
     },
 
     // handle server ending connection
     onDone: () {
       print('Server left.');
+      connecting = false;
       socket.destroy();
     },
   );
 
-  await _sendVersionMessage(
-    socket,
-    testnet,
-  );
+  while (!validVerackRecieved && connecting) {
+    await _sendVersionMessage(
+      socket,
+      testnet,
+    );
 
-  if (validVersionRecieved) {
-    result = 'Successfully received version, but handshake does not completed';
+    if (validVersionRecieved) {
+      result = 'Received version message';
+      await _sendVerack(
+        socket,
+        testnet,
+      );
+    }
+    validVersionRecieved = false;
+  }
+
+  if (validVerackRecieved) {
+    result = 'handshake completed';
   }
 
   return result;
@@ -87,17 +119,22 @@ Future<void> _sendMessage(
   Uint8List payload,
   Command command,
 ) async {
-  final message = Uint8List.fromList([...header, ...payload]);
+  late final Uint8List message;
+  if (payload.isEmpty) {
+    message = header;
+  } else {
+    message = Uint8List.fromList([...header, ...payload]);
+  }
   socket.add(message);
-  print('$message');
-  print('Send: $command ${payload.length}');
-  await Future<void>.delayed(const Duration(seconds: 2));
+  print('Send: ${command.string}');
+  await Future<void>.delayed(const Duration(milliseconds: 500));
 }
 
 Future<void> _sendVersionMessage(
   Socket socket,
-  bool testnet,
-) async {
+  bool testnet, {
+  bool verbose = false,
+}) async {
   final addrRecv = NetAddr(
     services: Services([Service.nodeZero]),
     ipAddr: IpAddr([0, 0, 0, 0]),
@@ -137,19 +174,53 @@ Future<void> _sendVersionMessage(
     payload: serializedPayload,
   );
 
-  print(
-    jsonEncode({
-      'Version': {
-        'messageHeader': header.toJson(),
-        'versionMessage': payload.toJson()
-      },
-    }),
-  );
+  if (verbose) {
+    print(
+      jsonEncode({
+        'Version': {
+          'messageHeader': header.toJson(),
+          'versionMessage': payload.toJson()
+        },
+      }),
+    );
+  }
 
   await _sendMessage(socket, header.serialize(), serializedPayload, command);
 }
 
-bool _receiveVersionMessage(MessageHeader messageHeader, Uint8List payload) {
+Future<void> _sendVerack(
+  Socket socket,
+  bool testnet, {
+  bool verbose = false,
+}) async {
+  const command = Command.verack;
+  final magic = testnet ? Magic.testnet : Magic.mainnet;
+  final payload = Uint8List(0);
+
+  final header = MessageHeader.create(
+    magic: magic,
+    command: command,
+    payload: payload,
+  );
+
+  if (verbose) {
+    print(
+      jsonEncode({
+        'Verack': {
+          'messageHeader': header.toJson(),
+        },
+      }),
+    );
+  }
+
+  await _sendMessage(socket, header.serialize(), payload, command);
+}
+
+bool _receiveVersionMessage(
+  MessageHeader messageHeader,
+  Uint8List payload, {
+  bool verbose = false,
+}) {
   final VersionMessage versionMessage;
   try {
     versionMessage = VersionMessage.deserialize(payload);
@@ -158,14 +229,16 @@ bool _receiveVersionMessage(MessageHeader messageHeader, Uint8List payload) {
     return false;
   }
 
-  print(
-    jsonEncode({
-      'Version': {
-        'messageHeader': messageHeader.toJson(),
-        'versionMessage': versionMessage.toJson()
-      },
-    }),
-  );
+  if (verbose) {
+    print(
+      jsonEncode({
+        'Version': {
+          'messageHeader': messageHeader.toJson(),
+          'versionMessage': versionMessage.toJson()
+        },
+      }),
+    );
+  }
 
   return true;
 }
