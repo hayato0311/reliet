@@ -2,32 +2,44 @@ import 'dart:typed_data';
 
 import '../../extensions/int_extensions.dart';
 
-enum Port {
-  mainnet(8333),
-  testnet(18333),
-  zero(0);
-
-  const Port(this.value);
+class Port {
+  factory Port(int value) {
+    if (value != mainnet && value != testnet && value != zero) {
+      throw ArgumentError(
+        'Given port is invalid. Please set Port.mainnet, Port.testnet or Port.zero.',
+      );
+    }
+    return Port._internal(value);
+  }
 
   factory Port.deserialize(Uint8List bytes) {
-    final portValue = CreateInt.fromUint16beBytes(bytes);
-
-    if (portValue == 8333) {
-      return Port.mainnet;
-    } else if (portValue == 18333) {
-      return Port.testnet;
-    } else if (portValue == 0) {
-      return Port.zero;
-    } else {
-      throw ArgumentError('Undefined port value');
-    }
+    final value = CreateInt.fromUint16beBytes(bytes);
+    return Port._internal(value);
   }
+
+  Port._internal(this.value);
+
+  static int get mainnet => 8333;
+  static int get testnet => 18333;
+  static int get zero => 0;
 
   static int bytesLength() => 2;
 
   final int value;
 
-  Map<String, dynamic> toJson() => {'value': '${toString()}($value)'};
+  Map<String, dynamic> toJson() {
+    final String portType;
+    if (value == mainnet) {
+      portType = 'mainnet';
+    } else if (value == testnet) {
+      portType = 'testnet';
+    } else if (value == zero) {
+      portType = 'zero';
+    } else {
+      portType = 'custom';
+    }
+    return {'value': '$value($portType)'};
+  }
 
   Uint8List serialize() => value.toUint16beBytes();
 }
