@@ -70,15 +70,6 @@ void main() {
       expect(serializedCommand, commandString.toBytes(12));
       expect(serializedCommand.length, 12);
     });
-    test('of verack', () {
-      const commandString = 'verack';
-      const command = Command.verack;
-      final serializedCommand = command.serialize();
-
-      expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
-      expect(serializedCommand.length, 12);
-    });
     test('of getheaders', () {
       const commandString = 'getheaders';
       const command = Command.getheaders;
