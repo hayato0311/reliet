@@ -96,3 +96,6 @@ linter:
 
     # Too verbose for current project status, but we might change this setting in the future.
     public_member_api_docs: false
+
+    # print is only way to print message to console in dart
+    avoid_print: false

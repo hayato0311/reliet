@@ -5,7 +5,7 @@ void main() {
   test('send and receive version', () async {
     expect(
       await handshake(testnet: true),
-      'Successfully received version, but handshake not completed',
+      'Successfully received version, but handshake does not completed',
     );
   });
 }
