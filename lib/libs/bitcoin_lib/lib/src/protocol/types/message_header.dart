@@ -21,11 +21,7 @@ class MessageHeader {
     );
   }
 
-  factory MessageHeader.deserialize(Uint8List bytes, Uint8List payload) {
-    if (bytes.length != bytesLength()) {
-      throw ArgumentError('the length of given bytes is invalid');
-    }
-
+  factory MessageHeader.deserialize(Uint8List bytes) {
     var startIndex = 0;
 
     final magic = Magic.deserialize(
@@ -52,28 +48,32 @@ class MessageHeader {
     );
     startIndex += PayloadLength.bytesLength();
 
-    final checksumBytes = bytes.sublist(
+    final givenChecksum = bytes.sublist(
       startIndex,
       startIndex + Checksum.bytesLength(),
     );
 
     startIndex += Checksum.bytesLength();
 
-    if (bytes.length != startIndex) {
+    if (startIndex != bytesLength()) {
       throw ArgumentError('The length of given bytes is invalid');
     }
 
-    final checksum = Checksum.fromPayload(payload);
+    final payload = bytes.sublist(startIndex, startIndex + payloadLength.value);
 
-    if (!checksum.isValid(checksumBytes)) {
-      throw ArgumentError('Checksum is invalid');
+    final checksumFromPayload = Checksum.fromPayload(payload);
+
+    if (!checksumFromPayload.isValid(givenChecksum)) {
+      throw ArgumentError(
+        'Given checksum and the checksum computed from payload are not equal.',
+      );
     }
 
     return MessageHeader._internal(
       magic,
       command,
       payloadLength,
-      checksum,
+      checksumFromPayload,
     );
   }
 
