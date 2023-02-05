@@ -13,7 +13,7 @@ void main() {
       final services = Services([Service.nodeNetwork]);
       final ipAddr =
           IpAddr([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 127, 0, 0, 1]);
-      const port = Port.testnet;
+      final port = Port(Port.testnet);
       final netAddr = NetAddr(
         services: services,
         ipAddr: ipAddr,
@@ -33,7 +33,7 @@ void main() {
     test('with valid bytes', () {
       final services = Services([Service.nodeNetwork]);
       final ipAddr = IpAddr([127, 0, 0, 1]);
-      const port = Port.testnet;
+      final port = Port(Port.testnet);
       final netAddr = NetAddr(
         services: services,
         ipAddr: ipAddr,

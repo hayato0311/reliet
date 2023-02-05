@@ -10,7 +10,7 @@ void main() {
     test('of version', () {
       const command = Command.version;
 
-      expect(command.value, 'version');
+      expect(command.string, 'version');
 
       final actualSerializedCommand = command.serialize();
 

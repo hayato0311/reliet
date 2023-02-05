@@ -23,12 +23,12 @@ void main() {
       final addrRecv = NetAddr(
         services: services,
         ipAddr: ipAddr,
-        port: Port.zero,
+        port: Port(Port.zero),
       );
       final addrFrom = NetAddr(
         services: services,
         ipAddr: ipAddr,
-        port: Port.zero,
+        port: Port(Port.zero),
       );
       final nonce = Nonce(<int>[0, 0, 0, 0, 0, 0, 0, 0]);
       final userAgent = VarStr('userAgentString');
@@ -73,12 +73,12 @@ void main() {
       final addrRecv = NetAddr(
         services: services,
         ipAddr: ipAddr,
-        port: Port.zero,
+        port: Port(Port.zero),
       );
       final addrFrom = NetAddr(
         services: services,
         ipAddr: ipAddr,
-        port: Port.zero,
+        port: Port(Port.zero),
       );
       final nonce = Nonce(<int>[0, 0, 0, 0, 0, 0, 0, 0]);
       final userAgent = VarStr('userAgentString');

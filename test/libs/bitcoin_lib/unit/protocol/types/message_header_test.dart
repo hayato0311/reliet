@@ -45,15 +45,20 @@ void main() {
       );
       final serializedMessageHeader = messageHeader.serialize();
 
+      final serializedPayload = payload;
+
       expect(
-        MessageHeader.deserialize(serializedMessageHeader, payload),
+        MessageHeader.deserialize(
+          Uint8List.fromList(
+            [...serializedMessageHeader, ...serializedPayload],
+          ),
+        ),
         isA<MessageHeader>(),
       );
     });
     test('with invalid bytes', () {
       expect(
         () => MessageHeader.deserialize(
-          Uint8List.fromList([0, 0, 0, 1]),
           Uint8List.fromList([0, 0, 0, 1]),
         ),
         throwsArgumentError,
