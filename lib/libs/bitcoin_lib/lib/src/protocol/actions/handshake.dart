@@ -1,4 +1,4 @@
-import 'dart:developer' as developer;
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
@@ -25,41 +25,58 @@ Future<String> handshake({bool testnet = false}) async {
 
   final socket = await Socket.connect(
     dnsSeeds[Random().nextInt(dnsSeeds.length)],
-    testnet ? Port.testnet.value : Port.main.value,
+    testnet ? Port.testnet : Port.mainnet,
   );
 
-  developer.log(
+  print(
     'Connected to: ${socket.remoteAddress.address}:${socket.remotePort}',
   );
 
   var result = 'failed to connect to node';
 
+  var validVersionRecieved = false;
+
   // listen for responses from the server
   socket.listen(
     // handle data from the server
     (data) {
-      developer.log('Server: Successfully received version');
-      developer.log('$data');
-      result = 'Successfully received version, but handshake not completed';
+      print('Server: Successfully received version');
+      print('$data');
+
+      final messageHeader = MessageHeader.deserialize(data);
+
+      if (messageHeader.command == Command.version) {
+        validVersionRecieved = _receiveVersionMessage(
+          messageHeader,
+          data.sublist(
+            MessageHeader.bytesLength(),
+            MessageHeader.bytesLength() + messageHeader.payloadLength.value,
+          ),
+        );
+      }
     },
 
     // handle errors
     onError: (error) {
-      developer.log('$error');
+      print('$error');
       socket.destroy();
     },
 
     // handle server ending connection
     onDone: () {
-      developer.log('Server left.');
+      print('Server left.');
       socket.destroy();
     },
   );
 
-  await _sendVersion(
+  await _sendVersionMessage(
     socket,
     testnet,
   );
+
+  if (validVersionRecieved) {
+    result = 'Successfully received version, but handshake does not completed';
+  }
 
   return result;
 }
@@ -72,19 +89,19 @@ Future<void> _sendMessage(
 ) async {
   final message = Uint8List.fromList([...header, ...payload]);
   socket.add(message);
-  developer.log('$message');
-  developer.log('Send: ${command.value} ${payload.length}');
+  print('$message');
+  print('Send: $command ${payload.length}');
   await Future<void>.delayed(const Duration(seconds: 2));
 }
 
-Future<void> _sendVersion(
+Future<void> _sendVersionMessage(
   Socket socket,
   bool testnet,
 ) async {
   final addrRecv = NetAddr(
     services: Services([Service.nodeZero]),
     ipAddr: IpAddr([0, 0, 0, 0]),
-    port: testnet ? Port.testnet : Port.main,
+    port: testnet ? Port(Port.testnet) : Port(Port.mainnet),
   );
 
   const userAgentString = 'rust-example';
@@ -95,7 +112,7 @@ Future<void> _sendVersion(
   final addrFrom = NetAddr(
     services: services,
     ipAddr: IpAddr([0, 0, 0, 0]),
-    port: Port.zero,
+    port: Port(Port.zero),
   );
 
   final payload = VersionMessage.create(
@@ -107,7 +124,9 @@ Future<void> _sendVersion(
     userAgent: userAgent,
     startHeight: StartHeight(0),
     relay: false,
-  ).serialize();
+  );
+
+  final serializedPayload = payload.serialize();
 
   const command = Command.version;
   final magic = testnet ? Magic.testnet : Magic.mainnet;
@@ -115,8 +134,38 @@ Future<void> _sendVersion(
   final header = MessageHeader.create(
     magic: magic,
     command: command,
-    payload: payload,
-  ).serialize();
+    payload: serializedPayload,
+  );
 
-  await _sendMessage(socket, header, payload, command);
+  print(
+    jsonEncode({
+      'Version': {
+        'messageHeader': header.toJson(),
+        'versionMessage': payload.toJson()
+      },
+    }),
+  );
+
+  await _sendMessage(socket, header.serialize(), serializedPayload, command);
+}
+
+bool _receiveVersionMessage(MessageHeader messageHeader, Uint8List payload) {
+  final VersionMessage versionMessage;
+  try {
+    versionMessage = VersionMessage.deserialize(payload);
+  } catch (e) {
+    print(e);
+    return false;
+  }
+
+  print(
+    jsonEncode({
+      'Version': {
+        'messageHeader': messageHeader.toJson(),
+        'versionMessage': versionMessage.toJson()
+      },
+    }),
+  );
+
+  return true;
 }

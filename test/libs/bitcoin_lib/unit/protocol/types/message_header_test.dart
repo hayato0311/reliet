@@ -33,4 +33,36 @@ void main() {
       );
     });
   });
+  group('deserialize bytes to MessageHeader instance', () {
+    test('with valid bytes', () {
+      const magic = Magic.testnet;
+      const command = Command.version;
+      final payload = Uint8List.fromList([0x10, 0x10]);
+      final messageHeader = MessageHeader.create(
+        magic: magic,
+        command: command,
+        payload: payload,
+      );
+      final serializedMessageHeader = messageHeader.serialize();
+
+      final serializedPayload = payload;
+
+      expect(
+        MessageHeader.deserialize(
+          Uint8List.fromList(
+            [...serializedMessageHeader, ...serializedPayload],
+          ),
+        ),
+        isA<MessageHeader>(),
+      );
+    });
+    test('with invalid bytes', () {
+      expect(
+        () => MessageHeader.deserialize(
+          Uint8List.fromList([0, 0, 0, 1]),
+        ),
+        throwsArgumentError,
+      );
+    });
+  });
 }

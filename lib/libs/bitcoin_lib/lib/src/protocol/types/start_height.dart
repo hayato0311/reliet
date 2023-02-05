@@ -12,8 +12,16 @@ class StartHeight {
     return StartHeight._internal(value);
   }
 
+  factory StartHeight.deserialize(Uint8List bytes) =>
+      StartHeight(CreateInt.fromInt32leBytes(bytes));
+
   StartHeight._internal(this.value);
+
+  static int bytesLength() => 4;
+
   final int value;
+
+  Map<String, dynamic> toJson() => {'value': value};
 
   Uint8List serialize() => value.toInt32leBytes();
 }

@@ -5,9 +5,23 @@ import '../../extensions/string_extensions.dart';
 enum Command {
   version('version');
 
-  const Command(this.value);
+  const Command(this.string);
 
-  final String value;
+  factory Command.deserialize(Uint8List bytes) {
+    final commandValue = CreateString.fromBytes(bytes);
 
-  Uint8List serialize() => value.toBytes(12);
+    if (commandValue == 'version') {
+      return Command.version;
+    } else {
+      throw ArgumentError('Undefined command');
+    }
+  }
+
+  static int bytesLength() => 12;
+
+  final String string;
+
+  Map<String, dynamic> toJson() => {'string': "${toString()}('$string')"};
+
+  Uint8List serialize() => string.toBytes(12);
 }

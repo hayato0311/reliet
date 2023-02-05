@@ -8,12 +8,12 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/service.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/services.dart';
 
 void main() {
-  group('serialize network address', () {
+  group('serialize NetAddr', () {
     test('with valid params', () {
       final services = Services([Service.nodeNetwork]);
       final ipAddr =
           IpAddr([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 127, 0, 0, 1]);
-      const port = Port.testnet;
+      final port = Port(Port.testnet);
       final netAddr = NetAddr(
         services: services,
         ipAddr: ipAddr,
@@ -27,6 +27,27 @@ void main() {
       ];
 
       expect(netAddr.serialize(), Uint8List.fromList(byteList));
+    });
+  });
+  group('deserialize bytes to NetAddr instance', () {
+    test('with valid bytes', () {
+      final services = Services([Service.nodeNetwork]);
+      final ipAddr = IpAddr([127, 0, 0, 1]);
+      final port = Port(Port.testnet);
+      final netAddr = NetAddr(
+        services: services,
+        ipAddr: ipAddr,
+        port: port,
+      );
+      final serializedNetAddr = netAddr.serialize();
+
+      expect(NetAddr.deserialize(serializedNetAddr), isA<NetAddr>());
+    });
+    test('with invalid bytes', () {
+      expect(
+        () => NetAddr.deserialize(Uint8List.fromList([0, 0, 0, 1])),
+        throwsArgumentError,
+      );
     });
   });
 }

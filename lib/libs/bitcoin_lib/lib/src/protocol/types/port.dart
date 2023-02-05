@@ -2,14 +2,44 @@ import 'dart:typed_data';
 
 import '../../extensions/int_extensions.dart';
 
-enum Port {
-  main(8333),
-  testnet(18333),
-  zero(0);
+class Port {
+  factory Port(int value) {
+    if (value != mainnet && value != testnet && value != zero) {
+      throw ArgumentError(
+        'Given port is invalid. Please set Port.mainnet, Port.testnet or Port.zero.',
+      );
+    }
+    return Port._internal(value);
+  }
 
-  const Port(this.value);
+  factory Port.deserialize(Uint8List bytes) {
+    final value = CreateInt.fromUint16beBytes(bytes);
+    return Port._internal(value);
+  }
+
+  Port._internal(this.value);
+
+  static int get mainnet => 8333;
+  static int get testnet => 18333;
+  static int get zero => 0;
+
+  static int bytesLength() => 2;
 
   final int value;
+
+  Map<String, dynamic> toJson() {
+    final String portType;
+    if (value == mainnet) {
+      portType = 'mainnet';
+    } else if (value == testnet) {
+      portType = 'testnet';
+    } else if (value == zero) {
+      portType = 'zero';
+    } else {
+      portType = 'custom';
+    }
+    return {'value': '$value($portType)'};
+  }
 
   Uint8List serialize() => value.toUint16beBytes();
 }

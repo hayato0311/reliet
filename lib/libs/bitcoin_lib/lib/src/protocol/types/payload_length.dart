@@ -12,8 +12,16 @@ class PayloadLength {
     return PayloadLength._internal(value);
   }
 
+  factory PayloadLength.deserialize(Uint8List bytes) =>
+      PayloadLength(CreateInt.fromUint32leBytes(bytes));
+
   PayloadLength._internal(this.value);
+
+  static int bytesLength() => 4;
+
   final int value;
+
+  Map<String, dynamic> toJson() => {'value': value};
 
   Uint8List serialize() => value.toUint32leBytes();
 }

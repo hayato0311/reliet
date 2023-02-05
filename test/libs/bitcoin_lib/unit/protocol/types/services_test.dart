@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/extensions/int_extensions.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/service.dart';
@@ -6,9 +8,10 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/services.dart';
 void main() {
   group('create and serialize Services instance', () {
     test('with single service', () {
-      final services = Services([Service.nodeNetwork]);
+      final serviceList = [Service.nodeNetwork];
+      final services = Services(serviceList);
 
-      expect(services.value, Service.nodeNetwork.value);
+      expect(services.serviceList, serviceList);
       expect(
         services.serialize(),
         Service.nodeNetwork.value.toUint64leBytes(),
@@ -16,7 +19,7 @@ void main() {
     });
 
     test('with multi service', () {
-      final services = Services([
+      final serviceList = [
         Service.nodeNetwork,
         Service.nodeGetutxo,
         Service.nodeBloom,
@@ -24,7 +27,8 @@ void main() {
         Service.nodeXthin,
         Service.nodeCompactFilters,
         Service.nodeNetworkLimited,
-      ]);
+      ];
+      final services = Services(serviceList);
 
       final servicesValueSum = Service.nodeNetwork.value +
           Service.nodeGetutxo.value +
@@ -35,13 +39,57 @@ void main() {
           Service.nodeNetworkLimited.value;
 
       expect(
-        services.value,
-        servicesValueSum,
+        services.serviceList,
+        serviceList,
       );
       expect(
         services.serialize(),
         servicesValueSum.toUint64leBytes(),
       );
+    });
+  });
+
+  group('deserialize bytes to Services instance', () {
+    group('with valid bytes', () {
+      test('when zero', () {
+        final serviceList = [Service.nodeZero];
+        final serializedServicesBytes = Services(serviceList).serialize();
+        expect(
+          Services.deserialize(serializedServicesBytes).serviceList.toSet(),
+          serviceList.toSet(),
+        );
+      });
+
+      test('with all services bytes', () {
+        final serviceList = [
+          Service.nodeNetwork,
+          Service.nodeGetutxo,
+          Service.nodeBloom,
+          Service.nodeWitness,
+          Service.nodeXthin,
+          Service.nodeCompactFilters,
+          Service.nodeNetworkLimited,
+        ];
+        final serializedServicesBytes = Services(serviceList).serialize();
+        expect(
+          Services.deserialize(serializedServicesBytes).serviceList.toSet(),
+          serviceList.toSet(),
+        );
+      });
+    });
+    group('with invalid bytes', () {
+      test('when empty bytes', () {
+        expect(
+          () => Services.deserialize(Uint8List.fromList([])).serviceList,
+          throwsArgumentError,
+        );
+      });
+      test('when not defind service value is included', () {
+        expect(
+          () => Services.deserialize(Uint8List.fromList([40])).serviceList,
+          throwsArgumentError,
+        );
+      });
     });
   });
 }

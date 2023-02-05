@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
+
 import '../../utils/hash.dart';
 
 class Checksum {
@@ -10,7 +12,13 @@ class Checksum {
     return Checksum._internal(checksum);
   }
 
+  static int bytesLength() => 4;
+
+  bool isValid(Uint8List checksum) => checksum.equals(bytes);
+
   late final Uint8List bytes;
+
+  Map<String, dynamic> toJson() => {'bytes': bytes};
 
   Uint8List serialize() => bytes;
 }

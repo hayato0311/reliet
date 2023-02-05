@@ -24,3 +24,10 @@ extension StringExtensions on String {
     return Uint8List.fromList(byteList);
   }
 }
+
+extension CreateString on String {
+  static String fromBytes(Uint8List bytes) {
+    final removedZeroPaddingBytes = bytes.where((value) => value != 0).toList();
+    return utf8.decode(removedZeroPaddingBytes);
+  }
+}

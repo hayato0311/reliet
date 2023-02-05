@@ -7,7 +7,25 @@ enum Magic {
   testnet(0x0709110b);
 
   const Magic(this.value);
+
+  factory Magic.deserialize(Uint8List bytes) {
+    final magicValue = CreateInt.fromUint32leBytes(bytes);
+
+    if (magicValue == Magic.mainnet.value) {
+      return Magic.mainnet;
+    } else if (magicValue == Magic.testnet.value) {
+      return Magic.testnet;
+    } else {
+      throw ArgumentError('Undefined magic value');
+    }
+  }
+
+  static int bytesLength() => 4;
+
   final int value;
+
+  Map<String, dynamic> toJson() =>
+      {'value': '${toString()}(${value.toRadixString(16)})'};
 
   Uint8List serialize() => value.toUint32leBytes();
 }
