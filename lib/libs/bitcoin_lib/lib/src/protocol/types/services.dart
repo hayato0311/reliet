@@ -22,7 +22,7 @@ class Services {
     var serviceList = <Service>[];
 
     if (servicesValueSum == 0) {
-      throw ArgumentError('No Services are included in the given bytes');
+      serviceList += [Service.nodeZero];
     }
 
     if (servicesValueSum >= 1024) {

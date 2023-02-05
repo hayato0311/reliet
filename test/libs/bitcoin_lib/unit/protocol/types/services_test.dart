@@ -51,6 +51,15 @@ void main() {
 
   group('deserialize bytes to Services instance', () {
     group('with valid bytes', () {
+      test('when zero', () {
+        final serviceList = [Service.nodeZero];
+        final serializedServicesBytes = Services(serviceList).serialize();
+        expect(
+          Services.deserialize(serializedServicesBytes).serviceList.toSet(),
+          serviceList.toSet(),
+        );
+      });
+
       test('with all services bytes', () {
         final serviceList = [
           Service.nodeNetwork,
@@ -69,9 +78,15 @@ void main() {
       });
     });
     group('with invalid bytes', () {
-      test('with empty bytes', () {
+      test('when empty bytes', () {
         expect(
           () => Services.deserialize(Uint8List.fromList([])).serviceList,
+          throwsArgumentError,
+        );
+      });
+      test('when not defind service value is included', () {
+        expect(
+          () => Services.deserialize(Uint8List.fromList([40])).serviceList,
           throwsArgumentError,
         );
       });
