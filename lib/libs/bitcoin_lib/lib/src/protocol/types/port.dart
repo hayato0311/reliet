@@ -27,7 +27,7 @@ enum Port {
 
   final int value;
 
-  Map<String, dynamic> toJson() => {'value': this};
+  Map<String, dynamic> toJson() => {'value': '${toString()}($value)'};
 
   Uint8List serialize() => value.toUint16beBytes();
 }

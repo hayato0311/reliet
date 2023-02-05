@@ -69,7 +69,8 @@ class Services {
 
   Map<String, dynamic> toJson() => {
         'serviceList': [
-          for (int i = 0; i < serviceList.length; i++) serviceList[i]
+          for (Service service in serviceList)
+            '${service.toString()}(${service.value})'
         ]
       };
 

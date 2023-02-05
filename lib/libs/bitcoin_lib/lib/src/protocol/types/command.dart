@@ -5,7 +5,7 @@ import '../../extensions/string_extensions.dart';
 enum Command {
   version('version');
 
-  const Command(this.value);
+  const Command(this.string);
 
   factory Command.deserialize(Uint8List bytes) {
     final commandValue = CreateString.fromBytes(bytes);
@@ -19,9 +19,9 @@ enum Command {
 
   static int bytesLength() => 12;
 
-  final String value;
+  final String string;
 
-  Map<String, dynamic> toJson() => {'value': this};
+  Map<String, dynamic> toJson() => {'string': "${toString()}('$string')"};
 
-  Uint8List serialize() => value.toBytes(12);
+  Uint8List serialize() => string.toBytes(12);
 }
