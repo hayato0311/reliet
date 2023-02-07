@@ -21,13 +21,13 @@ class SpvClient {
 
   late Socket _socket;
 
-  bool _handshakeCompleted = false;
+  bool handshakeCompleted = false;
   bool _versionReceived = false;
 
   String nodeHost = '';
 
   Future<void> connectToNode() async {
-    while (!_handshakeCompleted) {
+    while (!handshakeCompleted) {
       if (connecting) {
         _socket.destroy();
       }
@@ -98,15 +98,15 @@ class SpvClient {
             break;
 
           case Command.verack:
-            _handshakeCompleted = true;
+            handshakeCompleted = true;
             break;
 
           case Command.sendheaders:
-            _handshakeCompleted = true;
+            handshakeCompleted = true;
             break;
 
           case Command.sendcmpct:
-            _handshakeCompleted = true;
+            handshakeCompleted = true;
             break;
 
           default:
