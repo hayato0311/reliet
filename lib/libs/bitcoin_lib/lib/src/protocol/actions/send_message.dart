@@ -16,23 +16,6 @@ import '../types/start_height.dart';
 import '../types/variable_length_string.dart';
 import '../types/version.dart';
 
-Future<void> handshake(
-  Socket socket, {
-  bool testnet = false,
-  bool verbose = false,
-}) async {
-  await _sendVersionMessage(
-    socket,
-    testnet,
-    verbose: true,
-  );
-
-  await _sendVerack(
-    socket,
-    testnet,
-  );
-}
-
 Future<void> _sendMessage(
   Socket socket,
   Uint8List header,
@@ -50,9 +33,9 @@ Future<void> _sendMessage(
   await Future<void>.delayed(const Duration(milliseconds: 500));
 }
 
-Future<void> _sendVersionMessage(
-  Socket socket,
-  bool testnet, {
+Future<void> sendVersionMessage(
+  Socket socket, {
+  bool testnet = false,
   bool verbose = false,
 }) async {
   final addrRecv = NetAddr(
@@ -61,7 +44,7 @@ Future<void> _sendVersionMessage(
     port: testnet ? Port(Port.testnet) : Port(Port.mainnet),
   );
 
-  const userAgentString = 'rust-example';
+  const userAgentString = '';
   final userAgent = VarStr(userAgentString);
 
   final services = Services([Service.nodeZero]);
@@ -108,9 +91,9 @@ Future<void> _sendVersionMessage(
   await _sendMessage(socket, header.serialize(), serializedPayload, command);
 }
 
-Future<void> _sendVerack(
-  Socket socket,
-  bool testnet, {
+Future<void> sendVerackMessage(
+  Socket socket, {
+  bool testnet = false,
   bool verbose = false,
 }) async {
   const command = Command.verack;

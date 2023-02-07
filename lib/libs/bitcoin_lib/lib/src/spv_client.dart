@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'chain_params.dart';
-import 'protocol/actions/handshake.dart';
+import 'protocol/actions/send_message.dart';
 import 'protocol/messages/version_message.dart';
 import 'protocol/types/command.dart';
 import 'protocol/types/message_header.dart';
@@ -18,20 +18,38 @@ class SpvClient {
   final bool testnet;
 
   bool connecting = false;
-  String status = '';
-
-  bool handshakeCompleted = false;
 
   late Socket _socket;
+
+  bool _handshakeCompleted = false;
+  bool _versionReceived = false;
 
   String nodeHost = '';
 
   Future<void> connectToNode() async {
-    while (!handshakeCompleted) {
+    while (!_handshakeCompleted) {
+      if (connecting) {
+        _socket.destroy();
+      }
+
       await _connect();
       _listen();
-      await handshake(_socket);
+      await _handshake();
     }
+  }
+
+  Future<void> _handshake() async {
+    await sendVersionMessage(
+      _socket,
+      testnet: testnet,
+    );
+
+    if (!_versionReceived) return;
+
+    await sendVerackMessage(
+      _socket,
+      testnet: testnet,
+    );
   }
 
   Future<void> _connect() async {
@@ -52,7 +70,6 @@ class SpvClient {
 
   void _listen({bool verbose = false}) {
     _socket.listen(
-      // handle data from the server
       (data) async {
         final messageHeader = MessageHeader.deserialize(data);
         final messageBytes = data.sublist(
@@ -64,9 +81,10 @@ class SpvClient {
 
         switch (messageHeader.command) {
           case Command.version:
-            final versionMessage = VersionMessage.deserialize(messageBytes);
+            _versionReceived = true;
 
             if (verbose) {
+              final versionMessage = VersionMessage.deserialize(messageBytes);
               print(
                 jsonEncode({
                   messageHeader.command.string: {
@@ -80,15 +98,15 @@ class SpvClient {
             break;
 
           case Command.verack:
-            handshakeCompleted = true;
+            _handshakeCompleted = true;
             break;
 
           case Command.sendheaders:
-            handshakeCompleted = true;
+            _handshakeCompleted = true;
             break;
 
           case Command.sendcmpct:
-            handshakeCompleted = true;
+            _handshakeCompleted = true;
             break;
 
           default:
@@ -99,15 +117,15 @@ class SpvClient {
       // handle errors
       onError: (error) {
         print('$error');
-        connecting = false;
         _socket.destroy();
+        connecting = false;
       },
 
       // handle server ending connection
       onDone: () {
         print('Server left.');
-        connecting = false;
         _socket.destroy();
+        connecting = false;
       },
     );
   }
