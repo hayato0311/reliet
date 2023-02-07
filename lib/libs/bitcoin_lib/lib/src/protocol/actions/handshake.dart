@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
 
-import '../../chain_params.dart';
+import '../messages/version_message.dart';
 import '../types/command.dart';
 import '../types/ip_address.dart';
 import '../types/magic.dart';
@@ -16,101 +15,22 @@ import '../types/services.dart';
 import '../types/start_height.dart';
 import '../types/variable_length_string.dart';
 import '../types/version.dart';
-import '../types/version_message.dart';
 
-Future<String> handshake({bool testnet = false}) async {
-  // TODO: need refactoring
-
-  final dnsSeeds = testnet ? TestnetParams.dnsSeeds : MainParams.dnsSeeds;
-
-  final socket = await Socket.connect(
-    dnsSeeds[Random().nextInt(dnsSeeds.length)],
-    testnet ? Port.testnet : Port.mainnet,
+Future<void> handshake(
+  Socket socket, {
+  bool testnet = false,
+  bool verbose = false,
+}) async {
+  await _sendVersionMessage(
+    socket,
+    testnet,
+    verbose: true,
   );
 
-  print(
-    'Connected to: ${socket.remoteAddress.address}:${socket.remotePort}',
+  await _sendVerack(
+    socket,
+    testnet,
   );
-
-  var connecting = true;
-
-  var result = 'failed to connect to node';
-
-  var validVersionRecieved = false;
-  var validVerackRecieved = false;
-
-  // listen for responses from the server
-  socket.listen(
-    // handle data from the server
-    (data) {
-      final messageHeader = MessageHeader.deserialize(data);
-
-      print('Recv: ${messageHeader.command.string}');
-
-      switch (messageHeader.command) {
-        case Command.version:
-          validVersionRecieved = _receiveVersionMessage(
-            messageHeader,
-            data.sublist(
-              MessageHeader.bytesLength(),
-              MessageHeader.bytesLength() + messageHeader.payloadLength.value,
-            ),
-          );
-          break;
-
-        case Command.verack:
-          validVerackRecieved = true;
-          break;
-
-        case Command.sendheaders:
-          validVerackRecieved = true;
-          break;
-
-        case Command.sendcmpct:
-          validVerackRecieved = true;
-          break;
-
-        default:
-          print('${messageHeader.command} is not supported yet');
-      }
-    },
-
-    // handle errors
-    onError: (error) {
-      print('$error');
-      connecting = false;
-      socket.destroy();
-    },
-
-    // handle server ending connection
-    onDone: () {
-      print('Server left.');
-      connecting = false;
-      socket.destroy();
-    },
-  );
-
-  while (!validVerackRecieved && connecting) {
-    await _sendVersionMessage(
-      socket,
-      testnet,
-    );
-
-    if (validVersionRecieved) {
-      result = 'Received version message';
-      await _sendVerack(
-        socket,
-        testnet,
-      );
-    }
-    validVersionRecieved = false;
-  }
-
-  if (validVerackRecieved) {
-    result = 'handshake completed';
-  }
-
-  return result;
 }
 
 Future<void> _sendMessage(
@@ -214,31 +134,4 @@ Future<void> _sendVerack(
   }
 
   await _sendMessage(socket, header.serialize(), payload, command);
-}
-
-bool _receiveVersionMessage(
-  MessageHeader messageHeader,
-  Uint8List payload, {
-  bool verbose = false,
-}) {
-  final VersionMessage versionMessage;
-  try {
-    versionMessage = VersionMessage.deserialize(payload);
-  } catch (e) {
-    print(e);
-    return false;
-  }
-
-  if (verbose) {
-    print(
-      jsonEncode({
-        'Version': {
-          'messageHeader': messageHeader.toJson(),
-          'versionMessage': versionMessage.toJson()
-        },
-      }),
-    );
-  }
-
-  return true;
 }

@@ -1,14 +1,14 @@
 import 'dart:typed_data';
 
 import '../../extensions/bool_extensions.dart';
-import 'network_address.dart';
-import 'nonce.dart';
-import 'services.dart';
-import 'start_height.dart';
-import 'timestamp.dart';
-import 'variable_length_integer.dart';
-import 'variable_length_string.dart';
-import 'version.dart';
+import '../types/network_address.dart';
+import '../types/nonce.dart';
+import '../types/services.dart';
+import '../types/start_height.dart';
+import '../types/timestamp.dart';
+import '../types/variable_length_integer.dart';
+import '../types/variable_length_string.dart';
+import '../types/version.dart';
 
 class VersionMessage {
   VersionMessage._internal({

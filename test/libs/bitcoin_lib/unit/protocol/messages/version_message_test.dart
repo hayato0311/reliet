@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/extensions/bool_extensions.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/messages/version_message.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/ip_address.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/network_address.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/nonce.dart';
@@ -12,7 +13,6 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/start_height.dart
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/timestamp.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/variable_length_string.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/version.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/version_message.dart';
 
 void main() {
   group('create and serialize VersionMessage instance', () {
