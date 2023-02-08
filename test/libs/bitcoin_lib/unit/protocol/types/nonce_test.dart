@@ -15,6 +15,12 @@ void main() {
       expect(() => Nonce([0, 0, 0, 0, 0, 0, 0]), throwsFormatException);
       expect(() => Nonce([0, 0, 0, 0, 0, 0, 0, 0, 0]), throwsFormatException);
     });
+    test('create from .create factory constructor', () {
+      final nonce = Nonce.create();
+
+      expect(nonce, isA<Nonce>());
+      expect(nonce.bytes.length, 8);
+    });
   });
 
   group('deserialize bytes to Nonce instance', () {

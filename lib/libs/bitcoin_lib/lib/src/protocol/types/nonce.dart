@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 
 class Nonce {
@@ -10,6 +11,16 @@ class Nonce {
   }
 
   factory Nonce.deserialize(Uint8List bytes) => Nonce(bytes.reversed.toList());
+
+  factory Nonce.create() {
+    final random = Random();
+    final randomUint64Bytes = <int>[];
+    for (var i = 0; i < 8; i++) {
+      randomUint64Bytes.add(random.nextInt(0xff));
+    }
+
+    return Nonce(randomUint64Bytes);
+  }
 
   Nonce._internal(this.bytes);
 
