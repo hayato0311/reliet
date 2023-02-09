@@ -4,6 +4,8 @@ import 'dart:math';
 
 import 'chain_params.dart';
 import 'protocol/actions/send_message.dart';
+import 'protocol/messages/ping_message.dart';
+import 'protocol/messages/pong_message.dart';
 import 'protocol/messages/version_message.dart';
 import 'protocol/types/command.dart';
 import 'protocol/types/message_header.dart';
@@ -19,12 +21,14 @@ class SpvClient {
 
   bool connecting = false;
 
-  late Socket _socket;
+  String nodeHost = 'not connecting';
 
   bool handshakeCompleted = false;
-  bool _versionReceived = false;
+  bool pongMessageRecieved = false;
 
-  String nodeHost = '';
+  late Socket _socket;
+
+  bool _versionReceived = false;
 
   Future<void> connectToNode() async {
     while (!handshakeCompleted) {
@@ -36,6 +40,11 @@ class SpvClient {
       _listen();
       await _handshake();
     }
+  }
+
+  Future<void> sendPing() async {
+    pongMessageRecieved = false;
+    await sendPingMessage(_socket);
   }
 
   Future<void> _handshake() async {
@@ -107,6 +116,37 @@ class SpvClient {
 
           case Command.sendcmpct:
             handshakeCompleted = true;
+            break;
+
+          case Command.ping:
+            final pingMessage = PingMessage.deserialize(messageBytes);
+
+            if (verbose) {
+              print(
+                jsonEncode({
+                  messageHeader.command.string: {
+                    'messageHeader': messageHeader.toJson(),
+                    'message': pingMessage.toJson()
+                  },
+                }),
+              );
+            }
+            break;
+
+          case Command.pong:
+            pongMessageRecieved = true;
+            final pongMessage = PongMessage.deserialize(messageBytes);
+
+            if (verbose) {
+              print(
+                jsonEncode({
+                  messageHeader.command.string: {
+                    'messageHeader': messageHeader.toJson(),
+                    'message': pongMessage.toJson()
+                  },
+                }),
+              );
+            }
             break;
 
           default:

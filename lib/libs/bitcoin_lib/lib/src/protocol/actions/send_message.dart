@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import '../messages/ping_message.dart';
+import '../messages/pong_message.dart';
 import '../messages/version_message.dart';
 import '../types/command.dart';
 import '../types/ip_address.dart';
@@ -117,4 +119,67 @@ Future<void> sendVerackMessage(
   }
 
   await _sendMessage(socket, header.serialize(), payload, command);
+}
+
+Future<void> sendPongMessage(
+  Socket socket,
+  Nonce nonce, {
+  bool testnet = false,
+  bool verbose = false,
+}) async {
+  const command = Command.pong;
+  final magic = testnet ? Magic.testnet : Magic.mainnet;
+  final payload = PongMessage(nonce);
+
+  final serializedPayload = payload.serialize();
+
+  final header = MessageHeader.create(
+    magic: magic,
+    command: command,
+    payload: serializedPayload,
+  );
+
+  if (verbose) {
+    print(
+      jsonEncode({
+        'pong': {
+          'messageHeader': header.toJson(),
+          'pongMessage': payload.toJson()
+        },
+      }),
+    );
+  }
+
+  await _sendMessage(socket, header.serialize(), serializedPayload, command);
+}
+
+Future<void> sendPingMessage(
+  Socket socket, {
+  bool testnet = false,
+  bool verbose = false,
+}) async {
+  const command = Command.ping;
+  final magic = testnet ? Magic.testnet : Magic.mainnet;
+  final payload = PingMessage(Nonce.create());
+
+  final serializedPayload = payload.serialize();
+
+  final header = MessageHeader.create(
+    magic: magic,
+    command: command,
+    payload: serializedPayload,
+  );
+
+  if (verbose) {
+    print(
+      jsonEncode({
+        'ping': {
+          'messageHeader': header.toJson(),
+          'pingMessage': payload.toJson()
+        },
+      }),
+    );
+  }
+
+  await _sendMessage(socket, header.serialize(), serializedPayload, command);
 }
