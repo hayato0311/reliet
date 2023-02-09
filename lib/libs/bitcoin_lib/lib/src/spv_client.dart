@@ -30,7 +30,15 @@ class SpvClient {
 
   bool _versionReceived = false;
 
-  Future<void> connectToNode() async {
+  Future<void> sendPing() async {
+    if (!handshakeCompleted) {
+      await _connectToNode();
+    }
+    pongMessageRecieved = false;
+    await sendPingMessage(_socket);
+  }
+
+  Future<void> _connectToNode() async {
     while (!handshakeCompleted) {
       if (connecting) {
         _socket.destroy();
@@ -40,14 +48,6 @@ class SpvClient {
       _listen();
       await _handshake();
     }
-  }
-
-  Future<void> sendPing() async {
-    if (!handshakeCompleted) {
-      await connectToNode();
-    }
-    pongMessageRecieved = false;
-    await sendPingMessage(_socket);
   }
 
   Future<void> _handshake() async {
