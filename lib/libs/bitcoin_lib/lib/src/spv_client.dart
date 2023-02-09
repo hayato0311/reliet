@@ -43,6 +43,9 @@ class SpvClient {
   }
 
   Future<void> sendPing() async {
+    if (!handshakeCompleted) {
+      await connectToNode();
+    }
     pongMessageRecieved = false;
     await sendPingMessage(_socket);
   }

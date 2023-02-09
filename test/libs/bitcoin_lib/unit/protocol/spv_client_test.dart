@@ -15,13 +15,18 @@ void main() {
   test('send ping, then recieve pong', () async {
     final spvClient = SpvClient();
 
-    await spvClient.connectToNode();
     expect(
       spvClient.pongMessageRecieved,
       isFalse,
     );
 
     await spvClient.sendPing();
+
+    expect(
+      spvClient.handshakeCompleted,
+      isTrue,
+    );
+
     expect(
       spvClient.pongMessageRecieved,
       isTrue,
