@@ -55,7 +55,7 @@ class PingObserver extends ProviderObserver {
 
     if (pingObserverState == null) return;
 
-    await sendPingMessage(pingObserverState.socket);
+    await sendPongMessage(pingObserverState.socket, pingObserverState.nonce);
   }
 }
 
