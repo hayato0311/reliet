@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'chain_params.dart';
 import 'protocol/actions/send_message.dart';
+import 'protocol/messages/inv_message.dart';
 import 'protocol/messages/ping_message.dart';
 import 'protocol/messages/pong_message.dart';
 import 'protocol/messages/version_message.dart';
@@ -122,9 +123,8 @@ class SpvClient {
             break;
 
           case Command.ping:
-            final pingMessage = PingMessage.deserialize(messageBytes);
-
             if (verbose) {
+              final pingMessage = PingMessage.deserialize(messageBytes);
               print(
                 jsonEncode({
                   messageHeader.command.string: {
@@ -138,14 +138,28 @@ class SpvClient {
 
           case Command.pong:
             pongMessageRecieved = true;
-            final pongMessage = PongMessage.deserialize(messageBytes);
 
             if (verbose) {
+              final pongMessage = PongMessage.deserialize(messageBytes);
               print(
                 jsonEncode({
                   messageHeader.command.string: {
                     'messageHeader': messageHeader.toJson(),
                     'message': pongMessage.toJson()
+                  },
+                }),
+              );
+            }
+            break;
+
+          case Command.inv:
+            if (verbose) {
+              final invMessage = InvMessage.deserialize(messageBytes);
+              print(
+                jsonEncode({
+                  messageHeader.command.string: {
+                    'messageHeader': messageHeader.toJson(),
+                    'message': invMessage.toJson()
                   },
                 }),
               );
