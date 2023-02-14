@@ -10,13 +10,13 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/variable_length_i
 void main() {
   group('create and serialize InvMessage instance', () {
     test('with valid args', () {
-      final count = VarInt(2);
       final inventories = [
         Inventory(InventoryType.transaction, Hash256.create([1, 2, 3, 4])),
         Inventory(InventoryType.transaction, Hash256.create([1, 1, 1, 1])),
       ];
+      final count = VarInt(inventories.length);
 
-      final invMessage = InvMessage(count, inventories);
+      final invMessage = InvMessage(inventories);
 
       final serializedInvMessage = <int>[
         ...count.serialize(),
@@ -32,16 +32,12 @@ void main() {
 
   group('deserialize bytes to InvMessage instance', () {
     test('with valid bytes', () {
-      final count = VarInt(2);
+      final inventories = [
+        Inventory(InventoryType.transaction, Hash256.create([1, 2, 3, 4])),
+        Inventory(InventoryType.transaction, Hash256.create([1, 1, 1, 1]))
+      ];
 
-      final inventory1 =
-          Inventory(InventoryType.transaction, Hash256.create([1, 2, 3, 4]));
-      final inventory2 =
-          Inventory(InventoryType.transaction, Hash256.create([1, 1, 1, 1]));
-
-      final inventories = [inventory1, inventory2];
-
-      final invMessage = InvMessage(count, inventories);
+      final invMessage = InvMessage(inventories);
 
       final serializedInvMessage = invMessage.serialize();
 

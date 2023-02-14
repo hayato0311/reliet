@@ -4,7 +4,13 @@ import '../types/inventory.dart';
 import '../types/variable_length_integer.dart';
 
 class InvMessage {
-  InvMessage(this.count, this.inventories);
+  factory InvMessage(List<Inventory> inventories) {
+    final count = VarInt(inventories.length);
+
+    return InvMessage._internal(count, inventories);
+  }
+
+  InvMessage._internal(this.count, this.inventories);
 
   factory InvMessage.deserialize(Uint8List bytes) {
     final headByte = bytes[0];
@@ -36,7 +42,7 @@ class InvMessage {
       throw ArgumentError('Given bytes is invalid');
     }
 
-    return InvMessage(count, inventories);
+    return InvMessage(inventories);
   }
 
   static int bytesLength(VarInt count) => Inventory.bytesLength() * count.value;
