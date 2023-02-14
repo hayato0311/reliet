@@ -1,6 +1,9 @@
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
+@immutable
 class Nonce {
   factory Nonce(List<int> bytes) {
     if (bytes.length != 8) {
@@ -22,7 +25,7 @@ class Nonce {
     return Nonce(randomUint64Bytes);
   }
 
-  Nonce._internal(this.bytes);
+  const Nonce._internal(this.bytes);
 
   static int bytesLength() => 8;
 

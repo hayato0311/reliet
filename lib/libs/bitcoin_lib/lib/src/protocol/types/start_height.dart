@@ -1,7 +1,10 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../extensions/int_extensions.dart';
 
+@immutable
 class StartHeight {
   factory StartHeight(int value) {
     if (value > 0x7fffffff) {
@@ -15,7 +18,7 @@ class StartHeight {
   factory StartHeight.deserialize(Uint8List bytes) =>
       StartHeight(CreateInt.fromInt32leBytes(bytes));
 
-  StartHeight._internal(this.value);
+  const StartHeight._internal(this.value);
 
   static int bytesLength() => 4;
 

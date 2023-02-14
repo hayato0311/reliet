@@ -1,12 +1,15 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
+@immutable
 class IpAddr {
   factory IpAddr(List<int> input) {
     final bytes = _convertToIPv4MappedIPv6Addr(input);
 
     return IpAddr._internal(bytes);
   }
-  IpAddr._internal(this.bytes);
+  const IpAddr._internal(this.bytes);
 
   factory IpAddr.deserialize(Uint8List bytes) {
     if (bytes.length != 16) {

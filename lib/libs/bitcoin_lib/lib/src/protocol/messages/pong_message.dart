@@ -1,9 +1,12 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../types/nonce.dart';
 
+@immutable
 class PongMessage {
-  PongMessage(this.nonce);
+  const PongMessage(this.nonce);
 
   factory PongMessage.deserialize(Uint8List bytes) {
     const startIndex = 0;

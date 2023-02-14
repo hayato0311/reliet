@@ -1,7 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
+import 'package:meta/meta.dart';
 
+@immutable
 class Hash256 {
   factory Hash256.create(List<int> bytes) {
     final digest = sha256.convert(bytes);
@@ -18,7 +20,7 @@ Expected: ${bytesLength()}, Actual: ${bytes.length}
     return Hash256._internal(bytes.toList().reversed.toList());
   }
 
-  Hash256._internal(this.bytes);
+  const Hash256._internal(this.bytes);
 
   static int bytesLength() => 32;
 

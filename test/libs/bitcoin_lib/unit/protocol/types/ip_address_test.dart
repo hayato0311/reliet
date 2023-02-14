@@ -6,7 +6,7 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/ip_address.dart';
 void main() {
   group('create and serialize IpAddr instance', () {
     test('with IPv4 address', () {
-      final ipAddr = IpAddr([127, 0, 0, 1]);
+      final ipAddr = IpAddr(const [127, 0, 0, 1]);
       expect(
         ipAddr.bytes,
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 127, 0, 0, 1],

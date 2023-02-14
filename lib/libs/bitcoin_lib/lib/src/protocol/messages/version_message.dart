@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../extensions/bool_extensions.dart';
 import '../types/network_address.dart';
 import '../types/nonce.dart';
@@ -10,8 +12,9 @@ import '../types/variable_length_integer.dart';
 import '../types/variable_length_string.dart';
 import '../types/version.dart';
 
+@immutable
 class VersionMessage {
-  VersionMessage._internal({
+  const VersionMessage._internal({
     required this.version,
     required this.services,
     required this.timestamp,

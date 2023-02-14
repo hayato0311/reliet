@@ -1,7 +1,10 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../extensions/int_extensions.dart';
 
+@immutable
 class VarInt {
   VarInt(this.value) {
     if (value < 0xfd) {

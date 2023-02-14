@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import 'variable_length_integer.dart';
 
+@immutable
 class VarStr {
   VarStr(this.string) {
     length = VarInt(string.length);

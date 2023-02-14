@@ -1,9 +1,12 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../types/nonce.dart';
 
+@immutable
 class PingMessage {
-  PingMessage(this.nonce);
+  const PingMessage(this.nonce);
 
   factory PingMessage.deserialize(Uint8List bytes) {
     const startIndex = 0;

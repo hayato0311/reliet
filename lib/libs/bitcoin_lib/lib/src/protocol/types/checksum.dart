@@ -1,11 +1,13 @@
 import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
+import 'package:meta/meta.dart';
 
 import 'hash256.dart';
 
+@immutable
 class Checksum {
-  Checksum._internal(this.bytes);
+  const Checksum._internal(this.bytes);
   factory Checksum.fromPayload(Uint8List payload) {
     final checksum =
         Uint8List.fromList(Hash256.create(payload).bytes.sublist(0, 4));
@@ -17,7 +19,7 @@ class Checksum {
 
   bool isValid(Uint8List checksum) => checksum.equals(bytes);
 
-  late final Uint8List bytes;
+  final Uint8List bytes;
 
   Map<String, dynamic> toJson() => {'bytes': bytes};
 

@@ -1,11 +1,14 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import 'ip_address.dart';
 import 'port.dart';
 import 'services.dart';
 
+@immutable
 class NetAddr {
-  NetAddr({
+  const NetAddr({
     required this.services,
     required this.ipAddr,
     required this.port,

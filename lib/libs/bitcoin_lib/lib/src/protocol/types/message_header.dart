@@ -1,10 +1,13 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import 'checksum.dart';
 import 'command.dart';
 import 'magic.dart';
 import 'payload_length.dart';
 
+@immutable
 class MessageHeader {
   factory MessageHeader.create({
     required Magic magic,
@@ -77,7 +80,7 @@ class MessageHeader {
     );
   }
 
-  MessageHeader._internal(
+  const MessageHeader._internal(
     this.magic,
     this.command,
     this.payloadLength,

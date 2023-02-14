@@ -41,19 +41,19 @@ Future<void> sendVersionMessage(
   bool verbose = false,
 }) async {
   final addrRecv = NetAddr(
-    services: Services([Service.nodeZero]),
-    ipAddr: IpAddr([0, 0, 0, 0]),
+    services: Services(const [Service.nodeZero]),
+    ipAddr: IpAddr(const [0, 0, 0, 0]),
     port: testnet ? Port(Port.testnet) : Port(Port.mainnet),
   );
 
   const userAgentString = '';
   final userAgent = VarStr(userAgentString);
 
-  final services = Services([Service.nodeZero]);
+  final services = Services(const [Service.nodeZero]);
 
   final addrFrom = NetAddr(
     services: services,
-    ipAddr: IpAddr([0, 0, 0, 0]),
+    ipAddr: IpAddr(const [0, 0, 0, 0]),
     port: Port(Port.zero),
   );
 
@@ -62,7 +62,7 @@ Future<void> sendVersionMessage(
     services: services,
     addrRecv: addrRecv,
     addrFrom: addrFrom,
-    nonce: Nonce([0, 0, 0, 0, 0, 0, 0, 0]),
+    nonce: Nonce(const [0, 0, 0, 0, 0, 0, 0, 0]),
     userAgent: userAgent,
     startHeight: StartHeight(0),
     relay: false,

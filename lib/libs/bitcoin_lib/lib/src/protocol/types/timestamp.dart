@@ -1,9 +1,12 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../extensions/int_extensions.dart';
 
+@immutable
 class Timestamp {
-  Timestamp._internal(this.secondsUnixtime);
+  const Timestamp._internal(this.secondsUnixtime);
 
   factory Timestamp.create() {
     final secondsUnixtime =
