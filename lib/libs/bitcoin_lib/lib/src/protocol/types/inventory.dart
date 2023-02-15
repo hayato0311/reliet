@@ -1,10 +1,13 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import 'hash256.dart';
 import 'inventory_type.dart';
 
+@immutable
 class Inventory {
-  Inventory(this.type, this.hash);
+  const Inventory(this.type, this.hash);
 
   factory Inventory.deserialize(Uint8List bytes) {
     var startIndex = 0;

@@ -18,8 +18,8 @@ void main() {
   group('create and serialize VersionMessage instance', () {
     test('with valid args', () {
       const version = Version.protocolVersion;
-      final services = Services([Service.nodeZero]);
-      final ipAddr = IpAddr([0, 0, 0, 0]);
+      final services = Services(const [Service.nodeZero]);
+      final ipAddr = IpAddr(const [0, 0, 0, 0]);
       final addrRecv = NetAddr(
         services: services,
         ipAddr: ipAddr,
@@ -30,7 +30,7 @@ void main() {
         ipAddr: ipAddr,
         port: Port(Port.zero),
       );
-      final nonce = Nonce(<int>[0, 0, 0, 0, 0, 0, 0, 0]);
+      final nonce = Nonce(const <int>[0, 0, 0, 0, 0, 0, 0, 0]);
       final userAgent = VarStr('userAgentString');
       final startHeight = StartHeight(0);
       const relay = false;
@@ -68,8 +68,8 @@ void main() {
   group('deserialize bytes to VersionMessage instance', () {
     test('with valid bytes', () {
       const version = Version.protocolVersion;
-      final services = Services([Service.nodeNetwork]);
-      final ipAddr = IpAddr([0, 0, 0, 0]);
+      final services = Services(const [Service.nodeNetwork]);
+      final ipAddr = IpAddr(const [0, 0, 0, 0]);
       final addrRecv = NetAddr(
         services: services,
         ipAddr: ipAddr,
@@ -80,7 +80,7 @@ void main() {
         ipAddr: ipAddr,
         port: Port(Port.zero),
       );
-      final nonce = Nonce(<int>[0, 0, 0, 0, 0, 0, 0, 0]);
+      final nonce = Nonce(const <int>[0, 0, 0, 0, 0, 0, 0, 0]);
       final userAgent = VarStr('userAgentString');
       final startHeight = StartHeight(0);
       const relay = false;

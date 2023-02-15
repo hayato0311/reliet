@@ -1,8 +1,11 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../types/inventory.dart';
 import '../types/variable_length_integer.dart';
 
+@immutable
 class InvMessage {
   factory InvMessage(List<Inventory> inventories) {
     final count = VarInt(inventories.length);
@@ -10,7 +13,7 @@ class InvMessage {
     return InvMessage._internal(count, inventories);
   }
 
-  InvMessage._internal(this.count, this.inventories);
+  const InvMessage._internal(this.count, this.inventories);
 
   factory InvMessage.deserialize(Uint8List bytes) {
     final headByte = bytes[0];

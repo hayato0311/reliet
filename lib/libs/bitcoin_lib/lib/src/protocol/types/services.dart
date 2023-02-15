@@ -1,8 +1,11 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../extensions/int_extensions.dart';
 import 'service.dart';
 
+@immutable
 class Services {
   factory Services(List<Service> serviceList) {
     if (serviceList.isEmpty) {
@@ -61,7 +64,7 @@ class Services {
     return Services(serviceList);
   }
 
-  Services._internal(this.serviceList);
+  const Services._internal(this.serviceList);
 
   static int bytesLength() => 8;
 

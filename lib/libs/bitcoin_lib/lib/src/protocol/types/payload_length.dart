@@ -1,7 +1,10 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../extensions/int_extensions.dart';
 
+@immutable
 class PayloadLength {
   factory PayloadLength(int value) {
     if (value > 0xffffffff) {
@@ -15,7 +18,7 @@ class PayloadLength {
   factory PayloadLength.deserialize(Uint8List bytes) =>
       PayloadLength(CreateInt.fromUint32leBytes(bytes));
 
-  PayloadLength._internal(this.value);
+  const PayloadLength._internal(this.value);
 
   static int bytesLength() => 4;
 

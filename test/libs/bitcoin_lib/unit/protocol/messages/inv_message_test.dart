@@ -11,8 +11,14 @@ void main() {
   group('create and serialize InvMessage instance', () {
     test('with valid args', () {
       final inventories = [
-        Inventory(InventoryType.transaction, Hash256.create([1, 2, 3, 4])),
-        Inventory(InventoryType.transaction, Hash256.create([1, 1, 1, 1])),
+        Inventory(
+          InventoryType.transaction,
+          Hash256.create(const [1, 2, 3, 4]),
+        ),
+        Inventory(
+          InventoryType.transaction,
+          Hash256.create(const [1, 1, 1, 1]),
+        ),
       ];
       final count = VarInt(inventories.length);
 
@@ -33,8 +39,11 @@ void main() {
   group('deserialize bytes to InvMessage instance', () {
     test('with valid bytes', () {
       final inventories = [
-        Inventory(InventoryType.transaction, Hash256.create([1, 2, 3, 4])),
-        Inventory(InventoryType.transaction, Hash256.create([1, 1, 1, 1]))
+        Inventory(
+          InventoryType.transaction,
+          Hash256.create(const [1, 2, 3, 4]),
+        ),
+        Inventory(InventoryType.transaction, Hash256.create(const [1, 1, 1, 1]))
       ];
 
       final invMessage = InvMessage(inventories);

@@ -1,7 +1,10 @@
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import '../../extensions/int_extensions.dart';
 
+@immutable
 class Port {
   factory Port(int value) {
     if (value != mainnet && value != testnet && value != zero) {
@@ -17,7 +20,7 @@ class Port {
     return Port._internal(value);
   }
 
-  Port._internal(this.value);
+  const Port._internal(this.value);
 
   static int get mainnet => 8333;
   static int get testnet => 18333;

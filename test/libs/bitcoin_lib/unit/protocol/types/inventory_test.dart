@@ -9,7 +9,7 @@ void main() {
   group('create and serialize Inventory instance', () {
     test('with valid params', () {
       const type = InventoryType.transaction;
-      final hash = Hash256.create([1, 1, 1, 1]);
+      final hash = Hash256.create(const [1, 1, 1, 1]);
       final inventory = Inventory(type, hash);
 
       final serializedInventory = <int>[
@@ -26,7 +26,7 @@ void main() {
   group('deserialize bytes to MessageHeader instance', () {
     test('with valid bytes', () {
       const type = InventoryType.transaction;
-      final hash = Hash256.create([1, 1, 1, 1]);
+      final hash = Hash256.create(const [1, 1, 1, 1]);
       final inventory = Inventory(type, hash);
 
       final serializedInventory = inventory.serialize();

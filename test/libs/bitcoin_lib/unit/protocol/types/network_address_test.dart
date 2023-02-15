@@ -10,9 +10,9 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/services.dart';
 void main() {
   group('serialize NetAddr', () {
     test('with valid params', () {
-      final services = Services([Service.nodeNetwork]);
+      final services = Services(const [Service.nodeNetwork]);
       final ipAddr =
-          IpAddr([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 127, 0, 0, 1]);
+          IpAddr(const [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 127, 0, 0, 1]);
       final port = Port(Port.testnet);
       final netAddr = NetAddr(
         services: services,
@@ -31,8 +31,8 @@ void main() {
   });
   group('deserialize bytes to NetAddr instance', () {
     test('with valid bytes', () {
-      final services = Services([Service.nodeNetwork]);
-      final ipAddr = IpAddr([127, 0, 0, 1]);
+      final services = Services(const [Service.nodeNetwork]);
+      final ipAddr = IpAddr(const [127, 0, 0, 1]);
       final port = Port(Port.testnet);
       final netAddr = NetAddr(
         services: services,

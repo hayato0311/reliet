@@ -1,5 +1,7 @@
 // Source: https://github.com/bitcoin/bitcoin/blob/master/src/chainparams.cpp
+import 'package:meta/meta.dart';
 
+@immutable
 class MainParams {
   static const List<String> dnsSeeds = [
     'seed.bitcoin.sipa.be',
@@ -14,6 +16,7 @@ class MainParams {
   ];
 }
 
+@immutable
 class TestnetParams {
   static const List<String> dnsSeeds = [
     'testnet-seed.bitcoin.jonasschnelli.ch',
