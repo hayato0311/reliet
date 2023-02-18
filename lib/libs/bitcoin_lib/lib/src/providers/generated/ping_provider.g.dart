@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'spv_client.dart';
+part of '../ping_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator

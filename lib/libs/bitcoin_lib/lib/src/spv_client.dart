@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:riverpod/riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'chain_params.dart';
 import 'protocol/actions/send_message.dart';
@@ -13,51 +12,8 @@ import 'protocol/messages/pong_message.dart';
 import 'protocol/messages/version_message.dart';
 import 'protocol/types/command.dart';
 import 'protocol/types/message_header.dart';
-import 'protocol/types/nonce.dart';
 import 'protocol/types/port.dart';
-
-part 'spv_client.g.dart';
-
-class PingObserverState {
-  PingObserverState(this.socket, this.nonce);
-  final Socket socket;
-  final Nonce nonce;
-}
-
-@riverpod
-class PingReciever extends _$PingReciever {
-  @override
-  PingObserverState? build() {
-    return null;
-  }
-
-  // ignore: use_setters_to_change_properties
-  void updateState(PingObserverState pingObserverState) {
-    state = pingObserverState;
-  }
-}
-
-class PingObserver extends ProviderObserver {
-  @override
-  Future<void> didUpdateProvider(
-    ProviderBase<dynamic> provider,
-    Object? previousValue,
-    Object? newValue,
-    ProviderContainer container,
-  ) async {
-    print('''
-{
-  "provider": "${provider.name ?? provider.runtimeType}",
-  "newValue": "$newValue"
-}''');
-
-    final pingObserverState = container.read(pingRecieverProvider);
-
-    if (pingObserverState == null) return;
-
-    await sendPongMessage(pingObserverState.socket, pingObserverState.nonce);
-  }
-}
+import 'providers/ping_provider.dart';
 
 class SpvClient {
   factory SpvClient({bool testnet = false}) {
