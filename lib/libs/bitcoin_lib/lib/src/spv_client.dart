@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:riverpod/riverpod.dart';
+
 import 'chain_params.dart';
 import 'protocol/actions/send_message.dart';
 import 'protocol/messages/inv_message.dart';
@@ -11,6 +13,7 @@ import 'protocol/messages/version_message.dart';
 import 'protocol/types/command.dart';
 import 'protocol/types/message_header.dart';
 import 'protocol/types/port.dart';
+import 'providers/ping_provider.dart';
 
 class SpvClient {
   factory SpvClient({bool testnet = false}) {
@@ -26,6 +29,8 @@ class SpvClient {
 
   bool handshakeCompleted = false;
   bool pongMessageRecieved = false;
+
+  final _container = ProviderContainer(observers: [PingObserver()]);
 
   late Socket _socket;
 
@@ -123,8 +128,9 @@ class SpvClient {
             break;
 
           case Command.ping:
+            final pingMessage = PingMessage.deserialize(messageBytes);
+
             if (verbose) {
-              final pingMessage = PingMessage.deserialize(messageBytes);
               print(
                 jsonEncode({
                   messageHeader.command.string: {
@@ -134,6 +140,12 @@ class SpvClient {
                 }),
               );
             }
+
+            final pingObserverState =
+                PingObserverState(_socket, pingMessage.nonce);
+            _container
+                .read(pingRecieverProvider.notifier)
+                .updateState(pingObserverState);
             break;
 
           case Command.pong:
