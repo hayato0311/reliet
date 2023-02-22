@@ -13,6 +13,7 @@ import 'protocol/messages/version_message.dart';
 import 'protocol/types/command.dart';
 import 'protocol/types/message_header.dart';
 import 'protocol/types/port.dart';
+import 'providers/inv_provider.dart';
 import 'providers/ping_provider.dart';
 
 class SpvClient {
@@ -30,7 +31,12 @@ class SpvClient {
   bool handshakeCompleted = false;
   bool pongMessageRecieved = false;
 
-  final _container = ProviderContainer(observers: [PingObserver()]);
+  final _container = ProviderContainer(
+    observers: [
+      PingObserver(),
+      InvObserver(),
+    ],
+  );
 
   late Socket _socket;
 
@@ -165,8 +171,9 @@ class SpvClient {
             break;
 
           case Command.inv:
+            final invMessage = InvMessage.deserialize(messageBytes);
+
             if (verbose) {
-              final invMessage = InvMessage.deserialize(messageBytes);
               print(
                 jsonEncode({
                   messageHeader.command.string: {
@@ -176,6 +183,12 @@ class SpvClient {
                 }),
               );
             }
+
+            final invObserverState =
+                InvObserverState(_socket, invMessage.inventories);
+            _container
+                .read(invRecieverProvider.notifier)
+                .updateState(invObserverState);
             break;
 
           default:

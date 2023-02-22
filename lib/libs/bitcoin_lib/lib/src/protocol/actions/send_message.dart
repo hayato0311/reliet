@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import '../messages/get_data_message.dart';
 import '../messages/ping_message.dart';
 import '../messages/pong_message.dart';
 import '../messages/version_message.dart';
 import '../types/command.dart';
+import '../types/inventory.dart';
 import '../types/ip_address.dart';
 import '../types/magic.dart';
 import '../types/message_header.dart';
@@ -176,6 +178,38 @@ Future<void> sendPingMessage(
         'ping': {
           'messageHeader': header.toJson(),
           'pingMessage': payload.toJson()
+        },
+      }),
+    );
+  }
+
+  await _sendMessage(socket, header.serialize(), serializedPayload, command);
+}
+
+Future<void> sendGetDataMessage(
+  Socket socket,
+  List<Inventory> inventories, {
+  bool testnet = false,
+  bool verbose = false,
+}) async {
+  const command = Command.getdata;
+  final magic = testnet ? Magic.testnet : Magic.mainnet;
+  final payload = GetDataMessage(inventories);
+
+  final serializedPayload = payload.serialize();
+
+  final header = MessageHeader.create(
+    magic: magic,
+    command: command,
+    payload: serializedPayload,
+  );
+
+  if (verbose) {
+    print(
+      jsonEncode({
+        'pong': {
+          'messageHeader': header.toJson(),
+          'pongMessage': payload.toJson()
         },
       }),
     );
