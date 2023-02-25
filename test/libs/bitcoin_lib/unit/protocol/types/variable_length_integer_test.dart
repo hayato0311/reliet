@@ -51,36 +51,50 @@ void main() {
   });
 
   group('deserialize bytes to VarInt instance', () {
+    const noiseBytes = [1, 1, 1];
     test('which value is less than 0xfd', () {
       const varIntValue = 0xfc;
       final serializedVarIntBytes = VarInt(varIntValue).serialize();
       print(serializedVarIntBytes);
 
-      expect(VarInt.deserialize(serializedVarIntBytes).value, varIntValue);
+      expect(
+        VarInt.deserialize(
+          Uint8List.fromList([...serializedVarIntBytes, ...noiseBytes]),
+        ).value,
+        varIntValue,
+      );
     });
     test('which value is less than 0x10000', () {
       const varIntValue = 0xfffd;
       final serializedVarIntBytes = VarInt(varIntValue).serialize();
 
-      expect(VarInt.deserialize(serializedVarIntBytes).value, varIntValue);
+      expect(
+        VarInt.deserialize(
+          Uint8List.fromList([...serializedVarIntBytes, ...noiseBytes]),
+        ).value,
+        varIntValue,
+      );
     });
     test('which value is less than 0x100000000', () {
       const varIntValue = 0xfffffffd;
       final serializedVarIntBytes = VarInt(varIntValue).serialize();
 
-      expect(VarInt.deserialize(serializedVarIntBytes).value, varIntValue);
+      expect(
+        VarInt.deserialize(
+          Uint8List.fromList([...serializedVarIntBytes, ...noiseBytes]),
+        ).value,
+        varIntValue,
+      );
     });
     test('which value is 0x100000000 or more', () {
       const varIntValue = 0x7fffffffffffffff;
       final serializedVarIntBytes = VarInt(varIntValue).serialize();
 
-      expect(VarInt.deserialize(serializedVarIntBytes).value, varIntValue);
-    });
-
-    test('with invalid bytes', () {
       expect(
-        () => VarInt.deserialize(Uint8List.fromList([0, 0, 0, 1])),
-        throwsArgumentError,
+        VarInt.deserialize(
+          Uint8List.fromList([...serializedVarIntBytes, ...noiseBytes]),
+        ).value,
+        varIntValue,
       );
     });
   });

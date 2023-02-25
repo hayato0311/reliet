@@ -105,8 +105,7 @@ class VersionMessage {
 
     startIndex += Nonce.bytesLength();
 
-    final userAgentStringLength =
-        _bytesToUserAgentStringLength(bytes.sublist(startIndex));
+    final userAgentStringLength = VarInt.deserialize(bytes.sublist(startIndex));
 
     final userAgent = VarStr.deserialize(
       bytes.sublist(
@@ -145,13 +144,6 @@ class VersionMessage {
       startHeight: startHeight,
       relay: relay,
     );
-  }
-
-  static VarInt _bytesToUserAgentStringLength(Uint8List bytes) {
-    final headByte = bytes[0];
-    final varIntLength = VarInt.bytesLength(headByte);
-
-    return VarInt.deserialize(bytes.sublist(0, varIntLength));
   }
 
   final Version version;
