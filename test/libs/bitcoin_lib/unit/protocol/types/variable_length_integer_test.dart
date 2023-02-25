@@ -55,7 +55,6 @@ void main() {
     test('which value is less than 0xfd', () {
       const varIntValue = 0xfc;
       final serializedVarIntBytes = VarInt(varIntValue).serialize();
-      print(serializedVarIntBytes);
 
       expect(
         VarInt.deserialize(

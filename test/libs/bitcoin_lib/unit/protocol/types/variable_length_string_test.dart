@@ -26,7 +26,6 @@ void main() {
     test('with valid bytes', () {
       const varStrValue = 'valid';
       final serializedVarStrBytes = VarStr(varStrValue).serialize();
-      print(serializedVarStrBytes);
 
       expect(VarStr.deserialize(serializedVarStrBytes).string, varStrValue);
     });
