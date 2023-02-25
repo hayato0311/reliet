@@ -21,11 +21,12 @@ class VarStr {
 
     final length = VarInt.deserialize(bytes.sublist(0, varIntBytesLength));
 
-    final stringBytes = bytes.sublist(varIntBytesLength);
-
-    if (stringBytes.length != length.value) {
+    if (bytes.length < varIntBytesLength + length.value) {
       throw ArgumentError('The given bytes is invalid');
     }
+
+    final stringBytes =
+        bytes.sublist(varIntBytesLength, varIntBytesLength + length.value);
 
     return VarStr(utf8.decode(stringBytes));
   }
