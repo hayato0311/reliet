@@ -40,7 +40,11 @@ class VarInt {
     return VarInt(value);
   }
 
-  static int bytesLength(int headByte) {
+  late final int length;
+  late final int headByte;
+  late final int value;
+
+  int bytesLength() {
     if (headByte < 0xfd) {
       return 1;
     } else if (headByte == 0xfd) {
@@ -53,10 +57,6 @@ class VarInt {
 
     throw ArgumentError('The given head byte is not a byte value');
   }
-
-  late final int length;
-  late final int headByte;
-  late final int value;
 
   Map<String, dynamic> toJson() =>
       {'length': length, 'headByte': headByte, 'value': value};

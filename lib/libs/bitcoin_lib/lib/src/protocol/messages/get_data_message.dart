@@ -16,16 +16,10 @@ class GetDataMessage {
   const GetDataMessage._internal(this.count, this.inventories);
 
   factory GetDataMessage.deserialize(Uint8List bytes) {
-    final headByte = bytes[0];
-    final varIntBytesLength = VarInt.bytesLength(headByte);
+    var startIndex = 0;
 
-    if (bytes.length < varIntBytesLength) {
-      throw ArgumentError('The length of given bytes is invalid');
-    }
-
-    final count = VarInt.deserialize(bytes.sublist(0, varIntBytesLength));
-
-    var startIndex = varIntBytesLength;
+    final count = VarInt.deserialize(bytes.sublist(startIndex));
+    startIndex += count.bytesLength();
 
     final inventories = <Inventory>[];
 

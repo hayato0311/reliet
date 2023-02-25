@@ -99,32 +99,22 @@ void main() {
     });
   });
 
-  group('get bytes of length based on the head byte', () {
-    test('which value is 0xfd', () {
-      const headByte = 0xfd;
-
-      expect(VarInt.bytesLength(headByte), 3);
+  group('get length of bytes', () {
+    test('which value is less than 0xfd', () {
+      final varInt = VarInt(0xfc);
+      expect(varInt.bytesLength(), 1);
     });
-    test('which value is 0xfe', () {
-      const headByte = 0xfe;
-
-      expect(VarInt.bytesLength(headByte), 5);
+    test('which value is less than 0x10000', () {
+      final varInt = VarInt(0xffff);
+      expect(varInt.bytesLength(), 3);
     });
-    test('which value is 0xff', () {
-      const headByte = 0xff;
-
-      expect(VarInt.bytesLength(headByte), 9);
+    test('which value is less than 0x100000000', () {
+      final varInt = VarInt(0xffffffff);
+      expect(varInt.bytesLength(), 5);
     });
-    test('which value is other than 0xfd, 0xfe and 0xff', () {
-      const headByte = 0xfc;
-
-      expect(VarInt.bytesLength(headByte), 1);
-    });
-
-    test('with invalid bytes', () {
-      const headByte = 0xff00;
-
-      expect(() => VarInt.bytesLength(headByte), throwsArgumentError);
+    test('which value is 0x100000000 or more', () {
+      final varInt = VarInt(0x7ffffffff);
+      expect(varInt.bytesLength(), 9);
     });
   });
 }

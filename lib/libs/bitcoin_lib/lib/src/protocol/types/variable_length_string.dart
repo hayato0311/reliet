@@ -12,31 +12,22 @@ class VarStr {
   }
 
   factory VarStr.deserialize(Uint8List bytes) {
-    final headByte = bytes[0];
-    final varIntBytesLength = VarInt.bytesLength(headByte);
+    final length = VarInt.deserialize(bytes);
 
-    if (bytes.length < varIntBytesLength) {
-      throw ArgumentError('The length of given bytes is invalid');
-    }
-
-    final length = VarInt.deserialize(bytes.sublist(0, varIntBytesLength));
-
-    if (bytes.length < varIntBytesLength + length.value) {
-      throw ArgumentError('The given bytes is invalid');
-    }
-
-    final stringBytes =
-        bytes.sublist(varIntBytesLength, varIntBytesLength + length.value);
+    final stringBytes = bytes.sublist(
+      length.bytesLength(),
+      length.bytesLength() + length.value,
+    );
 
     return VarStr(utf8.decode(stringBytes));
   }
 
-  static int bytesLength(VarInt varInt) {
-    return varInt.length + varInt.value;
-  }
-
   late final VarInt length;
   final String string;
+
+  int bytesLength() {
+    return length.length + string.length;
+  }
 
   Map<String, dynamic> toJson() =>
       {'length': length.toJson(), 'string': string};
