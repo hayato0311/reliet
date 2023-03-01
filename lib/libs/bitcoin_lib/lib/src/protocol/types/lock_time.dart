@@ -18,18 +18,17 @@ class LockTime {
       return LockTime._internal(LockTimeType.secondsUnixtime, value);
     }
   }
-  const LockTime._internal(this.locktimeType, this.value);
+  const LockTime._internal(this.type, this.value);
 
   factory LockTime.deserialize(Uint8List bytes) =>
       LockTime(CreateInt.fromUint32leBytes(bytes));
 
   static int bytesLength() => 4;
 
-  final LockTimeType locktimeType;
+  final LockTimeType type;
   final int value;
 
-  Map<String, dynamic> toJson() =>
-      {'locktime': '${locktimeType.toString()}($value)'};
+  Map<String, dynamic> toJson() => {'locktime': '${type.toString()}($value)'};
 
   Uint8List serialize() => value.toUint32leBytes();
 }
