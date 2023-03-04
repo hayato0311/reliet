@@ -3,10 +3,10 @@ import 'dart:typed_data';
 import 'package:meta/meta.dart';
 
 import '../../extensions/bool_extensions.dart';
+import '../types/bases/int32le.dart';
 import '../types/network_address.dart';
 import '../types/nonce.dart';
 import '../types/services.dart';
-import '../types/start_height.dart';
 import '../types/timestamp.dart';
 import '../types/variable_length_string.dart';
 import '../types/version.dart';
@@ -32,7 +32,7 @@ class VersionMessage {
     required NetAddr addrFrom,
     required Nonce nonce,
     required VarStr userAgent,
-    required StartHeight startHeight,
+    required Int32le startHeight,
     required bool relay,
   }) {
     return VersionMessage._internal(
@@ -107,14 +107,14 @@ class VersionMessage {
     final userAgent = VarStr.deserialize(bytes.sublist(startIndex));
     startIndex += userAgent.bytesLength();
 
-    final startHeight = StartHeight.deserialize(
+    final startHeight = Int32le.deserialize(
       bytes.sublist(
         startIndex,
-        startIndex + StartHeight.bytesLength(),
+        startIndex + Int32le.bytesLength(),
       ),
     );
 
-    startIndex += StartHeight.bytesLength();
+    startIndex += Int32le.bytesLength();
 
     final relay = bytes[startIndex] == 1;
 
@@ -144,7 +144,7 @@ class VersionMessage {
   final NetAddr addrFrom;
   final Nonce nonce;
   final VarStr userAgent;
-  final StartHeight startHeight;
+  final Int32le startHeight;
   final bool relay;
 
   Map<String, dynamic> toJson() => {

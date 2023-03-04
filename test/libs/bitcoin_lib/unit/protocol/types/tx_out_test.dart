@@ -1,19 +1,19 @@
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/bases/Int64le.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/script_pubkey.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/tx_out.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/tx_value.dart';
 
 void main() {
   group('create and serialize TxOut instance', () {
     test('with valid params', () {
-      final value = TxValue(100);
+      final txValue = Int64le(100);
       final scriptPubKey = ScriptPubKey(const [1, 1, 1, 1]);
-      final txOut = TxOut(value, scriptPubKey);
+      final txOut = TxOut(txValue, scriptPubKey);
 
       final serializedTxOut = <int>[
-        ...value.serialize(),
+        ...txValue.serialize(),
         ...scriptPubKey.serialize(),
       ];
 
@@ -25,9 +25,9 @@ void main() {
   });
   group('deserialize bytes to TxOut instance', () {
     test('with valid bytes', () {
-      final value = TxValue(100);
+      final txValue = Int64le(100);
       final scriptPubKey = ScriptPubKey(const [1, 1, 1, 1]);
-      final txOut = TxOut(value, scriptPubKey);
+      final txOut = TxOut(txValue, scriptPubKey);
 
       final serializedTxOut = txOut.serialize();
 

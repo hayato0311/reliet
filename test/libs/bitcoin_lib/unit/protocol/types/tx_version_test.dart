@@ -15,6 +15,13 @@ void main() {
         value.toUint32leBytes(),
       );
     });
+    test('with invalid params', () {
+      const value = 3;
+      expect(
+        () => TxVersion(value),
+        throwsRangeError,
+      );
+    });
   });
   group('deserialize bytes to TxVersion instance', () {
     test('with valid bytes', () {

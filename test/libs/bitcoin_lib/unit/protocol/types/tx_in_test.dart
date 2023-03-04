@@ -1,21 +1,20 @@
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/bases/uint32le.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/hash256.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/script_sig.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/sequence.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/tx_in.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/tx_out_point.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/tx_out_point_index.dart';
 
 void main() {
   group('create and serialize TxIn instance', () {
     test('with valid params', () {
-      final index = TxOutPointIndex(100);
+      final index = Uint32le(100);
       final hash = Hash256.create(const [1, 1, 1, 1]);
       final previousOutput = TxOutPoint(hash, index);
       final scriptSig = ScriptSig(const [1, 1, 1, 1]);
-      final sequence = Sequence(100);
+      final sequence = Uint32le(100);
       final txIn = TxIn(previousOutput, scriptSig, sequence);
 
       final serializedTxIn = <int>[
@@ -33,11 +32,11 @@ void main() {
 
   group('deserialize bytes to MessageHeader instance', () {
     test('with valid bytes', () {
-      final index = TxOutPointIndex(100);
+      final index = Uint32le(100);
       final hash = Hash256.create(const [1, 1, 1, 1]);
       final previousOutput = TxOutPoint(hash, index);
       final scriptSig = ScriptSig(const [1, 1, 1, 1]);
-      final sequence = Sequence(100);
+      final sequence = Uint32le(100);
       final txIn = TxIn(previousOutput, scriptSig, sequence);
 
       final serializedTxIn = txIn.serialize();

@@ -3,13 +3,13 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/extensions/bool_extensions.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/messages/version_message.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/bases/int32le.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/ip_address.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/network_address.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/nonce.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/port.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/service.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/services.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/start_height.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/timestamp.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/variable_length_string.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/version.dart';
@@ -32,7 +32,7 @@ void main() {
       );
       final nonce = Nonce(const <int>[0, 0, 0, 0, 0, 0, 0, 0]);
       final userAgent = VarStr('userAgentString');
-      final startHeight = StartHeight(0);
+      final startHeight = Int32le(0);
       const relay = false;
 
       final versionMessage = VersionMessage.create(
@@ -82,7 +82,7 @@ void main() {
       );
       final nonce = Nonce(const <int>[0, 0, 0, 0, 0, 0, 0, 0]);
       final userAgent = VarStr('userAgentString');
-      final startHeight = StartHeight(0);
+      final startHeight = Int32le(0);
       const relay = false;
 
       final versionMessage = VersionMessage.create(

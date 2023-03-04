@@ -2,23 +2,23 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
-import '../../extensions/int_extensions.dart';
+import '../../../extensions/int_extensions.dart';
 
 @immutable
-class StartHeight {
-  factory StartHeight(int value) {
+class Int32le {
+  factory Int32le(int value) {
     if (value > 0x7fffffff) {
       throw RangeError(
         'Given value is out of range. Set less than 0x7fffffff',
       );
     }
-    return StartHeight._internal(value);
+    return Int32le._internal(value);
   }
 
-  factory StartHeight.deserialize(Uint8List bytes) =>
-      StartHeight(CreateInt.fromInt32leBytes(bytes));
+  factory Int32le.deserialize(Uint8List bytes) =>
+      Int32le(CreateInt.fromInt32leBytes(bytes));
 
-  const StartHeight._internal(this.value);
+  const Int32le._internal(this.value);
 
   static int bytesLength() => 4;
 
