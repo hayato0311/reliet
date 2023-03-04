@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/bases/Int64le.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/bases/int64le.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/script_pubkey.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/tx_out.dart';
 

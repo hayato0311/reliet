@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
-import 'bases/Int64le.dart';
+import 'bases/int64le.dart';
 import 'script_pubkey.dart';
 
 @immutable
