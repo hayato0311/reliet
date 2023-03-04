@@ -9,6 +9,7 @@ import 'protocol/actions/send_message.dart';
 import 'protocol/messages/inv_message.dart';
 import 'protocol/messages/ping_message.dart';
 import 'protocol/messages/pong_message.dart';
+import 'protocol/messages/tx_message.dart';
 import 'protocol/messages/version_message.dart';
 import 'protocol/types/command.dart';
 import 'protocol/types/message_header.dart';
@@ -189,6 +190,21 @@ class SpvClient {
             _container
                 .read(invRecieverProvider.notifier)
                 .updateState(invObserverState);
+            break;
+
+          case Command.tx:
+            final txMessage = TxMessage.deserialize(messageBytes);
+
+            if (verbose) {
+              print(
+                jsonEncode({
+                  messageHeader.command.string: {
+                    'messageHeader': messageHeader.toJson(),
+                    'message': txMessage.toJson()
+                  },
+                }),
+              );
+            }
             break;
 
           default:

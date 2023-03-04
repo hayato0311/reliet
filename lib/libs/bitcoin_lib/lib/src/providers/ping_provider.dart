@@ -35,12 +35,6 @@ class PingObserver extends ProviderObserver {
     Object? newValue,
     ProviderContainer container,
   ) async {
-    print('''
-{
-  "provider": "${provider.name ?? provider.runtimeType}",
-  "newValue": "$newValue"
-}''');
-
     final pingObserverState = container.read(pingRecieverProvider);
 
     if (pingObserverState == null) return;

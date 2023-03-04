@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -6,12 +5,12 @@ import 'package:meta/meta.dart';
 import 'variable_length_integer.dart';
 
 @immutable
-class VarStr {
-  VarStr(this.string) {
-    length = VarInt(string.length);
+class ScriptPubKey {
+  ScriptPubKey(this.bytes) {
+    length = VarInt(bytes.length);
   }
 
-  factory VarStr.deserialize(Uint8List bytes) {
+  factory ScriptPubKey.deserialize(Uint8List bytes) {
     final length = VarInt.deserialize(bytes);
 
     final stringBytes = bytes.sublist(
@@ -19,24 +18,23 @@ class VarStr {
       length.bytesLength() + length.value,
     );
 
-    return VarStr(utf8.decode(stringBytes));
+    return ScriptPubKey(stringBytes);
   }
 
   late final VarInt length;
-  final String string;
+  final List<int> bytes;
 
   int bytesLength() {
-    return length.length + string.length;
+    return length.length + bytes.length;
   }
 
-  Map<String, dynamic> toJson() =>
-      {'length': length.toJson(), 'string': string};
+  Map<String, dynamic> toJson() => {'length': length.toJson(), 'bytes': bytes};
 
   Uint8List serialize() {
     final byteList = length.serialize().toList();
 
-    if (string.isNotEmpty) {
-      byteList.addAll(utf8.encode(string));
+    if (bytes.isNotEmpty) {
+      byteList.addAll(bytes);
     }
 
     return Uint8List.fromList(byteList);

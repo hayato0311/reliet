@@ -8,7 +8,6 @@ import '../types/nonce.dart';
 import '../types/services.dart';
 import '../types/start_height.dart';
 import '../types/timestamp.dart';
-import '../types/variable_length_integer.dart';
 import '../types/variable_length_string.dart';
 import '../types/version.dart';
 
@@ -105,17 +104,8 @@ class VersionMessage {
 
     startIndex += Nonce.bytesLength();
 
-    final userAgentStringLength =
-        _bytesToUserAgentStringLength(bytes.sublist(startIndex));
-
-    final userAgent = VarStr.deserialize(
-      bytes.sublist(
-        startIndex,
-        startIndex + VarStr.bytesLength(userAgentStringLength),
-      ),
-    );
-
-    startIndex += VarStr.bytesLength(userAgentStringLength);
+    final userAgent = VarStr.deserialize(bytes.sublist(startIndex));
+    startIndex += userAgent.bytesLength();
 
     final startHeight = StartHeight.deserialize(
       bytes.sublist(
@@ -145,13 +135,6 @@ class VersionMessage {
       startHeight: startHeight,
       relay: relay,
     );
-  }
-
-  static VarInt _bytesToUserAgentStringLength(Uint8List bytes) {
-    final headByte = bytes[0];
-    final varIntLength = VarInt.bytesLength(headByte);
-
-    return VarInt.deserialize(bytes.sublist(0, varIntLength));
   }
 
   final Version version;

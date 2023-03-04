@@ -24,15 +24,15 @@ class VarInt {
 
   factory VarInt.deserialize(Uint8List bytes) {
     final headByte = bytes[0];
-    late final int value;
-    if (bytes.length == 1) {
-      value = CreateInt.fromUint8Bytes(bytes);
+    final int value;
+    if (headByte < 0xfd) {
+      value = CreateInt.fromUint8Bytes(bytes.sublist(0, 1));
     } else if (headByte == 0xfd) {
-      value = CreateInt.fromUint16leBytes(bytes.sublist(1));
+      value = CreateInt.fromUint16leBytes(bytes.sublist(1, 3));
     } else if (headByte == 0xfe) {
-      value = CreateInt.fromUint32leBytes(bytes.sublist(1));
+      value = CreateInt.fromUint32leBytes(bytes.sublist(1, 5));
     } else if (headByte == 0xff) {
-      value = CreateInt.fromUint64leBytes(bytes.sublist(1));
+      value = CreateInt.fromUint64leBytes(bytes.sublist(1, 9));
     } else {
       throw ArgumentError('The head byte of given bytes is invalid');
     }
@@ -40,23 +40,23 @@ class VarInt {
     return VarInt(value);
   }
 
-  static int bytesLength(int headByte) {
-    if (headByte == 0xfd) {
+  late final int length;
+  late final int headByte;
+  late final int value;
+
+  int bytesLength() {
+    if (headByte < 0xfd) {
+      return 1;
+    } else if (headByte == 0xfd) {
       return 3;
     } else if (headByte == 0xfe) {
       return 5;
     } else if (headByte == 0xff) {
       return 9;
-    } else if (headByte > 0xff) {
-      throw ArgumentError('The given head byte is not a byte value');
-    } else {
-      return 1;
     }
-  }
 
-  late final int length;
-  late final int headByte;
-  late final int value;
+    throw ArgumentError('The given head byte is not a byte value');
+  }
 
   Map<String, dynamic> toJson() =>
       {'length': length, 'headByte': headByte, 'value': value};

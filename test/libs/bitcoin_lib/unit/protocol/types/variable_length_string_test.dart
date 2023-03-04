@@ -26,25 +26,18 @@ void main() {
     test('with valid bytes', () {
       const varStrValue = 'valid';
       final serializedVarStrBytes = VarStr(varStrValue).serialize();
-      print(serializedVarStrBytes);
 
       expect(VarStr.deserialize(serializedVarStrBytes).string, varStrValue);
     });
-
-    test('with invalid bytes', () {
-      expect(
-        () => VarStr.deserialize(Uint8List.fromList([0, 0, 0, 1])),
-        throwsArgumentError,
-      );
-    });
   });
 
-  group('get bytes of length based on varInt', () {
-    test('with valid varInt', () {
-      const varStrLength = 0xfd;
-      final varInt = VarInt(varStrLength);
+  group('get length of bytes', () {
+    test('with valid varStr instance', () {
+      const varStrValue = 'valid';
+      final varInt = VarInt(varStrValue.length);
+      final varStr = VarStr(varStrValue);
 
-      expect(VarStr.bytesLength(varInt), varInt.length + varInt.value);
+      expect(varStr.bytesLength(), varInt.length + varInt.value);
     });
   });
 }
