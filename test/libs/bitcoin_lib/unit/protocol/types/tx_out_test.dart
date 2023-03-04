@@ -8,7 +8,7 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/tx_out.dart';
 void main() {
   group('create and serialize TxOut instance', () {
     test('with valid params', () {
-      final txValue = Int64le(100);
+      const txValue = Int64le(100);
       final scriptPubKey = ScriptPubKey(const [1, 1, 1, 1]);
       final txOut = TxOut(txValue, scriptPubKey);
 
@@ -25,7 +25,7 @@ void main() {
   });
   group('deserialize bytes to TxOut instance', () {
     test('with valid bytes', () {
-      final txValue = Int64le(100);
+      const txValue = Int64le(100);
       final scriptPubKey = ScriptPubKey(const [1, 1, 1, 1]);
       final txOut = TxOut(txValue, scriptPubKey);
 

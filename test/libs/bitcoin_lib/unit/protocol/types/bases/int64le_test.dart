@@ -8,7 +8,7 @@ void main() {
   group('create and serialize Int64le instance', () {
     test('with valid params', () {
       const value = 100;
-      final txValue = Int64le(value);
+      const txValue = Int64le(value);
 
       expect(
         txValue.serialize(),
@@ -19,7 +19,7 @@ void main() {
   group('deserialize bytes to Int64le instance', () {
     test('with valid bytes', () {
       const value = 100;
-      final txValue = Int64le(value);
+      const txValue = Int64le(value);
 
       final serializedInt64le = txValue.serialize();
 
