@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
+import 'bases/uint32le.dart';
 import 'script_sig.dart';
-import 'sequence.dart';
 import 'tx_out_point.dart';
 
 @immutable
@@ -11,7 +11,7 @@ class TxIn {
   factory TxIn(
     TxOutPoint previousOutput,
     ScriptSig scriptSig,
-    Sequence sequence,
+    Uint32le sequence,
   ) =>
       TxIn._internal(
         previousOutput,
@@ -38,13 +38,13 @@ class TxIn {
     final scriptSig = ScriptSig.deserialize(bytes.sublist(startIndex));
     startIndex += scriptSig.bytesLength();
 
-    final sequence = Sequence.deserialize(
+    final sequence = Uint32le.deserialize(
       bytes.sublist(
         startIndex,
-        startIndex + Sequence.bytesLength(),
+        startIndex + Uint32le.bytesLength(),
       ),
     );
-    startIndex += Sequence.bytesLength();
+    startIndex += Uint32le.bytesLength();
 
     return TxIn._internal(
       previousOutput,
@@ -55,12 +55,12 @@ class TxIn {
 
   final TxOutPoint previousOutput;
   final ScriptSig scriptSig;
-  final Sequence sequence;
+  final Uint32le sequence;
 
   int bytesLength() =>
       TxOutPoint.bytesLength() +
       scriptSig.bytesLength() +
-      Sequence.bytesLength();
+      Uint32le.bytesLength();
 
   Map<String, dynamic> toJson() => {
         'previousOutput': previousOutput.toJson(),

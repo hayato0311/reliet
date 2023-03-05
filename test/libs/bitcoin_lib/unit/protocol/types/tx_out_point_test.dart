@@ -1,15 +1,15 @@
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/bases/uint32le.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/hash256.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/tx_out_point.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/tx_out_point_index.dart';
 
 void main() {
   group('create and serialize TxOutPoint instance', () {
     test('with valid params', () {
       final hash = Hash256.create(const [1, 1, 1, 1]);
-      final index = TxOutPointIndex(100);
+      final index = Uint32le(100);
       final txOutPoint = TxOutPoint(hash, index);
 
       final serializedInventory = <int>[
@@ -26,7 +26,7 @@ void main() {
   group('deserialize bytes to TxOutPoint instance', () {
     test('with valid bytes', () {
       final hash = Hash256.create(const [1, 1, 1, 1]);
-      final index = TxOutPointIndex(100);
+      final index = Uint32le(100);
       final txOutPoint = TxOutPoint(hash, index);
 
       final serializedTxOutPoint = txOutPoint.serialize();

@@ -2,10 +2,10 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
+import 'bases/uint32le.dart';
 import 'checksum.dart';
 import 'command.dart';
 import 'magic.dart';
-import 'payload_length.dart';
 
 @immutable
 class MessageHeader {
@@ -19,7 +19,7 @@ class MessageHeader {
     return MessageHeader._internal(
       magic,
       command,
-      PayloadLength(payload.length),
+      Uint32le(payload.length),
       checksum,
     );
   }
@@ -43,13 +43,13 @@ class MessageHeader {
     );
     startIndex += Command.bytesLength();
 
-    final payloadLength = PayloadLength.deserialize(
+    final payloadLength = Uint32le.deserialize(
       bytes.sublist(
         startIndex,
-        startIndex + PayloadLength.bytesLength(),
+        startIndex + Uint32le.bytesLength(),
       ),
     );
-    startIndex += PayloadLength.bytesLength();
+    startIndex += Uint32le.bytesLength();
 
     final givenChecksum = bytes.sublist(
       startIndex,
@@ -90,12 +90,12 @@ class MessageHeader {
   static int bytesLength() =>
       Magic.bytesLength() +
       Command.bytesLength() +
-      PayloadLength.bytesLength() +
+      Uint32le.bytesLength() +
       Checksum.bytesLength();
 
   final Magic magic;
   final Command command;
-  final PayloadLength payloadLength;
+  final Uint32le payloadLength;
   final Checksum checksum;
 
   Map<String, dynamic> toJson() => {

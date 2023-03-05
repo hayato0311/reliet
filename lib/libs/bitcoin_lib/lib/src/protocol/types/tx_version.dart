@@ -6,6 +6,7 @@ import '../../extensions/int_extensions.dart';
 
 @immutable
 class TxVersion {
+  // TODO: inherit from Uint32le
   factory TxVersion(int value) {
     if (value > 2) {
       throw RangeError(

@@ -5,7 +5,7 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/extensions/int_extensions.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/timestamp.dart';
 
 void main() {
-  group('create and serialize StartHeight instance', () {
+  group('create and serialize Timestamp instance', () {
     test('with a vaild value', () {
       final secondsUnixtime =
           (DateTime.now().millisecondsSinceEpoch / 1000).floor();
@@ -19,7 +19,7 @@ void main() {
     });
   });
 
-  group('deserialize bytes to StartHeight instance', () {
+  group('deserialize bytes to Timestamp instance', () {
     test('with valid bytes', () {
       final secondsUnixtime =
           (DateTime.now().millisecondsSinceEpoch / 1000).floor();

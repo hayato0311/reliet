@@ -1,11 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/bases/uint32le.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/checksum.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/command.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/magic.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/message_header.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/payload_length.dart';
 
 void main() {
   group('create and serialize MessageHeader instance', () {
@@ -23,7 +23,7 @@ void main() {
       final serializedMessageHeader = <int>[
         ...magic.serialize(),
         ...command.serialize(),
-        ...PayloadLength(payload.length).serialize(),
+        ...Uint32le(payload.length).serialize(),
         ...checksum.serialize(),
       ];
 

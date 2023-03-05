@@ -6,6 +6,7 @@ import '../messages/get_data_message.dart';
 import '../messages/ping_message.dart';
 import '../messages/pong_message.dart';
 import '../messages/version_message.dart';
+import '../types/bases/int32le.dart';
 import '../types/command.dart';
 import '../types/inventory.dart';
 import '../types/ip_address.dart';
@@ -16,7 +17,6 @@ import '../types/nonce.dart';
 import '../types/port.dart';
 import '../types/service.dart';
 import '../types/services.dart';
-import '../types/start_height.dart';
 import '../types/variable_length_string.dart';
 import '../types/version.dart';
 
@@ -66,7 +66,7 @@ Future<void> sendVersionMessage(
     addrFrom: addrFrom,
     nonce: Nonce(const [0, 0, 0, 0, 0, 0, 0, 0]),
     userAgent: userAgent,
-    startHeight: StartHeight(0),
+    startHeight: Int32le(0),
     relay: false,
   );
 

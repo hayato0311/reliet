@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
+import 'bases/uint32le.dart';
 import 'hash256.dart';
-import 'tx_out_point_index.dart';
 
 @immutable
 class TxOutPoint {
@@ -16,11 +16,11 @@ class TxOutPoint {
     );
     startIndex += Hash256.bytesLength();
 
-    final index = TxOutPointIndex.deserialize(
-      bytes.sublist(startIndex, startIndex + TxOutPointIndex.bytesLength()),
+    final index = Uint32le.deserialize(
+      bytes.sublist(startIndex, startIndex + Uint32le.bytesLength()),
     );
 
-    startIndex += TxOutPointIndex.bytesLength();
+    startIndex += Uint32le.bytesLength();
 
     if (bytes.length != startIndex) {
       throw ArgumentError('''
@@ -31,11 +31,10 @@ Expected: ${bytesLength()}, Actual: ${bytes.length}''');
     return TxOutPoint(hash, index);
   }
 
-  static int bytesLength() =>
-      Hash256.bytesLength() + TxOutPointIndex.bytesLength();
+  static int bytesLength() => Hash256.bytesLength() + Uint32le.bytesLength();
 
   final Hash256 hash;
-  final TxOutPointIndex index;
+  final Uint32le index;
 
   Map<String, dynamic> toJson() =>
       {'hash': hash.toJson(), 'index': index.toJson()};
