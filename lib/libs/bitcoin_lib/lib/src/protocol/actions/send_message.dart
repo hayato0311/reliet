@@ -207,9 +207,9 @@ Future<void> sendGetDataMessage(
   if (verbose) {
     print(
       jsonEncode({
-        'pong': {
+        'getData': {
           'messageHeader': header.toJson(),
-          'pongMessage': payload.toJson()
+          'getDataMessage': payload.toJson()
         },
       }),
     );
