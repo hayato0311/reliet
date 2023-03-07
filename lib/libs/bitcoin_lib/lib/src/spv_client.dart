@@ -18,10 +18,10 @@ import 'providers/inv_provider.dart';
 import 'providers/ping_provider.dart';
 
 class SpvClient {
-  factory SpvClient({bool testnet = false}) {
-    return SpvClient._internal(testnet);
+  factory SpvClient({String nodeHost = '', bool testnet = false}) {
+    return SpvClient._internal(nodeHost, testnet);
   }
-  SpvClient._internal(this.testnet);
+  SpvClient._internal(this.nodeHost, this.testnet);
 
   final bool testnet;
 
@@ -80,7 +80,9 @@ class SpvClient {
   Future<void> _connect() async {
     final dnsSeeds = testnet ? TestnetParams.dnsSeeds : MainParams.dnsSeeds;
 
-    nodeHost = dnsSeeds[Random().nextInt(dnsSeeds.length)];
+    if (nodeHost.isEmpty) {
+      nodeHost = dnsSeeds[Random().nextInt(dnsSeeds.length)];
+    }
 
     _socket = await Socket.connect(
       nodeHost,
