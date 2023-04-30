@@ -13,7 +13,8 @@ void main() {
       final index = Uint32le(100);
       final hash = Hash256.create(const [1, 1, 1, 1]);
       final previousOutput = TxOutPoint(hash, index);
-      final scriptSig = ScriptSig(const [1, 1, 1, 1]);
+      final signature = List<int>.filled(74, 10);
+      final scriptSig = ScriptSig.forP2PK(signature);
       final sequence = Uint32le(100);
       final txIn = TxIn(previousOutput, scriptSig, sequence);
 
@@ -35,7 +36,8 @@ void main() {
       final index = Uint32le(100);
       final hash = Hash256.create(const [1, 1, 1, 1]);
       final previousOutput = TxOutPoint(hash, index);
-      final scriptSig = ScriptSig(const [1, 1, 1, 1]);
+      final signature = List<int>.filled(74, 10);
+      final scriptSig = ScriptSig.forP2PK(signature);
       final sequence = Uint32le(100);
       final txIn = TxIn(previousOutput, scriptSig, sequence);
 

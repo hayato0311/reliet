@@ -9,7 +9,8 @@ void main() {
   group('create and serialize TxOut instance', () {
     test('with valid params', () {
       const txValue = Int64le(100);
-      final scriptPubKey = ScriptPubKey(const [1, 1, 1, 1]);
+      final pubKey = List<int>.filled(33, 10);
+      final scriptPubKey = ScriptPubKey.forP2PK(pubKey);
       final txOut = TxOut(txValue, scriptPubKey);
 
       final serializedTxOut = <int>[
@@ -26,7 +27,8 @@ void main() {
   group('deserialize bytes to TxOut instance', () {
     test('with valid bytes', () {
       const txValue = Int64le(100);
-      final scriptPubKey = ScriptPubKey(const [1, 1, 1, 1]);
+      final pubKey = List<int>.filled(33, 10);
+      final scriptPubKey = ScriptPubKey.forP2PK(pubKey);
       final txOut = TxOut(txValue, scriptPubKey);
 
       final serializedTxOut = txOut.serialize();

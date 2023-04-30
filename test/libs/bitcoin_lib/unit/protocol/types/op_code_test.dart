@@ -6,8 +6,8 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/op_code.dart';
 void main() {
   group('create and serialize OpCode instance', () {
     test('with valid input', () {
-      expect(OpCode.opPushBytes1.code, 1);
-      expect(OpCode.opPushBytes1.serialize(), Uint8List.fromList([1, 0, 0, 0]));
+      expect(OpCode.opPushBytes1.value, 1);
+      expect(OpCode.opPushBytes1.serialize(), Uint8List.fromList([1]));
     });
   });
 
