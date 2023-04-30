@@ -13,6 +13,7 @@ import 'variable_length_integer.dart';
 class Script {
   const Script(this.length, this.commands, this.type);
 
+  // ignore: prefer_constructors_over_static_methods
   static Script deserialize(Uint8List bytes) {
     final commands = <dynamic>[];
 
