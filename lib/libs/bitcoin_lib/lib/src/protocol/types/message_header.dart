@@ -62,6 +62,11 @@ class MessageHeader {
       throw ArgumentError('The length of given bytes is invalid');
     }
 
+    if (startIndex + payloadLength.value > bytes.length) {
+      throw PacketsReceptionUnfinishedException(
+        'Packets reception process is still incomplete.',
+      );
+    }
     final payload = bytes.sublist(startIndex, startIndex + payloadLength.value);
 
     final checksumFromPayload = Checksum.fromPayload(payload);
@@ -118,5 +123,15 @@ class MessageHeader {
 
   static bool isValidChecksum(Uint8List checksum, Uint8List payload) {
     return Checksum.fromPayload(payload).isValid(checksum);
+  }
+}
+
+class PacketsReceptionUnfinishedException implements Exception {
+  PacketsReceptionUnfinishedException(this.message);
+  final String message;
+
+  @override
+  String toString() {
+    return 'PacketsReceptionUnfinishedException: $message';
   }
 }

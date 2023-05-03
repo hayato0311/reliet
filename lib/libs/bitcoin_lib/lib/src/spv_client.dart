@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:riverpod/riverpod.dart';
 
@@ -12,6 +13,9 @@ import 'protocol/messages/pong_message.dart';
 import 'protocol/messages/tx_message.dart';
 import 'protocol/messages/version_message.dart';
 import 'protocol/types/command.dart';
+import 'protocol/types/hash256.dart';
+import 'protocol/types/inventory.dart';
+import 'protocol/types/inventory_type.dart';
 import 'protocol/types/message_header.dart';
 import 'protocol/types/port.dart';
 import 'providers/inv_provider.dart';
@@ -25,12 +29,14 @@ class SpvClient {
 
   final bool testnet;
 
-  bool connecting = false;
-
   String nodeHost = 'not connecting';
 
+  bool connecting = false;
   bool handshakeCompleted = false;
   bool pongMessageRecieved = false;
+
+  TxMessage? _txMessage;
+  Uint8List _buffer = Uint8List(0);
 
   final _container = ProviderContainer(
     observers: [
@@ -42,6 +48,36 @@ class SpvClient {
   late Socket _socket;
 
   bool _versionReceived = false;
+
+  Future<TxMessage?> fetchBlock(Hash256 blockHash) async {
+    if (!handshakeCompleted) {
+      await _connectToNode();
+    }
+
+    await sendGetDataMessage(
+      _socket,
+      [Inventory(InventoryType.block, blockHash)],
+      testnet: testnet,
+      verbose: true,
+    );
+
+    return _txMessage;
+  }
+
+  Future<TxMessage?> fetchTx(Hash256 txHash) async {
+    if (!handshakeCompleted) {
+      await _connectToNode();
+    }
+
+    await sendGetDataMessage(
+      _socket,
+      [Inventory(InventoryType.transaction, txHash)],
+      testnet: testnet,
+      verbose: true,
+    );
+
+    return _txMessage;
+  }
 
   Future<void> sendPing() async {
     if (!handshakeCompleted) {
@@ -78,6 +114,8 @@ class SpvClient {
   }
 
   Future<void> _connect() async {
+    if (connecting) return;
+
     final dnsSeeds = testnet ? TestnetParams.dnsSeeds : MainParams.dnsSeeds;
 
     if (nodeHost.isEmpty) {
@@ -95,10 +133,30 @@ class SpvClient {
     connecting = true;
   }
 
+  void disconnect() {
+    if (!connecting) return;
+
+    _socket.destroy();
+    connecting = false;
+    handshakeCompleted = false;
+    pongMessageRecieved = false;
+    _versionReceived = false;
+  }
+
   void _listen({bool verbose = false}) {
     _socket.listen(
       (data) async {
-        final messageHeader = MessageHeader.deserialize(data);
+        final MessageHeader messageHeader;
+        data = Uint8List.fromList([..._buffer, ...data]);
+        try {
+          messageHeader = MessageHeader.deserialize(data);
+        } on PacketsReceptionUnfinishedException catch (e) {
+          if (verbose) print(e);
+          _buffer = data;
+          return;
+        }
+        _buffer = Uint8List(0);
+
         final messageBytes = data.sublist(
           MessageHeader.bytesLength(),
           MessageHeader.bytesLength() + messageHeader.payloadLength.value,
