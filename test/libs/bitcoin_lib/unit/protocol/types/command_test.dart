@@ -13,7 +13,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of verack', () {
@@ -22,7 +22,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of addr', () {
@@ -31,7 +31,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of inv', () {
@@ -40,7 +40,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of getdata', () {
@@ -49,7 +49,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of notfound', () {
@@ -58,7 +58,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of getblocks', () {
@@ -67,7 +67,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of getheaders', () {
@@ -76,7 +76,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of tx', () {
@@ -85,7 +85,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of block', () {
@@ -94,7 +94,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of headers', () {
@@ -103,7 +103,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of getaddr', () {
@@ -112,7 +112,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of mempool', () {
@@ -121,7 +121,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of checkorder', () {
@@ -130,7 +130,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of submitorder', () {
@@ -139,7 +139,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of reply', () {
@@ -148,7 +148,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of ping', () {
@@ -157,7 +157,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of pong', () {
@@ -166,7 +166,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of reject', () {
@@ -175,7 +175,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of filterload', () {
@@ -184,7 +184,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of filteradd', () {
@@ -193,7 +193,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of filterclear', () {
@@ -202,7 +202,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of merkleblock', () {
@@ -211,7 +211,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of alert', () {
@@ -220,7 +220,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of sendheaders', () {
@@ -229,7 +229,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of feefilter', () {
@@ -238,7 +238,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of sendcmpct', () {
@@ -247,7 +247,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of cmpctblock', () {
@@ -256,7 +256,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of getblocktxn', () {
@@ -265,7 +265,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
     test('of blocktxn', () {
@@ -274,7 +274,7 @@ void main() {
       final serializedCommand = command.serialize();
 
       expect(command.string, commandString);
-      expect(serializedCommand, commandString.toBytes(12));
+      expect(serializedCommand, commandString.encodeAsUtf8(12));
       expect(serializedCommand.length, 12);
     });
   });

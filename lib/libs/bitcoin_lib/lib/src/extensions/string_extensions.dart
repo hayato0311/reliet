@@ -4,7 +4,7 @@ import 'dart:typed_data';
 extension StringExtensions on String {
   // to fixed length bytecodes
 
-  Uint8List toBytes([int length = -1]) {
+  Uint8List encodeAsUtf8([int length = -1]) {
     final byteList = List<int>.from(utf8.encode(this));
 
     if (length == -1) {

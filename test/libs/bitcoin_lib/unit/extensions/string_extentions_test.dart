@@ -7,13 +7,14 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/extensions/string_extensions.dar
 void main() {
   group('convert string into bytes', () {
     test('without specified length', () {
-      expect('valid'.toBytes(), utf8.encode('valid'));
+      expect('valid'.encodeAsUtf8(), utf8.encode('valid'));
     });
     test('with valid length', () {
-      expect('valid'.toBytes(10), [...utf8.encode('valid'), 0, 0, 0, 0, 0]);
+      expect(
+          'valid'.encodeAsUtf8(10), [...utf8.encode('valid'), 0, 0, 0, 0, 0]);
     });
     test('with invalid length', () {
-      expect(() => 'invalid'.toBytes(1), throwsArgumentError);
+      expect(() => 'invalid'.encodeAsUtf8(1), throwsArgumentError);
     });
   });
 

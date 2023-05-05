@@ -140,5 +140,5 @@ enum Command {
 
   Map<String, dynamic> toJson() => {'string': "${toString()}('$string')"};
 
-  Uint8List serialize() => string.toBytes(12);
+  Uint8List serialize() => string.encodeAsUtf8(12);
 }

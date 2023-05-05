@@ -11,7 +11,7 @@ class Hash256 {
   }
 
   factory Hash256.fromHexString(String hex) {
-    return Hash256._internal(hexStringToBytes(hex));
+    return Hash256._internal(hexencodeAsUtf8(hex));
   }
 
   factory Hash256.deserialize(Uint8List bytes) {
