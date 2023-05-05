@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/extensions/string_extensions.dart';
 
@@ -31,17 +30,6 @@ void main() {
     });
     test('with invalid string', () {
       expect(() => 'zz01'.hexToBytes(), throwsFormatException);
-    });
-  });
-
-  group('convert bytes into string', () {
-    test('with valid bytes', () {
-      expect(
-        CreateString.fromBytes(
-          Uint8List.fromList([...utf8.encode('valid'), 0, 0, 0, 0, 0]),
-        ),
-        'valid',
-      );
     });
   });
 }

@@ -26,17 +26,15 @@ extension StringExtensions on String {
 
   Uint8List hexToBytes() {
     final bytes = <int>[];
-    for (var i = 0; i < length; i += 2) {
-      final byte = int.parse(substring(i, i + 2), radix: 16);
+    var string = this;
+
+    if ('0x' == substring(0, 2)) {
+      string = replaceFirst('0x', '');
+    }
+    for (var i = 0; i < string.length; i += 2) {
+      final byte = int.parse(string.substring(i, i + 2), radix: 16);
       bytes.add(byte);
     }
     return Uint8List.fromList(bytes);
-  }
-}
-
-extension CreateString on String {
-  static String fromBytes(Uint8List bytes) {
-    final removedZeroPaddingBytes = bytes.where((value) => value != 0).toList();
-    return utf8.decode(removedZeroPaddingBytes);
   }
 }

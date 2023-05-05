@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import '../../extensions/string_extensions.dart';
@@ -37,7 +38,7 @@ enum Command {
   const Command(this.string);
 
   factory Command.deserialize(Uint8List bytes) {
-    final commandValue = CreateString.fromBytes(bytes);
+    final commandValue = decodeAsUtf8(bytes);
 
     switch (commandValue) {
       case 'version':
@@ -141,4 +142,9 @@ enum Command {
   Map<String, dynamic> toJson() => {'string': "${toString()}('$string')"};
 
   Uint8List serialize() => string.encodeAsUtf8(12);
+}
+
+String decodeAsUtf8(Uint8List bytes) {
+  final removedZeroPaddingBytes = bytes.where((value) => value != 0).toList();
+  return utf8.decode(removedZeroPaddingBytes);
 }

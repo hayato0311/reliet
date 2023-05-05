@@ -407,4 +407,15 @@ void main() {
       expect(() => Command.deserialize(bytes), throwsArgumentError);
     });
   });
+
+  group('decode bytes as utf8', () {
+    test('with valid bytes', () {
+      expect(
+        decodeAsUtf8(
+          Uint8List.fromList([...utf8.encode('valid'), 0, 0, 0, 0, 0]),
+        ),
+        'valid',
+      );
+    });
+  });
 }
