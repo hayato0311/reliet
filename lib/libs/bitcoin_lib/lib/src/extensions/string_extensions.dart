@@ -23,6 +23,15 @@ extension StringExtensions on String {
     }
     return Uint8List.fromList(byteList);
   }
+
+  Uint8List hexToBytes() {
+    final bytes = <int>[];
+    for (var i = 0; i < length; i += 2) {
+      final byte = int.parse(substring(i, i + 2), radix: 16);
+      bytes.add(byte);
+    }
+    return Uint8List.fromList(bytes);
+  }
 }
 
 extension CreateString on String {
