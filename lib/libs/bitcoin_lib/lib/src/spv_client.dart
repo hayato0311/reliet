@@ -7,6 +7,7 @@ import 'package:riverpod/riverpod.dart';
 
 import 'chain_params.dart';
 import 'protocol/actions/send_message.dart';
+import 'protocol/messages/block_message.dart';
 import 'protocol/messages/inv_message.dart';
 import 'protocol/messages/ping_message.dart';
 import 'protocol/messages/pong_message.dart';
@@ -261,6 +262,21 @@ class SpvClient {
                   messageHeader.command.string: {
                     'messageHeader': messageHeader.toJson(),
                     'message': txMessage.toJson()
+                  },
+                }),
+              );
+            }
+            break;
+
+          case Command.block:
+            final blockMessage = BlockMessage.deserialize(messageBytes);
+
+            if (verbose) {
+              print(
+                jsonEncode({
+                  messageHeader.command.string: {
+                    'messageHeader': messageHeader.toJson(),
+                    'message': blockMessage.toJson()
                   },
                 }),
               );
