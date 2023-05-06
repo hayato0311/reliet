@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:meta/meta.dart';
 
+import '../../extensions/string_extensions.dart';
+
 @immutable
 class Hash256 {
   factory Hash256.create(List<int> bytes) {
@@ -10,8 +12,8 @@ class Hash256 {
     return Hash256._internal(sha256.convert(digest.bytes).bytes);
   }
 
-  factory Hash256.fromHexString(String hex) {
-    return Hash256._internal(hexencodeAsUtf8(hex));
+  factory Hash256.fromHexString(String hexString) {
+    return Hash256._internal(hexString.hexToBytes().toList());
   }
 
   factory Hash256.deserialize(Uint8List bytes) {
@@ -38,13 +40,4 @@ Expected: ${bytesLength()}, Actual: ${bytes.length}
       };
 
   Uint8List serialize() => Uint8List.fromList(bytes.reversed.toList());
-
-  static List<int> hexStringToBytes(String hex) {
-    final bytes = <int>[];
-    for (var i = 0; i < hex.length; i += 2) {
-      final byte = int.parse(hex.substring(i, i + 2), radix: 16);
-      bytes.add(byte);
-    }
-    return bytes;
-  }
 }
