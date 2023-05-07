@@ -4,7 +4,7 @@ import 'dart:typed_data';
 extension StringExtensions on String {
   // to fixed length bytecodes
 
-  Uint8List toBytes([int length = -1]) {
+  Uint8List encodeAsUtf8([int length = -1]) {
     final byteList = List<int>.from(utf8.encode(this));
 
     if (length == -1) {
@@ -23,11 +23,18 @@ extension StringExtensions on String {
     }
     return Uint8List.fromList(byteList);
   }
-}
 
-extension CreateString on String {
-  static String fromBytes(Uint8List bytes) {
-    final removedZeroPaddingBytes = bytes.where((value) => value != 0).toList();
-    return utf8.decode(removedZeroPaddingBytes);
+  Uint8List hexToBytes() {
+    final bytes = <int>[];
+    var string = this;
+
+    if ('0x' == substring(0, 2)) {
+      string = replaceFirst('0x', '');
+    }
+    for (var i = 0; i < string.length; i += 2) {
+      final byte = int.parse(string.substring(i, i + 2), radix: 16);
+      bytes.add(byte);
+    }
+    return Uint8List.fromList(bytes);
   }
 }

@@ -7,6 +7,7 @@ import 'package:riverpod/riverpod.dart';
 
 import 'chain_params.dart';
 import 'protocol/actions/send_message.dart';
+import 'protocol/messages/block_message.dart';
 import 'protocol/messages/inv_message.dart';
 import 'protocol/messages/ping_message.dart';
 import 'protocol/messages/pong_message.dart';
@@ -35,7 +36,9 @@ class SpvClient {
   bool handshakeCompleted = false;
   bool pongMessageRecieved = false;
 
+  BlockMessage? _blockMessage;
   TxMessage? _txMessage;
+
   Uint8List _buffer = Uint8List(0);
 
   final _container = ProviderContainer(
@@ -49,10 +52,12 @@ class SpvClient {
 
   bool _versionReceived = false;
 
-  Future<TxMessage?> fetchBlock(Hash256 blockHash) async {
+  Future<BlockMessage?> fetchBlock(Hash256 blockHash) async {
     if (!handshakeCompleted) {
       await _connectToNode();
     }
+
+    _blockMessage = null;
 
     await sendGetDataMessage(
       _socket,
@@ -61,13 +66,15 @@ class SpvClient {
       verbose: true,
     );
 
-    return _txMessage;
+    return _blockMessage;
   }
 
   Future<TxMessage?> fetchTx(Hash256 txHash) async {
     if (!handshakeCompleted) {
       await _connectToNode();
     }
+
+    _txMessage = null;
 
     await sendGetDataMessage(
       _socket,
@@ -253,14 +260,29 @@ class SpvClient {
             break;
 
           case Command.tx:
-            final txMessage = TxMessage.deserialize(messageBytes);
+            _txMessage = TxMessage.deserialize(messageBytes);
 
             if (verbose) {
               print(
                 jsonEncode({
                   messageHeader.command.string: {
                     'messageHeader': messageHeader.toJson(),
-                    'message': txMessage.toJson()
+                    'message': _txMessage?.toJson()
+                  },
+                }),
+              );
+            }
+            break;
+
+          case Command.block:
+            _blockMessage = BlockMessage.deserialize(messageBytes);
+
+            if (verbose) {
+              print(
+                jsonEncode({
+                  messageHeader.command.string: {
+                    'messageHeader': messageHeader.toJson(),
+                    'message': _blockMessage?.toJson()
                   },
                 }),
               );
