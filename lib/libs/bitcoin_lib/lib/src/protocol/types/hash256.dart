@@ -10,6 +10,10 @@ class Hash256 {
     return Hash256._internal(sha256.convert(digest.bytes).bytes);
   }
 
+  factory Hash256.fromHexString(String hex) {
+    return Hash256._internal(hexStringToBytes(hex));
+  }
+
   factory Hash256.deserialize(Uint8List bytes) {
     if (bytes.length != bytesLength()) {
       throw ArgumentError('''
@@ -34,4 +38,13 @@ Expected: ${bytesLength()}, Actual: ${bytes.length}
       };
 
   Uint8List serialize() => Uint8List.fromList(bytes.reversed.toList());
+
+  static List<int> hexStringToBytes(String hex) {
+    final bytes = <int>[];
+    for (var i = 0; i < hex.length; i += 2) {
+      final byte = int.parse(hex.substring(i, i + 2), radix: 16);
+      bytes.add(byte);
+    }
+    return bytes;
+  }
 }
