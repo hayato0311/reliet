@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -16,47 +18,62 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/variable_length_i
 
 void main() {
   group('create and serialize TxMessage instance', () {
-    test('with valid args', () {
-      final version = TxVersion(1);
-      final signature = List<int>.filled(72, 10);
-      final txIns = [
-        TxIn(
-          TxOutPoint(
-            Hash256.create(const [0, 1, 1, 1, 1]),
-            Uint32le(10),
+    group('when valid', () {
+      test('with valid args', () {
+        final version = TxVersion(1);
+        final signature = List<int>.filled(72, 10);
+        final txIns = [
+          TxIn(
+            TxOutPoint(
+              Hash256.create(const [0, 1, 1, 1, 1]),
+              Uint32le(10),
+            ),
+            ScriptSig.forP2PK(signature),
+            Uint32le(1448484),
           ),
-          ScriptSig.forP2PK(signature),
-          Uint32le(1448484),
-        ),
-      ];
+        ];
 
-      final pubKey = List<int>.filled(33, 10);
-      final txOuts = [
-        TxOut(
-          const Int64le(10000),
-          ScriptPubKey.forP2PK(pubKey),
-        ),
-      ];
+        final pubKey = List<int>.filled(33, 10);
+        final txOuts = [
+          TxOut(
+            const Int64le(10000),
+            ScriptPubKey.forP2PK(pubKey),
+          ),
+        ];
 
-      final txMessage = TxMessage(
-        version: version,
-        txIns: txIns,
-        txOuts: txOuts,
-      );
+        final txMessage = TxMessage(
+          version: version,
+          txIns: txIns,
+          txOuts: txOuts,
+        );
 
-      final serializedVersionMessage = <int>[
-        ...version.serialize(),
-        ...VarInt(txIns.length).serialize(),
-        for (var txIn in txIns) ...txIn.serialize(),
-        ...VarInt(txOuts.length).serialize(),
-        for (var txOut in txOuts) ...txOut.serialize(),
-        ...LockTime(0).serialize(),
-      ];
+        final serializedVersionMessage = <int>[
+          ...version.serialize(),
+          ...VarInt(txIns.length).serialize(),
+          for (var txIn in txIns) ...txIn.serialize(),
+          ...VarInt(txOuts.length).serialize(),
+          for (var txOut in txOuts) ...txOut.serialize(),
+          ...LockTime(0).serialize(),
+        ];
 
-      expect(
-        txMessage.serialize(),
-        Uint8List.fromList(serializedVersionMessage),
-      );
+        expect(
+          txMessage.serialize(),
+          Uint8List.fromList(serializedVersionMessage),
+        );
+      });
+      test('with real tx data', () async {
+        const path =
+            'test/libs/bitcoin_lib/unit/protocol/messages/data/tx_f3c6.json';
+        final jsonString = await File(path).readAsString();
+        final jsonData = jsonDecode(jsonString) as Map<String, dynamic>;
+        final bytes =
+            (jsonData['bytes'] as List<dynamic>).map((e) => e as int).toList();
+
+        final deserializedTxMessage =
+            TxMessage.deserialize(Uint8List.fromList(bytes));
+
+        expect(deserializedTxMessage.serialize(), jsonData['bytes']);
+      });
     });
   });
 
@@ -131,6 +148,22 @@ void main() {
         () => TxMessage.deserialize(Uint8List.fromList([0, 0, 0, 1])),
         throwsArgumentError,
       );
+    });
+  });
+
+  group('compute tx id', () {
+    test('with real tx data', () async {
+      const path =
+          'test/libs/bitcoin_lib/unit/protocol/messages/data/tx_f3c6.json';
+      final jsonString = await File(path).readAsString();
+      final jsonData = jsonDecode(jsonString) as Map<String, dynamic>;
+      final bytes =
+          (jsonData['bytes'] as List<dynamic>).map((e) => e as int).toList();
+
+      final deserializedTxMessage =
+          TxMessage.deserialize(Uint8List.fromList(bytes));
+
+      expect(deserializedTxMessage.hash(), jsonData['txId']);
     });
   });
 }

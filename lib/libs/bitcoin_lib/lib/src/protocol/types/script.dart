@@ -164,16 +164,16 @@ class Script {
         byteList.addAll(command.serialize());
       } else if (command is List<int>) {
         if (command.isNotEmpty && command.length <= 75) {
-          byteList.addAll(command.reversed);
+          byteList.addAll(command);
         } else if (command.length >= 76 && command.length <= 255) {
           // OpCode.opPushData1
-          byteList.addAll(command.reversed);
+          byteList.addAll(command);
         } else if (command.length >= 256 && command.length <= 65535) {
           // OpCode.opPushData2
-          byteList.addAll(command.reversed);
+          byteList.addAll(command);
         } else if (command.length >= 65536 && command.length <= 4294967295) {
           // OpCode.opPushData4
-          byteList.addAll(command.reversed);
+          byteList.addAll(command);
         } else {
           throw ArgumentError('The given command is too long');
         }
