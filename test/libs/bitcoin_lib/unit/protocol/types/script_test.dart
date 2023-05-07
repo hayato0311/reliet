@@ -8,7 +8,7 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/variable_length_i
 void main() {
   group('create Script instance, then serialize it', () {
     test('with valid args', () {
-      final bytes = List<int>.filled(10, 10);
+      final bytes = List<int>.filled(5, 10) + List<int>.filled(5, 5);
       final commands = [OpCode.opPushBytes10, bytes];
       final length = VarInt(10 + 1);
       final script = Script(length, commands, null);
@@ -20,18 +20,20 @@ void main() {
       expect(script.commands, commands);
       expect(
         script.serialize(),
-        Uint8List.fromList([
-          ...length.serialize(),
-          OpCode.opPushBytes10.value,
-          ...bytes.reversed
-        ]),
+        Uint8List.fromList(
+          [
+            ...length.serialize(),
+            OpCode.opPushBytes10.value,
+            ...bytes,
+          ],
+        ),
       );
     });
   });
 
   group('deserialize from bytes to Script instance', () {
     test('with valid args', () {
-      final bytes = List<int>.filled(10, 10);
+      final bytes = List<int>.filled(5, 10) + List<int>.filled(5, 5);
       final commands = [OpCode.opPushBytes10, bytes];
       final length = VarInt(10 + 1);
       final script = Script(length, commands, null);

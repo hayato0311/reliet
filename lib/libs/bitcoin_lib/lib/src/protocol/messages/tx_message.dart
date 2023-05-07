@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
+import '../../extensions/uint8_list_extensions.dart';
+import '../types/hash256.dart';
 import '../types/lock_time.dart';
 import '../types/tx_in.dart';
 import '../types/tx_out.dart';
@@ -123,6 +125,7 @@ class TxMessage {
   }
 
   Map<String, dynamic> toJson() => {
+        'txId': hash(),
         'version': version.toJson(),
         // 'flag': flag.toString(),
         'txInCount': txInCount.toJson(),
@@ -144,5 +147,10 @@ class TxMessage {
     ];
 
     return Uint8List.fromList(byteList);
+  }
+
+  String hash() {
+    final hash256 = Hash256.create(serialize());
+    return Uint8List.fromList(hash256.bytes.reversed.toList()).toHex();
   }
 }
