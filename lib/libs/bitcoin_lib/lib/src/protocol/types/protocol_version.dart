@@ -2,9 +2,9 @@ import 'dart:typed_data';
 
 import '../../extensions/int_extensions.dart';
 
-enum Version {
+enum ProtocolVersion {
   // in Bitcoin Core, this value is 70016
-  protocolVersion(70015),
+  defaultVersion(70015),
 
   // initial proto version, to be increased after version/verack negotiation
   initProtoVersion(209),
@@ -33,28 +33,28 @@ enum Version {
   // "wtxidrelay" command for wtxid-based relay starts with this version
   wtxidRelayVersion(70016);
 
-  const Version(this.value);
+  const ProtocolVersion(this.value);
 
-  factory Version.deserialize(Uint8List bytes) {
+  factory ProtocolVersion.deserialize(Uint8List bytes) {
     final commandValue = CreateInt.fromInt32leBytes(bytes);
     if (commandValue == 209) {
-      return Version.initProtoVersion;
+      return ProtocolVersion.initProtoVersion;
     } else if (commandValue == 31800) {
-      return Version.minPeerProtoVersion;
+      return ProtocolVersion.minPeerProtoVersion;
     } else if (commandValue == 60000) {
-      return Version.bip0031Version;
+      return ProtocolVersion.bip0031Version;
     } else if (commandValue == 70011) {
-      return Version.noBloomVersion;
+      return ProtocolVersion.noBloomVersion;
     } else if (commandValue == 70012) {
-      return Version.sendHeadersVersion;
+      return ProtocolVersion.sendHeadersVersion;
     } else if (commandValue == 70013) {
-      return Version.feeFilterVersion;
+      return ProtocolVersion.feeFilterVersion;
     } else if (commandValue == 70014) {
-      return Version.shortIdsBlocksVersion;
+      return ProtocolVersion.shortIdsBlocksVersion;
     } else if (commandValue == 70015) {
-      return Version.invalidCbNoBanVersion;
+      return ProtocolVersion.invalidCbNoBanVersion;
     } else if (commandValue == 70016) {
-      return Version.wtxidRelayVersion;
+      return ProtocolVersion.wtxidRelayVersion;
     } else {
       throw ArgumentError('Undefined version');
     }

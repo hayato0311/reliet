@@ -2,12 +2,12 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/extensions/int_extensions.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/version.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/protocol_version.dart';
 
 void main() {
-  group('create and serialize Version instance', () {
-    test('of protocolVersion', () {
-      const version = Version.protocolVersion;
+  group('create and serialize ProtocolVersion instance', () {
+    test('of defaultVersion', () {
+      const version = ProtocolVersion.defaultVersion;
       const versionValue = 70015;
 
       expect(version.value, versionValue);
@@ -15,7 +15,7 @@ void main() {
     });
 
     test('of initProtoVersion', () {
-      const version = Version.initProtoVersion;
+      const version = ProtocolVersion.initProtoVersion;
       const versionValue = 209;
 
       expect(version.value, versionValue);
@@ -23,7 +23,7 @@ void main() {
     });
 
     test('of minPeerProtoVersion', () {
-      const version = Version.minPeerProtoVersion;
+      const version = ProtocolVersion.minPeerProtoVersion;
       const versionValue = 31800;
 
       expect(version.value, versionValue);
@@ -31,7 +31,7 @@ void main() {
     });
 
     test('of bip0031Version', () {
-      const version = Version.bip0031Version;
+      const version = ProtocolVersion.bip0031Version;
       const versionValue = 60000;
 
       expect(version.value, versionValue);
@@ -39,7 +39,7 @@ void main() {
     });
 
     test('of noBloomVersion', () {
-      const version = Version.noBloomVersion;
+      const version = ProtocolVersion.noBloomVersion;
       const versionValue = 70011;
 
       expect(version.value, versionValue);
@@ -47,7 +47,7 @@ void main() {
     });
 
     test('of sendHeadersVersion', () {
-      const version = Version.sendHeadersVersion;
+      const version = ProtocolVersion.sendHeadersVersion;
       const versionValue = 70012;
 
       expect(version.value, versionValue);
@@ -55,7 +55,7 @@ void main() {
     });
 
     test('of feeFilterVersion', () {
-      const version = Version.feeFilterVersion;
+      const version = ProtocolVersion.feeFilterVersion;
       const versionValue = 70013;
 
       expect(version.value, versionValue);
@@ -63,7 +63,7 @@ void main() {
     });
 
     test('of shortIdsBlocksVersion', () {
-      const version = Version.shortIdsBlocksVersion;
+      const version = ProtocolVersion.shortIdsBlocksVersion;
       const versionValue = 70014;
 
       expect(version.value, versionValue);
@@ -71,7 +71,7 @@ void main() {
     });
 
     test('of invalidCbNoBanVersion', () {
-      const version = Version.invalidCbNoBanVersion;
+      const version = ProtocolVersion.invalidCbNoBanVersion;
       const versionValue = 70015;
 
       expect(version.value, versionValue);
@@ -79,92 +79,99 @@ void main() {
     });
 
     test('of wtxidRelayVersion', () {
-      const version = Version.wtxidRelayVersion;
+      const version = ProtocolVersion.wtxidRelayVersion;
       const versionValue = 70016;
 
       expect(version.value, versionValue);
       expect(version.serialize(), versionValue.toInt32leBytes());
     });
   });
-  group('deserialize bytes to Version instance', () {
+  group('deserialize bytes to ProtocolVersion instance', () {
     test('of initProtoVersion', () {
-      final serializedVersionBytes = Version.initProtoVersion.serialize();
+      final serializedVersionBytes =
+          ProtocolVersion.initProtoVersion.serialize();
 
       expect(
-        Version.deserialize(serializedVersionBytes),
-        Version.initProtoVersion,
+        ProtocolVersion.deserialize(serializedVersionBytes),
+        ProtocolVersion.initProtoVersion,
       );
     });
 
     test('of minPeerProtoVersion', () {
-      final serializedVersionBytes = Version.minPeerProtoVersion.serialize();
+      final serializedVersionBytes =
+          ProtocolVersion.minPeerProtoVersion.serialize();
 
       expect(
-        Version.deserialize(serializedVersionBytes),
-        Version.minPeerProtoVersion,
+        ProtocolVersion.deserialize(serializedVersionBytes),
+        ProtocolVersion.minPeerProtoVersion,
       );
     });
     test('of bip0031Version', () {
-      final serializedVersionBytes = Version.bip0031Version.serialize();
+      final serializedVersionBytes = ProtocolVersion.bip0031Version.serialize();
 
       expect(
-        Version.deserialize(serializedVersionBytes),
-        Version.bip0031Version,
+        ProtocolVersion.deserialize(serializedVersionBytes),
+        ProtocolVersion.bip0031Version,
       );
     });
     test('of noBloomVersion', () {
-      final serializedVersionBytes = Version.noBloomVersion.serialize();
+      final serializedVersionBytes = ProtocolVersion.noBloomVersion.serialize();
 
       expect(
-        Version.deserialize(serializedVersionBytes),
-        Version.noBloomVersion,
+        ProtocolVersion.deserialize(serializedVersionBytes),
+        ProtocolVersion.noBloomVersion,
       );
     });
     test('of sendHeadersVersion', () {
-      final serializedVersionBytes = Version.sendHeadersVersion.serialize();
+      final serializedVersionBytes =
+          ProtocolVersion.sendHeadersVersion.serialize();
 
       expect(
-        Version.deserialize(serializedVersionBytes),
-        Version.sendHeadersVersion,
+        ProtocolVersion.deserialize(serializedVersionBytes),
+        ProtocolVersion.sendHeadersVersion,
       );
     });
     test('of feeFilterVersion', () {
-      final serializedVersionBytes = Version.feeFilterVersion.serialize();
+      final serializedVersionBytes =
+          ProtocolVersion.feeFilterVersion.serialize();
 
       expect(
-        Version.deserialize(serializedVersionBytes),
-        Version.feeFilterVersion,
+        ProtocolVersion.deserialize(serializedVersionBytes),
+        ProtocolVersion.feeFilterVersion,
       );
     });
     test('of shortIdsBlocksVersion', () {
-      final serializedVersionBytes = Version.shortIdsBlocksVersion.serialize();
+      final serializedVersionBytes =
+          ProtocolVersion.shortIdsBlocksVersion.serialize();
 
       expect(
-        Version.deserialize(serializedVersionBytes),
-        Version.shortIdsBlocksVersion,
+        ProtocolVersion.deserialize(serializedVersionBytes),
+        ProtocolVersion.shortIdsBlocksVersion,
       );
     });
     test('of invalidCbNoBanVersion', () {
-      final serializedVersionBytes = Version.invalidCbNoBanVersion.serialize();
+      final serializedVersionBytes =
+          ProtocolVersion.invalidCbNoBanVersion.serialize();
 
       expect(
-        Version.deserialize(serializedVersionBytes),
-        Version.invalidCbNoBanVersion,
+        ProtocolVersion.deserialize(serializedVersionBytes),
+        ProtocolVersion.invalidCbNoBanVersion,
       );
     });
     test('of wtxidRelayVersion', () {
-      final serializedVersionBytes = Version.wtxidRelayVersion.serialize();
+      final serializedVersionBytes =
+          ProtocolVersion.wtxidRelayVersion.serialize();
 
       expect(
-        Version.deserialize(serializedVersionBytes),
-        Version.wtxidRelayVersion,
+        ProtocolVersion.deserialize(serializedVersionBytes),
+        ProtocolVersion.wtxidRelayVersion,
       );
     });
 
     test('with invalid bytes', () {
       final bytes = Uint8List.fromList([1, 2, 3, 4]);
 
-      expect(() => Version.deserialize(bytes), throwsArgumentError);
+      expect(() => ProtocolVersion.deserialize(bytes), throwsArgumentError);
     });
   });
 }
