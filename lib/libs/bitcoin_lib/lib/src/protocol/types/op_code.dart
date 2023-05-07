@@ -776,7 +776,7 @@ enum OpCode {
   // Matches any opcode that is not yet assigned.
   opInvalidOpCode._internal(255);
 
-  const OpCode._internal(this.code);
+  const OpCode._internal(this.value);
 
   factory OpCode.deserialize(Uint8List bytes) {
     if (bytes.length != bytesLength()) {
@@ -785,13 +785,13 @@ The length of given bytes is invalid
 Expected: ${bytesLength()}, Actual: ${bytes.length}''');
     }
 
-    final code = CreateInt.fromUint32leBytes(bytes);
+    final value = CreateInt.fromUint8Bytes(bytes);
 
-    if (code < 0 || code > 255) {
-      throw ArgumentError('"$code" is undefined OpCode code');
+    if (value < 0 || value > 255) {
+      throw ArgumentError('"$value" is undefined OpCode value');
     }
 
-    return _opCodes[code];
+    return _opCodes[value];
   }
 
   static const List<OpCode> _opCodes = [
@@ -1053,11 +1053,11 @@ Expected: ${bytesLength()}, Actual: ${bytes.length}''');
     OpCode.opInvalidOpCode
   ];
 
-  static int bytesLength() => 4;
+  static int bytesLength() => 1;
 
-  final int code;
+  final int value;
 
-  Map<String, dynamic> toJson() => {'code': '${toString()}($code)'};
+  Map<String, dynamic> toJson() => {'value': '${toString()}($value)'};
 
-  Uint8List serialize() => code.toUint32leBytes();
+  Uint8List serialize() => value.toUint8Bytes();
 }
