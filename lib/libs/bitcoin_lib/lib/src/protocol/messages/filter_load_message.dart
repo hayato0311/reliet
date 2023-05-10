@@ -37,13 +37,13 @@ class FilterLoadMessage {
     );
     startIndex += Uint32le.bytesLength();
 
-    final nFlags = BloomFlags.deserialize(
+    final nFlags = BloomFlag.deserialize(
       bytes.sublist(
         startIndex,
-        startIndex + BloomFlags.bytesLength(),
+        startIndex + BloomFlag.bytesLength(),
       ),
     );
-    startIndex += BloomFlags.bytesLength();
+    startIndex += BloomFlag.bytesLength();
 
     return FilterLoadMessage(
       filter: filter,
@@ -56,13 +56,13 @@ class FilterLoadMessage {
   final BloomFilter filter;
   final Uint32le nHashFuncs;
   final Uint32le nTweak;
-  final BloomFlags nFlags;
+  final BloomFlag nFlags;
 
   int bytesLength() {
     return filter.bytesLength() +
         Uint32le.bytesLength() +
         Uint32le.bytesLength() +
-        BloomFlags.bytesLength();
+        BloomFlag.bytesLength();
   }
 
   Map<String, dynamic> toJson() => {
@@ -84,7 +84,7 @@ class FilterLoadMessage {
   }
 }
 
-enum BloomFlags {
+enum BloomFlag {
   // Never update the filter with outpoints.
   none(0),
   // Always update the filter with outpoints.
@@ -92,19 +92,19 @@ enum BloomFlags {
   // Only update the filter with outpoints if it is P2PK or P2MS
   pubKeyOnly(2);
 
-  const BloomFlags(this.value);
+  const BloomFlag(this.value);
 
-  static BloomFlags deserialize(Uint8List bytes) {
+  static BloomFlag deserialize(Uint8List bytes) {
     final value = bytes[0];
     switch (value) {
       case 0:
-        return BloomFlags.none;
+        return BloomFlag.none;
       case 1:
-        return BloomFlags.all;
+        return BloomFlag.all;
       case 2:
-        return BloomFlags.pubKeyOnly;
+        return BloomFlag.pubKeyOnly;
       default:
-        throw Exception('Invalid BloomFlags value: $value');
+        throw Exception('Invalid BloomFlag value: $value');
     }
   }
 
