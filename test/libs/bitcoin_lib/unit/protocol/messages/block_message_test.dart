@@ -65,27 +65,27 @@ void main() {
 
       expect(deserializedBlockMessage, isA<BlockMessage>());
       expect(
-        deserializedBlockMessage.version.value,
+        deserializedBlockMessage.header.version.value,
         version.value,
       );
       expect(
-        deserializedBlockMessage.previousBlockHash.bytes,
+        deserializedBlockMessage.header.previousBlockHash.bytes,
         previousBlockHash.bytes,
       );
       expect(
-        deserializedBlockMessage.merkleRoot.bytes,
+        deserializedBlockMessage.header.merkleRoot.bytes,
         merkleRoot.bytes,
       );
       expect(
-        deserializedBlockMessage.timestamp.value,
+        deserializedBlockMessage.header.timestamp.value,
         timestamp.value,
       );
       expect(
-        deserializedBlockMessage.bits.value,
+        deserializedBlockMessage.header.bits.value,
         bits.value,
       );
       expect(
-        deserializedBlockMessage.nonce.value,
+        deserializedBlockMessage.header.nonce.value,
         nonce.value,
       );
       expect(
@@ -117,7 +117,7 @@ void main() {
         BlockMessage.deserialize(Uint8List.fromList(bytes));
 
     expect(
-      deserializedBlockMessage.blockHash(),
+      deserializedBlockMessage.header.blockHash(),
       jsonData['blockHash'],
     );
   });
