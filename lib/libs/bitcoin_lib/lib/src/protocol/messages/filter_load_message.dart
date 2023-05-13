@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:meta/meta.dart';
 
 import '../types/bases/uint32le.dart';
-import '../types/filter.dart';
+import '../types/var_bytes.dart';
 
 @immutable
 class FilterLoadMessage {
@@ -16,7 +16,7 @@ class FilterLoadMessage {
 
   factory FilterLoadMessage.deserialize(Uint8List bytes) {
     var startIndex = 0;
-    final filter = Filter.deserialize(
+    final filter = VarBytes.deserialize(
       bytes.sublist(startIndex),
     );
     startIndex += filter.bytesLength();
@@ -53,7 +53,7 @@ class FilterLoadMessage {
     );
   }
 
-  final Filter filter;
+  final VarBytes filter;
   final Uint32le nHashFuncs;
   final Uint32le nTweak;
   final BloomFlag nFlags;
