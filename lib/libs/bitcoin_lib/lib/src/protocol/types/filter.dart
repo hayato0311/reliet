@@ -3,11 +3,11 @@ import 'dart:typed_data';
 import 'package:meta/meta.dart';
 
 @immutable
-class BloomFilter {
-  const BloomFilter(this.bytes);
+class Filter {
+  const Filter(this.bytes);
 
-  factory BloomFilter.deserialize(Uint8List bytes) =>
-      BloomFilter(Uint8List.fromList(bytes.reversed.toList()));
+  factory Filter.deserialize(Uint8List bytes) =>
+      Filter(Uint8List.fromList(bytes.reversed.toList()));
 
   final Uint8List bytes;
 
