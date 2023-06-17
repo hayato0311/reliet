@@ -15,10 +15,10 @@ import '../types/message_header.dart';
 import '../types/network_address.dart';
 import '../types/nonce.dart';
 import '../types/port.dart';
+import '../types/protocol_version.dart';
 import '../types/service.dart';
 import '../types/services.dart';
 import '../types/variable_length_string.dart';
-import '../types/version.dart';
 
 Future<void> _sendMessage(
   Socket socket,
@@ -60,7 +60,7 @@ Future<void> sendVersionMessage(
   );
 
   final payload = VersionMessage.create(
-    version: Version.protocolVersion,
+    version: ProtocolVersion.defaultVersion,
     services: services,
     addrRecv: addrRecv,
     addrFrom: addrFrom,

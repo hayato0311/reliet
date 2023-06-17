@@ -8,16 +8,16 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/ip_address.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/network_address.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/nonce.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/port.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/protocol_version.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/service.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/services.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/timestamp.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/variable_length_string.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/version.dart';
 
 void main() {
   group('create and serialize VersionMessage instance', () {
     test('with valid args', () {
-      const version = Version.protocolVersion;
+      const version = ProtocolVersion.defaultVersion;
       final services = Services(const [Service.nodeZero]);
       final ipAddr = IpAddr(const [0, 0, 0, 0]);
       final addrRecv = NetAddr(
@@ -67,7 +67,7 @@ void main() {
 
   group('deserialize bytes to VersionMessage instance', () {
     test('with valid bytes', () {
-      const version = Version.protocolVersion;
+      const version = ProtocolVersion.defaultVersion;
       final services = Services(const [Service.nodeNetwork]);
       final ipAddr = IpAddr(const [0, 0, 0, 0]);
       final addrRecv = NetAddr(

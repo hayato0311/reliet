@@ -6,10 +6,10 @@ import '../../extensions/bool_extensions.dart';
 import '../types/bases/int32le.dart';
 import '../types/network_address.dart';
 import '../types/nonce.dart';
+import '../types/protocol_version.dart';
 import '../types/services.dart';
 import '../types/timestamp.dart';
 import '../types/variable_length_string.dart';
-import '../types/version.dart';
 
 @immutable
 class VersionMessage {
@@ -26,7 +26,7 @@ class VersionMessage {
   });
 
   factory VersionMessage.create({
-    required Version version,
+    required ProtocolVersion version,
     required Services services,
     required NetAddr addrRecv,
     required NetAddr addrFrom,
@@ -50,14 +50,14 @@ class VersionMessage {
 
   factory VersionMessage.deserialize(Uint8List bytes) {
     var startIndex = 0;
-    final version = Version.deserialize(
+    final version = ProtocolVersion.deserialize(
       bytes.sublist(
         startIndex,
-        startIndex + Version.bytesLength(),
+        startIndex + ProtocolVersion.bytesLength(),
       ),
     );
 
-    startIndex += Version.bytesLength();
+    startIndex += ProtocolVersion.bytesLength();
 
     final services = Services.deserialize(
       bytes.sublist(
@@ -137,7 +137,7 @@ class VersionMessage {
     );
   }
 
-  final Version version;
+  final ProtocolVersion version;
   final Services services;
   final Timestamp timestamp;
   final NetAddr addrRecv;
