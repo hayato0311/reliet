@@ -2,11 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import '../messages/filter_load_message.dart';
 import '../messages/get_data_message.dart';
 import '../messages/ping_message.dart';
 import '../messages/pong_message.dart';
 import '../messages/version_message.dart';
 import '../types/bases/int32le.dart';
+import '../types/bases/uint32le.dart';
+import '../types/bloom_filter.dart';
 import '../types/command.dart';
 import '../types/inventory.dart';
 import '../types/ip_address.dart';
@@ -18,6 +21,7 @@ import '../types/port.dart';
 import '../types/protocol_version.dart';
 import '../types/service.dart';
 import '../types/services.dart';
+import '../types/var_bytes.dart';
 import '../types/variable_length_string.dart';
 
 Future<void> _sendMessage(
@@ -195,6 +199,44 @@ Future<void> sendGetDataMessage(
   const command = Command.getdata;
   final magic = testnet ? Magic.testnet : Magic.mainnet;
   final payload = GetDataMessage(inventories);
+
+  final serializedPayload = payload.serialize();
+
+  final header = MessageHeader.create(
+    magic: magic,
+    command: command,
+    payload: serializedPayload,
+  );
+
+  if (verbose) {
+    print(
+      jsonEncode({
+        'getData': {
+          'messageHeader': header.toJson(),
+          'getDataMessage': payload.toJson()
+        },
+      }),
+    );
+  }
+
+  await _sendMessage(socket, header.serialize(), serializedPayload, command);
+}
+
+Future<void> sendFilterLoadMessage(
+  Socket socket,
+  Uint32le nHashFuncs,
+  Uint32le nTweak, {
+  bool testnet = false,
+  bool verbose = false,
+}) async {
+  const command = Command.getdata;
+  final magic = testnet ? Magic.testnet : Magic.mainnet;
+  final payload = FilterLoadMessage(
+    filter: VarBytes(const [10]),
+    nHashFuncs: nHashFuncs,
+    nTweak: nTweak,
+    nFlags: BloomFlag.all,
+  );
 
   final serializedPayload = payload.serialize();
 

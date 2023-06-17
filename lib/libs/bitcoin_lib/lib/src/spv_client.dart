@@ -86,6 +86,29 @@ class SpvClient {
     return _txMessage;
   }
 
+  Future<TxMessage?> fetchMerkleblock(Hash256 txHash) async {
+    if (!handshakeCompleted) {
+      await _connectToNode();
+    }
+
+    // _txMessage = null;
+
+    // await sendFilterLoadMessage(
+    //   _socket,
+    //   [Inventory(InventoryType.transaction, txHash)],
+    //   testnet: testnet,
+    //   verbose: true,
+    // );
+    // await sendGetBlocksMessage(
+    //   _socket,
+    //   [Inventory(InventoryType.transaction, txHash)],
+    //   testnet: testnet,
+    //   verbose: true,
+    // );
+
+    return _txMessage;
+  }
+
   Future<void> sendPing() async {
     if (!handshakeCompleted) {
       await _connectToNode();
