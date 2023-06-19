@@ -49,18 +49,18 @@ class CFilterMessage {
   final Hash256 blockHash;
   final VarBytes filterBytes;
 
+  int bytesLength() {
+    return FilterType.bytesLength() +
+        Uint32le.bytesLength() +
+        filterBytes.bytesLength();
+  }
+
   Uint8List serialize() {
     return Uint8List.fromList([
       ...filterType.serialize(),
       ...blockHash.serialize(),
       ...filterBytes.serialize(),
     ]);
-  }
-
-  int bytesLength() {
-    return FilterType.bytesLength() +
-        Uint32le.bytesLength() +
-        Hash256.bytesLength();
   }
 
   Map<String, dynamic> toJson() => {

@@ -15,6 +15,14 @@ class GetCFHeadersMessage {
   });
 
   factory GetCFHeadersMessage.deserialize(Uint8List bytes) {
+    if (bytes.length != bytesLength()) {
+      throw ArgumentError('''
+GetCFHeadersMessage.deserialize:
+The length of given bytes is invalid
+Expected: ${bytesLength()}, Actual: ${bytes.length}
+''');
+    }
+
     var startIndex = 0;
     final filterType = FilterType.deserialize(
       bytes.sublist(
@@ -51,18 +59,18 @@ class GetCFHeadersMessage {
   final Uint32le startHeight;
   final Hash256 stopHash;
 
+  static int bytesLength() {
+    return FilterType.bytesLength() +
+        Uint32le.bytesLength() +
+        Hash256.bytesLength();
+  }
+
   Uint8List serialize() {
     return Uint8List.fromList([
       ...filterType.serialize(),
       ...startHeight.serialize(),
       ...stopHash.serialize(),
     ]);
-  }
-
-  int bytesLength() {
-    return FilterType.bytesLength() +
-        Uint32le.bytesLength() +
-        Hash256.bytesLength();
   }
 
   Map<String, dynamic> toJson() => {

@@ -49,18 +49,18 @@ class CFHeadersMessage {
   final Hash256 stopHash;
   final VarHashes filterHashes;
 
+  int bytesLength() {
+    return FilterType.bytesLength() +
+        Uint32le.bytesLength() +
+        filterHashes.bytesLength();
+  }
+
   Uint8List serialize() {
     return Uint8List.fromList([
       ...filterType.serialize(),
       ...stopHash.serialize(),
       ...filterHashes.serialize(),
     ]);
-  }
-
-  int bytesLength() {
-    return FilterType.bytesLength() +
-        Uint32le.bytesLength() +
-        Hash256.bytesLength();
   }
 
   Map<String, dynamic> toJson() => {
