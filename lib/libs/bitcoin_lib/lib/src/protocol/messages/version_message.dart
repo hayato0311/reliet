@@ -27,7 +27,7 @@ class VersionMessage {
 
   factory VersionMessage.create({
     required ProtocolVersion version,
-    required Services services,
+    required ServiceFlags services,
     required NetAddr addrRecv,
     required NetAddr addrFrom,
     required Nonce nonce,
@@ -59,14 +59,14 @@ class VersionMessage {
 
     startIndex += ProtocolVersion.bytesLength();
 
-    final services = Services.deserialize(
+    final services = ServiceFlags.deserialize(
       bytes.sublist(
         startIndex,
-        startIndex + Services.bytesLength(),
+        startIndex + ServiceFlags.bytesLength(),
       ),
     );
 
-    startIndex += Services.bytesLength();
+    startIndex += ServiceFlags.bytesLength();
 
     final timestamp = Timestamp.deserialize(
       bytes.sublist(
@@ -138,7 +138,7 @@ class VersionMessage {
   }
 
   final ProtocolVersion version;
-  final Services services;
+  final ServiceFlags services;
   final Timestamp timestamp;
   final NetAddr addrRecv;
   final NetAddr addrFrom;

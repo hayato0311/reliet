@@ -6,8 +6,8 @@ import '../../extensions/int_extensions.dart';
 import 'service.dart';
 
 @immutable
-class Services {
-  factory Services(List<Service> serviceList) {
+class ServiceFlags {
+  factory ServiceFlags(List<ServiceFlag> serviceList) {
     if (serviceList.isEmpty) {
       throw const FormatException('serviceList is empty');
     }
@@ -17,62 +17,62 @@ class Services {
       );
     }
 
-    return Services._internal(serviceList);
+    return ServiceFlags._internal(serviceList);
   }
 
-  factory Services.deserialize(Uint8List bytes) {
+  factory ServiceFlags.deserialize(Uint8List bytes) {
     var servicesValueSum = CreateInt.fromUint64leBytes(bytes);
-    var serviceList = <Service>[];
+    var serviceList = <ServiceFlag>[];
 
     if (servicesValueSum == 0) {
-      serviceList += [Service.nodeZero];
+      serviceList += [ServiceFlag.nodeZero];
     }
 
     if (servicesValueSum >= 1024) {
-      serviceList += [Service.nodeNetworkLimited];
+      serviceList += [ServiceFlag.nodeNetworkLimited];
       servicesValueSum -= 1024;
     }
     if (servicesValueSum >= 64) {
-      serviceList += [Service.nodeCompactFilters];
+      serviceList += [ServiceFlag.nodeCompactFilters];
       servicesValueSum -= 64;
     }
     if (servicesValueSum >= 16) {
-      serviceList += [Service.nodeXthin];
+      serviceList += [ServiceFlag.nodeXthin];
       servicesValueSum -= 16;
     }
     if (servicesValueSum >= 8) {
-      serviceList += [Service.nodeWitness];
+      serviceList += [ServiceFlag.nodeWitness];
       servicesValueSum -= 8;
     }
     if (servicesValueSum >= 4) {
-      serviceList += [Service.nodeBloom];
+      serviceList += [ServiceFlag.nodeBloom];
       servicesValueSum -= 4;
     }
     if (servicesValueSum >= 2) {
-      serviceList += [Service.nodeGetutxo];
+      serviceList += [ServiceFlag.nodeGetutxo];
       servicesValueSum -= 2;
     }
     if (servicesValueSum >= 1) {
-      serviceList += [Service.nodeNetwork];
+      serviceList += [ServiceFlag.nodeNetwork];
       servicesValueSum -= 1;
     }
 
     if (servicesValueSum != 0) {
-      throw ArgumentError('Invalid Services bytes');
+      throw ArgumentError('Invalid ServiceFlags bytes');
     }
 
-    return Services(serviceList);
+    return ServiceFlags(serviceList);
   }
 
-  const Services._internal(this.serviceList);
+  const ServiceFlags._internal(this.serviceList);
 
   static int bytesLength() => 8;
 
-  final List<Service> serviceList;
+  final List<ServiceFlag> serviceList;
 
   Map<String, dynamic> toJson() => {
         'serviceList': [
-          for (Service service in serviceList)
+          for (ServiceFlag service in serviceList)
             '${service.toString()}(${service.value})'
         ]
       };

@@ -18,7 +18,7 @@ void main() {
   group('create and serialize VersionMessage instance', () {
     test('with valid args', () {
       const version = ProtocolVersion.defaultVersion;
-      final services = Services(const [Service.nodeZero]);
+      final services = ServiceFlags(const [ServiceFlag.nodeZero]);
       final ipAddr = IpAddr(const [0, 0, 0, 0]);
       final addrRecv = NetAddr(
         services: services,
@@ -68,7 +68,7 @@ void main() {
   group('deserialize bytes to VersionMessage instance', () {
     test('with valid bytes', () {
       const version = ProtocolVersion.defaultVersion;
-      final services = Services(const [Service.nodeNetwork]);
+      final services = ServiceFlags(const [ServiceFlag.nodeNetwork]);
       final ipAddr = IpAddr(const [0, 0, 0, 0]);
       final addrRecv = NetAddr(
         services: services,
