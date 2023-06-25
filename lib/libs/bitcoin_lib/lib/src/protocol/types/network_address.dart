@@ -19,22 +19,22 @@ class NetAddr {
       throw ArgumentError('the length of given bytes is invalid');
     }
 
-    final services = Services.deserialize(
+    final services = ServiceFlags.deserialize(
       bytes.sublist(
         0,
-        Services.bytesLength(),
+        ServiceFlags.bytesLength(),
       ),
     );
     final ipAddr = IpAddr.deserialize(
       bytes.sublist(
-        Services.bytesLength(),
-        Services.bytesLength() + IpAddr.bytesLength(),
+        ServiceFlags.bytesLength(),
+        ServiceFlags.bytesLength() + IpAddr.bytesLength(),
       ),
     );
     final port = Port.deserialize(
       bytes.sublist(
-        Services.bytesLength() + IpAddr.bytesLength(),
-        Services.bytesLength() + IpAddr.bytesLength() + Port.bytesLength(),
+        ServiceFlags.bytesLength() + IpAddr.bytesLength(),
+        ServiceFlags.bytesLength() + IpAddr.bytesLength() + Port.bytesLength(),
       ),
     );
 
@@ -42,9 +42,9 @@ class NetAddr {
   }
 
   static int bytesLength() =>
-      Services.bytesLength() + IpAddr.bytesLength() + Port.bytesLength();
+      ServiceFlags.bytesLength() + IpAddr.bytesLength() + Port.bytesLength();
 
-  final Services services;
+  final ServiceFlags services;
   final IpAddr ipAddr;
   final Port port;
 

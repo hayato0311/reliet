@@ -1,4 +1,4 @@
-enum Service {
+enum ServiceFlag {
   nodeZero(0),
   nodeNetwork(1),
   nodeGetutxo(2),
@@ -8,6 +8,6 @@ enum Service {
   nodeCompactFilters(64),
   nodeNetworkLimited(1024);
 
-  const Service(this.value);
+  const ServiceFlag(this.value);
   final int value;
 }

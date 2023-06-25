@@ -6,37 +6,37 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/service.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/services.dart';
 
 void main() {
-  group('create and serialize Services instance', () {
+  group('create and serialize ServiceFlags instance', () {
     test('with single service', () {
-      final serviceList = [Service.nodeNetwork];
-      final services = Services(serviceList);
+      final serviceList = [ServiceFlag.nodeNetwork];
+      final services = ServiceFlags(serviceList);
 
       expect(services.serviceList, serviceList);
       expect(
         services.serialize(),
-        Service.nodeNetwork.value.toUint64leBytes(),
+        ServiceFlag.nodeNetwork.value.toUint64leBytes(),
       );
     });
 
     test('with multi service', () {
       final serviceList = [
-        Service.nodeNetwork,
-        Service.nodeGetutxo,
-        Service.nodeBloom,
-        Service.nodeWitness,
-        Service.nodeXthin,
-        Service.nodeCompactFilters,
-        Service.nodeNetworkLimited,
+        ServiceFlag.nodeNetwork,
+        ServiceFlag.nodeGetutxo,
+        ServiceFlag.nodeBloom,
+        ServiceFlag.nodeWitness,
+        ServiceFlag.nodeXthin,
+        ServiceFlag.nodeCompactFilters,
+        ServiceFlag.nodeNetworkLimited,
       ];
-      final services = Services(serviceList);
+      final services = ServiceFlags(serviceList);
 
-      final servicesValueSum = Service.nodeNetwork.value +
-          Service.nodeGetutxo.value +
-          Service.nodeBloom.value +
-          Service.nodeWitness.value +
-          Service.nodeXthin.value +
-          Service.nodeCompactFilters.value +
-          Service.nodeNetworkLimited.value;
+      final servicesValueSum = ServiceFlag.nodeNetwork.value +
+          ServiceFlag.nodeGetutxo.value +
+          ServiceFlag.nodeBloom.value +
+          ServiceFlag.nodeWitness.value +
+          ServiceFlag.nodeXthin.value +
+          ServiceFlag.nodeCompactFilters.value +
+          ServiceFlag.nodeNetworkLimited.value;
 
       expect(
         services.serviceList,
@@ -49,30 +49,30 @@ void main() {
     });
   });
 
-  group('deserialize bytes to Services instance', () {
+  group('deserialize bytes to ServiceFlags instance', () {
     group('with valid bytes', () {
       test('when zero', () {
-        final serviceList = [Service.nodeZero];
-        final serializedServicesBytes = Services(serviceList).serialize();
+        final serviceList = [ServiceFlag.nodeZero];
+        final serializedServicesBytes = ServiceFlags(serviceList).serialize();
         expect(
-          Services.deserialize(serializedServicesBytes).serviceList.toSet(),
+          ServiceFlags.deserialize(serializedServicesBytes).serviceList.toSet(),
           serviceList.toSet(),
         );
       });
 
       test('with all services bytes', () {
         final serviceList = [
-          Service.nodeNetwork,
-          Service.nodeGetutxo,
-          Service.nodeBloom,
-          Service.nodeWitness,
-          Service.nodeXthin,
-          Service.nodeCompactFilters,
-          Service.nodeNetworkLimited,
+          ServiceFlag.nodeNetwork,
+          ServiceFlag.nodeGetutxo,
+          ServiceFlag.nodeBloom,
+          ServiceFlag.nodeWitness,
+          ServiceFlag.nodeXthin,
+          ServiceFlag.nodeCompactFilters,
+          ServiceFlag.nodeNetworkLimited,
         ];
-        final serializedServicesBytes = Services(serviceList).serialize();
+        final serializedServicesBytes = ServiceFlags(serviceList).serialize();
         expect(
-          Services.deserialize(serializedServicesBytes).serviceList.toSet(),
+          ServiceFlags.deserialize(serializedServicesBytes).serviceList.toSet(),
           serviceList.toSet(),
         );
       });
@@ -80,13 +80,13 @@ void main() {
     group('with invalid bytes', () {
       test('when empty bytes', () {
         expect(
-          () => Services.deserialize(Uint8List.fromList([])).serviceList,
+          () => ServiceFlags.deserialize(Uint8List.fromList([])).serviceList,
           throwsArgumentError,
         );
       });
       test('when not defind service value is included', () {
         expect(
-          () => Services.deserialize(Uint8List.fromList([40])).serviceList,
+          () => ServiceFlags.deserialize(Uint8List.fromList([40])).serviceList,
           throwsArgumentError,
         );
       });
