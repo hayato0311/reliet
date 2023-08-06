@@ -7,17 +7,17 @@ import '../types/filter_type.dart';
 import '../types/hash256.dart';
 
 @immutable
-class GetCFilterMessage {
-  const GetCFilterMessage({
+class GetCFiltersMessage {
+  const GetCFiltersMessage({
     required this.filterType,
     required this.startHeight,
     required this.stopHash,
   });
 
-  factory GetCFilterMessage.deserialize(Uint8List bytes) {
+  factory GetCFiltersMessage.deserialize(Uint8List bytes) {
     if (bytes.length != bytesLength()) {
       throw ArgumentError('''
-GetCFilterMessage.deserialize:
+GetCFiltersMessage.deserialize:
 The length of given bytes is invalid
 Expected: ${bytesLength()}, Actual: ${bytes.length}
 ''');
@@ -48,7 +48,7 @@ Expected: ${bytesLength()}, Actual: ${bytes.length}
     );
     startIndex += Hash256.bytesLength();
 
-    return GetCFilterMessage(
+    return GetCFiltersMessage(
       filterType: filterType,
       startHeight: startHeight,
       stopHash: stopHash,
