@@ -8,6 +8,7 @@ import 'package:riverpod/riverpod.dart';
 import 'chain_params.dart';
 import 'protocol/actions/send_message.dart';
 import 'protocol/messages/block_message.dart';
+import 'protocol/messages/c_f_checkpt_message.dart';
 import 'protocol/messages/c_f_headers_message.dart';
 import 'protocol/messages/c_filters_message.dart';
 import 'protocol/messages/inv_message.dart';
@@ -109,6 +110,13 @@ class SpvClient {
       await _connectToNode();
     }
     await sendGetCFHeadersMessage(_socket, startHeight, stopHash);
+  }
+
+  Future<void> fetchCFCheckpt(Hash256 stopHash) async {
+    if (!handshakeCompleted) {
+      await _connectToNode();
+    }
+    await sendGetCFCheckptMessage(_socket, stopHash);
   }
 
   Future<void> _connectToNode() async {
@@ -330,6 +338,21 @@ class SpvClient {
                   messageHeader.command.string: {
                     'messageHeader': messageHeader.toJson(),
                     'message': cfheadersMessage.toJson()
+                  },
+                }),
+              );
+            }
+            break;
+
+          case Command.cfcheckpt:
+            final cfcheckptMessage = CFCheckptMessage.deserialize(messageBytes);
+
+            if (verbose) {
+              print(
+                jsonEncode({
+                  messageHeader.command.string: {
+                    'messageHeader': messageHeader.toJson(),
+                    'message': cfcheckptMessage.toJson()
                   },
                 }),
               );

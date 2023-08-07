@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import '../messages/get_c_f_checkpt_message.dart';
 import '../messages/get_c_f_header_message.dart';
 import '../messages/get_c_filters_message.dart';
 import '../messages/get_data_message.dart';
@@ -274,6 +275,42 @@ Future<void> sendGetCFHeadersMessage(
   final payload = GetCFHeadersMessage(
     filterType: filterType,
     startHeight: startHeight,
+    stopHash: stopHash,
+  );
+
+  final serializedPayload = payload.serialize();
+
+  final header = MessageHeader.create(
+    magic: magic,
+    command: command,
+    payload: serializedPayload,
+  );
+
+  if (verbose) {
+    print(
+      jsonEncode({
+        'getCFHeaders': {
+          'messageHeader': header.toJson(),
+          'getDataMessage': payload.toJson()
+        },
+      }),
+    );
+  }
+
+  await _sendMessage(socket, header.serialize(), serializedPayload, command);
+}
+
+Future<void> sendGetCFCheckptMessage(
+  Socket socket,
+  Hash256 stopHash, {
+  bool testnet = false,
+  bool verbose = false,
+  FilterType filterType = FilterType.basic,
+}) async {
+  const command = Command.getcfcheckpt;
+  final magic = testnet ? Magic.testnet : Magic.mainnet;
+  final payload = GetCFCheckptMessage(
+    filterType: filterType,
     stopHash: stopHash,
   );
 
