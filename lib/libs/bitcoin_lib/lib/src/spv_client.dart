@@ -8,11 +8,13 @@ import 'package:riverpod/riverpod.dart';
 import 'chain_params.dart';
 import 'protocol/actions/send_message.dart';
 import 'protocol/messages/block_message.dart';
+import 'protocol/messages/c_filters_message.dart';
 import 'protocol/messages/inv_message.dart';
 import 'protocol/messages/ping_message.dart';
 import 'protocol/messages/pong_message.dart';
 import 'protocol/messages/tx_message.dart';
 import 'protocol/messages/version_message.dart';
+import 'protocol/types/bases/uint32le.dart';
 import 'protocol/types/command.dart';
 import 'protocol/types/hash256.dart';
 import 'protocol/types/inventory.dart';
@@ -92,6 +94,13 @@ class SpvClient {
     }
     pongMessageRecieved = false;
     await sendPingMessage(_socket);
+  }
+
+  Future<void> searchTxHistory(Uint32le startHeight, Hash256 stopHash) async {
+    if (!handshakeCompleted) {
+      await _connectToNode();
+    }
+    await sendGetCFiltersMessage(_socket, startHeight, stopHash);
   }
 
   Future<void> _connectToNode() async {
@@ -283,6 +292,21 @@ class SpvClient {
                   messageHeader.command.string: {
                     'messageHeader': messageHeader.toJson(),
                     'message': _blockMessage?.toJson()
+                  },
+                }),
+              );
+            }
+            break;
+
+          case Command.cfilter:
+            final cfilterMessage = CFilterMessage.deserialize(messageBytes);
+
+            if (verbose) {
+              print(
+                jsonEncode({
+                  messageHeader.command.string: {
+                    'messageHeader': messageHeader.toJson(),
+                    'message': cfilterMessage.toJson()
                   },
                 }),
               );
