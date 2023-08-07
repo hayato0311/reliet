@@ -8,6 +8,7 @@ import 'package:riverpod/riverpod.dart';
 import 'chain_params.dart';
 import 'protocol/actions/send_message.dart';
 import 'protocol/messages/block_message.dart';
+import 'protocol/messages/c_f_header_message.dart';
 import 'protocol/messages/c_filters_message.dart';
 import 'protocol/messages/inv_message.dart';
 import 'protocol/messages/ping_message.dart';
@@ -101,6 +102,13 @@ class SpvClient {
       await _connectToNode();
     }
     await sendGetCFiltersMessage(_socket, startHeight, stopHash);
+  }
+
+  Future<void> fetchCFHeaders(Uint32le startHeight, Hash256 stopHash) async {
+    if (!handshakeCompleted) {
+      await _connectToNode();
+    }
+    await sendGetCFHeadersMessage(_socket, startHeight, stopHash);
   }
 
   Future<void> _connectToNode() async {
@@ -307,6 +315,21 @@ class SpvClient {
                   messageHeader.command.string: {
                     'messageHeader': messageHeader.toJson(),
                     'message': cfilterMessage.toJson()
+                  },
+                }),
+              );
+            }
+            break;
+
+          case Command.cfheaders:
+            final cfheadersMessage = CFHeadersMessage.deserialize(messageBytes);
+
+            if (verbose) {
+              print(
+                jsonEncode({
+                  messageHeader.command.string: {
+                    'messageHeader': messageHeader.toJson(),
+                    'message': cfheadersMessage.toJson()
                   },
                 }),
               );

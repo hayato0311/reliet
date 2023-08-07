@@ -12,6 +12,7 @@ class CFHeadersMessage {
   const CFHeadersMessage({
     required this.filterType,
     required this.stopHash,
+    required this.prevHeader,
     required this.filterHashes,
   });
 
@@ -33,6 +34,14 @@ class CFHeadersMessage {
     );
     startIndex += Hash256.bytesLength();
 
+    final prevHeader = Hash256.deserialize(
+      bytes.sublist(
+        startIndex,
+        startIndex + Hash256.bytesLength(),
+      ),
+    );
+    startIndex += Hash256.bytesLength();
+
     final filterHashes = VarHashes.deserialize(
       bytes.sublist(startIndex),
     );
@@ -41,12 +50,14 @@ class CFHeadersMessage {
     return CFHeadersMessage(
       filterType: filterType,
       stopHash: stopHash,
+      prevHeader: prevHeader,
       filterHashes: filterHashes,
     );
   }
 
   final FilterType filterType;
   final Hash256 stopHash;
+  final Hash256 prevHeader;
   final VarHashes filterHashes;
 
   int bytesLength() {
