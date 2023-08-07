@@ -7,20 +7,20 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/filter_type.dart'
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/hash256.dart';
 
 void main() {
-  group('create and serialize GetCFilterMessage instance', () {
+  group('create and serialize GetCFiltersMessage instance', () {
     test('with valid args', () {
       const filterType = FilterType.basic;
       final startHeight = Uint32le(1);
       final stopHash = Hash256.create(const [0, 1, 1, 1, 1]);
 
-      final getCFilterMessage = GetCFilterMessage(
+      final getCFiltersMessage = GetCFiltersMessage(
         filterType: filterType,
         startHeight: startHeight,
         stopHash: stopHash,
       );
 
       expect(
-        getCFilterMessage.serialize(),
+        getCFiltersMessage.serialize(),
         Uint8List.fromList([
           ...filterType.serialize(),
           ...startHeight.serialize(),
@@ -35,33 +35,33 @@ void main() {
       final startHeight = Uint32le(1);
       final stopHash = Hash256.create(const [0, 1, 1, 1, 1]);
 
-      final serializedGetCFilterMessage = GetCFilterMessage(
+      final serializedGetCFiltersMessage = GetCFiltersMessage(
         filterType: filterType,
         startHeight: startHeight,
         stopHash: stopHash,
       ).serialize();
 
-      final deserializedGetCFilterMessage = GetCFilterMessage.deserialize(
-        Uint8List.fromList(serializedGetCFilterMessage),
+      final deserializedGetCFiltersMessage = GetCFiltersMessage.deserialize(
+        Uint8List.fromList(serializedGetCFiltersMessage),
       );
 
-      expect(deserializedGetCFilterMessage, isA<GetCFilterMessage>());
+      expect(deserializedGetCFiltersMessage, isA<GetCFiltersMessage>());
       expect(
-        deserializedGetCFilterMessage.filterType.value,
+        deserializedGetCFiltersMessage.filterType.value,
         filterType.value,
       );
       expect(
-        deserializedGetCFilterMessage.startHeight.value,
+        deserializedGetCFiltersMessage.startHeight.value,
         startHeight.value,
       );
       expect(
-        deserializedGetCFilterMessage.stopHash.bytes,
+        deserializedGetCFiltersMessage.stopHash.bytes,
         stopHash.bytes,
       );
     });
     test('with invalid bytes', () {
       expect(
-        () => GetCFilterMessage.deserialize(Uint8List.fromList([0, 0, 0, 1])),
+        () => GetCFiltersMessage.deserialize(Uint8List.fromList([0, 0, 0, 1])),
         throwsArgumentError,
       );
     });

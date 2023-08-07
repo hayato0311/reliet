@@ -7,20 +7,20 @@ import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/hash256.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/var_bytes.dart';
 
 void main() {
-  group('create and serialize CFilterMessage instance', () {
+  group('create and serialize CFiltersMessage instance', () {
     test('with valid args', () {
       const filterType = FilterType.basic;
       final blockHash = Hash256.create(const [0, 1, 1, 1, 1]);
       final filterBytes = VarBytes(Uint8List.fromList([0, 1, 1, 1, 1]));
 
-      final cFilterMessage = CFilterMessage(
+      final cFiltersMessage = CFiltersMessage(
         filterType: filterType,
         blockHash: blockHash,
         filterBytes: filterBytes,
       );
 
       expect(
-        cFilterMessage.serialize(),
+        cFiltersMessage.serialize(),
         Uint8List.fromList([
           ...filterType.serialize(),
           ...blockHash.serialize(),
@@ -35,33 +35,33 @@ void main() {
       final blockHash = Hash256.create(const [0, 1, 1, 1, 1]);
       final filterBytes = VarBytes(Uint8List.fromList([0, 1, 1, 1, 1]));
 
-      final serializedCFilterMessage = CFilterMessage(
+      final serializedCFiltersMessage = CFiltersMessage(
         filterType: filterType,
         blockHash: blockHash,
         filterBytes: filterBytes,
       ).serialize();
 
-      final deserializedCFilterMessage = CFilterMessage.deserialize(
-        Uint8List.fromList(serializedCFilterMessage),
+      final deserializedCFiltersMessage = CFiltersMessage.deserialize(
+        Uint8List.fromList(serializedCFiltersMessage),
       );
 
-      expect(deserializedCFilterMessage, isA<CFilterMessage>());
+      expect(deserializedCFiltersMessage, isA<CFiltersMessage>());
       expect(
-        deserializedCFilterMessage.filterType.value,
+        deserializedCFiltersMessage.filterType.value,
         filterType.value,
       );
       expect(
-        deserializedCFilterMessage.blockHash.bytes,
+        deserializedCFiltersMessage.blockHash.bytes,
         blockHash.bytes,
       );
       expect(
-        deserializedCFilterMessage.filterBytes.bytes,
+        deserializedCFiltersMessage.filterBytes.bytes,
         filterBytes.bytes,
       );
     });
     test('with invalid bytes', () {
       expect(
-        () => CFilterMessage.deserialize(Uint8List.fromList([0, 0, 0, 1])),
+        () => CFiltersMessage.deserialize(Uint8List.fromList([0, 0, 0, 1])),
         throwsArgumentError,
       );
     });

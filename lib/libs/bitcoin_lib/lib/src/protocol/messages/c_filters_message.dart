@@ -8,14 +8,14 @@ import '../types/hash256.dart';
 import '../types/var_bytes.dart';
 
 @immutable
-class CFilterMessage {
-  const CFilterMessage({
+class CFiltersMessage {
+  const CFiltersMessage({
     required this.filterType,
     required this.blockHash,
     required this.filterBytes,
   });
 
-  factory CFilterMessage.deserialize(Uint8List bytes) {
+  factory CFiltersMessage.deserialize(Uint8List bytes) {
     var startIndex = 0;
     final filterType = FilterType.deserialize(
       bytes.sublist(
@@ -38,7 +38,7 @@ class CFilterMessage {
     );
     startIndex += filterBytes.bytesLength();
 
-    return CFilterMessage(
+    return CFiltersMessage(
       filterType: filterType,
       blockHash: blockHash,
       filterBytes: filterBytes,

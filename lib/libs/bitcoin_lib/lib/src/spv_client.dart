@@ -8,7 +8,7 @@ import 'package:riverpod/riverpod.dart';
 import 'chain_params.dart';
 import 'protocol/actions/send_message.dart';
 import 'protocol/messages/block_message.dart';
-import 'protocol/messages/c_f_header_message.dart';
+import 'protocol/messages/c_f_headers_message.dart';
 import 'protocol/messages/c_filters_message.dart';
 import 'protocol/messages/inv_message.dart';
 import 'protocol/messages/ping_message.dart';
@@ -307,7 +307,7 @@ class SpvClient {
             break;
 
           case Command.cfilter:
-            final cfilterMessage = CFilterMessage.deserialize(messageBytes);
+            final cfilterMessage = CFiltersMessage.deserialize(messageBytes);
 
             if (verbose) {
               print(

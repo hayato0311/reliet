@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/messages/c_f_header_message.dart';
+import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/messages/c_f_headers_message.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/filter_type.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/hash256.dart';
 import 'package:reliet/libs/bitcoin_lib/lib/src/protocol/types/var_hashes.dart';
@@ -11,6 +11,7 @@ void main() {
     test('with valid args', () {
       const filterType = FilterType.basic;
       final stopHash = Hash256.create(const [0, 1, 1, 1, 1]);
+      final prevHeader = Hash256.create(const [0, 1, 1, 1, 1]);
       final filterHashes = VarHashes([
         Hash256.create(const [1, 1, 1, 1, 1]),
         Hash256.create(const [1, 1, 1, 1, 2])
@@ -19,6 +20,7 @@ void main() {
       final cFHeadersMessage = CFHeadersMessage(
         filterType: filterType,
         stopHash: stopHash,
+        prevHeader: prevHeader,
         filterHashes: filterHashes,
       );
 
@@ -27,6 +29,7 @@ void main() {
         Uint8List.fromList([
           ...filterType.serialize(),
           ...stopHash.serialize(),
+          ...prevHeader.serialize(),
           ...filterHashes.serialize(),
         ]),
       );
@@ -36,6 +39,7 @@ void main() {
     test('when valid', () {
       const filterType = FilterType.basic;
       final stopHash = Hash256.create(const [0, 1, 1, 1, 1]);
+      final prevHeader = Hash256.create(const [0, 1, 1, 1, 1]);
       final filterHashes = VarHashes([
         Hash256.create(const [1, 1, 1, 1, 1]),
         Hash256.create(const [1, 1, 1, 1, 2])
@@ -44,6 +48,7 @@ void main() {
       final serializedCFHeadersMessage = CFHeadersMessage(
         filterType: filterType,
         stopHash: stopHash,
+        prevHeader: prevHeader,
         filterHashes: filterHashes,
       ).serialize();
 

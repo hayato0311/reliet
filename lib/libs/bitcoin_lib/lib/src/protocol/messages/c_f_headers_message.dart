@@ -70,6 +70,7 @@ class CFHeadersMessage {
     return Uint8List.fromList([
       ...filterType.serialize(),
       ...stopHash.serialize(),
+      ...prevHeader.serialize(),
       ...filterHashes.serialize(),
     ]);
   }
@@ -77,6 +78,7 @@ class CFHeadersMessage {
   Map<String, dynamic> toJson() => {
         'filterType': filterType.toJson(),
         'stopHash': stopHash.toJson(),
+        'prevHeader': prevHeader.toJson(),
         'filterHashes': filterHashes.toJson(),
       };
 }
