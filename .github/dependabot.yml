@@ -1,0 +1,14 @@
+version: 2
+
+updates:
+  - package-ecosystem: pub
+    directory: "/"
+    insecure-external-code-execution: allow
+    schedule:
+      interval: monthly
+      time: "10:00"
+      timezone: Asia/Tokyo
+    open-pull-requests-limit: 16
+    target-branch: main
+    labels:
+      - "dependencies"
