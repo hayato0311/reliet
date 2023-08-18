@@ -1,9 +1,17 @@
 import 'dart:typed_data';
 
 extension BigIntExtensions on BigInt {
-  String toHex() {
-    final hex = toRadixString(16);
-    return '0x${hex.padLeft(hex.length + (hex.length % 2), '0')}';
+  String toHex({bool prefix = true}) {
+    final hexWithoutPadding = toRadixString(16);
+    final hexWithoutPrefix = hexWithoutPadding.padLeft(
+      hexWithoutPadding.length + (hexWithoutPadding.length % 2),
+      '0',
+    );
+
+    if (prefix) {
+      return '0x$hexWithoutPrefix';
+    }
+    return hexWithoutPrefix;
   }
 
   Uint8List toUint8List() {
