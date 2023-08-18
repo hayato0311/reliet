@@ -1,15 +1,14 @@
 import 'dart:typed_data';
 
-import 'package:crypto/crypto.dart';
 import 'package:meta/meta.dart';
 
 import '../../extensions/string_extensions.dart';
+import '../../utils/hash256.dart';
 
 @immutable
 class Hash256 {
   factory Hash256.create(List<int> bytes) {
-    final digest = sha256.convert(bytes);
-    return Hash256._internal(sha256.convert(digest.bytes).bytes);
+    return Hash256._internal(hash256(bytes).bytes);
   }
 
   factory Hash256.fromHexString(String hexString) {
