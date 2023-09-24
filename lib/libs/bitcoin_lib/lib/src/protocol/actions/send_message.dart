@@ -30,8 +30,9 @@ Future<void> _sendMessage(
   Socket socket,
   Uint8List header,
   Uint8List payload,
-  Command command,
-) async {
+  Command command, {
+  int milliseconds = 500,
+}) async {
   late final Uint8List message;
   if (payload.isEmpty) {
     message = header;
@@ -40,7 +41,7 @@ Future<void> _sendMessage(
   }
   socket.add(message);
   print('Send: ${command.string}');
-  await Future<void>.delayed(const Duration(milliseconds: 500));
+  await Future<void>.delayed(Duration(milliseconds: milliseconds));
 }
 
 Future<void> sendVersionMessage(
@@ -221,7 +222,13 @@ Future<void> sendGetDataMessage(
     );
   }
 
-  await _sendMessage(socket, header.serialize(), serializedPayload, command);
+  await _sendMessage(
+    socket,
+    header.serialize(),
+    serializedPayload,
+    command,
+    milliseconds: 2000,
+  );
 }
 
 Future<void> sendGetCFiltersMessage(
@@ -253,13 +260,19 @@ Future<void> sendGetCFiltersMessage(
       jsonEncode({
         'getCFilters': {
           'messageHeader': header.toJson(),
-          'getDataMessage': payload.toJson()
+          'getCFiltersMessage': payload.toJson()
         },
       }),
     );
   }
 
-  await _sendMessage(socket, header.serialize(), serializedPayload, command);
+  await _sendMessage(
+    socket,
+    header.serialize(),
+    serializedPayload,
+    command,
+    milliseconds: 2000,
+  );
 }
 
 Future<void> sendGetCFHeadersMessage(
@@ -291,7 +304,7 @@ Future<void> sendGetCFHeadersMessage(
       jsonEncode({
         'getCFHeaders': {
           'messageHeader': header.toJson(),
-          'getDataMessage': payload.toJson()
+          'getCFHeadersMessage': payload.toJson()
         },
       }),
     );
@@ -325,9 +338,9 @@ Future<void> sendGetCFCheckptMessage(
   if (verbose) {
     print(
       jsonEncode({
-        'getCFHeaders': {
+        'getCFCheckpt': {
           'messageHeader': header.toJson(),
-          'getDataMessage': payload.toJson()
+          'getCFCheckptMessage': payload.toJson()
         },
       }),
     );
