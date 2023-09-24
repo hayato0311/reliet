@@ -1,3 +1,5 @@
+import 'dart:math';
+
 class BitStream {
   BitStream(this.value);
 
@@ -36,20 +38,29 @@ class BitStream {
     return topBits;
   }
 
-  void write(BigInt bitsToWrite, int numBits) {
-    if (bitsToWrite.bitLength > numBits) {
+  void write(BigInt bitsToWrite, [int numBits = 0]) {
+    var numBitsToWrite = numBits;
+    if (numBits == 0) {
+      numBitsToWrite = max(bitsToWrite.bitLength, 1);
+    }
+    if (bitsToWrite.bitLength > numBitsToWrite) {
       throw Exception('Number of bits in bitsToWrite exceeds numBits');
     }
 
     // Shift the current value to make room for the new bits
-    value <<= numBits;
+    value <<= numBitsToWrite;
 
     // OR the new bits onto the value
     value |= bitsToWrite;
 
     // Update the numTopZeroBits
     if (bitsToWrite == BigInt.zero && value == BigInt.zero) {
-      numTopZeroBits += numBits;
+      numTopZeroBits += numBitsToWrite;
     }
+  }
+
+  void writeTailBits(BigInt bits, int numTailBits) {
+    final tailBits = bits & ((BigInt.one << numTailBits) - BigInt.one);
+    write(tailBits, numTailBits);
   }
 }

@@ -39,6 +39,11 @@ void main() {
         BigInt.parse('11', radix: 2),
       );
 
+      expect(
+        bitStream.value.bitLength,
+        0,
+      );
+
       bitStream.write(BigInt.parse('1001', radix: 2), 4);
 
       expect(
@@ -49,6 +54,24 @@ void main() {
       expect(
         bitStream.read(2),
         BigInt.parse('01', radix: 2),
+      );
+
+      expect(
+        bitStream.value.bitLength,
+        0,
+      );
+
+      bitStream.write(BigInt.parse('10', radix: 2));
+      bitStream.write(BigInt.parse('0', radix: 2));
+
+      expect(
+        bitStream.read(3),
+        BigInt.parse('100', radix: 2),
+      );
+
+      expect(
+        bitStream.value.bitLength,
+        0,
       );
     });
   });
