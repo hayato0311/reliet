@@ -9,13 +9,6 @@ final mask = BigInt.parse('0xFFFFFFFFFFFFFFFF');
 
 // See https://www.aumasson.jp/siphash/siphash.pdf for more details
 class SipHash {
-  // Meaning of arguments in BIP158:
-  // key: The first 16 bytes of the block hash
-  // data: data is constructed by concatenating the following items, in order:
-  //  1. The previous output script for each input,
-  //    except for the coinbase transaction.
-  //  2. The scriptPubKey of each output,
-  //     excluding all OP_RETURN output scripts.
   factory SipHash({required Uint8List key, required Uint8List data}) {
     if (key.length != 16) {
       throw ArgumentError('Key must be 16 bytes');
