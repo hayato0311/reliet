@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:riverpod/riverpod.dart';
 
 import 'chain_params.dart';
+import 'extensions/uint8_list_extensions.dart';
 import 'protocol/actions/send_message.dart';
 import 'protocol/messages/block_message.dart';
 import 'protocol/messages/c_f_checkpt_message.dart';
@@ -18,11 +19,14 @@ import 'protocol/messages/tx_message.dart';
 import 'protocol/messages/version_message.dart';
 import 'protocol/types/bases/uint32le.dart';
 import 'protocol/types/command.dart';
+import 'protocol/types/gcs_filter.dart';
 import 'protocol/types/hash256.dart';
 import 'protocol/types/inventory.dart';
 import 'protocol/types/inventory_type.dart';
 import 'protocol/types/message_header.dart';
+import 'protocol/types/op_code.dart';
 import 'protocol/types/port.dart';
+import 'protocol/types/script_pubkey.dart';
 import 'providers/inv_provider.dart';
 import 'providers/ping_provider.dart';
 
@@ -42,6 +46,7 @@ class SpvClient {
 
   BlockMessage? _blockMessage;
   TxMessage? _txMessage;
+  CFiltersMessage? _cfiltersMessage;
 
   Uint8List _buffer = Uint8List(0);
 
@@ -70,6 +75,8 @@ class SpvClient {
       verbose: true,
     );
 
+    print(_blockMessage!.toJson());
+
     return _blockMessage;
   }
 
@@ -90,6 +97,78 @@ class SpvClient {
     return _txMessage;
   }
 
+  Future<int> computeNumItems(Hash256 blockHash) async {
+    await fetchBlock(blockHash);
+
+    if (_blockMessage == null) {
+      throw Exception('_blockMessage is null');
+    }
+
+    var numItems = 0;
+
+    for (var txIndex = 0; txIndex < _blockMessage!.txs.length; txIndex++) {
+      final tx = _blockMessage!.txs[txIndex];
+
+      // Exclude the coinbase transaction.
+      if (txIndex != 0) {
+        numItems += tx.txIns.length;
+      }
+
+      for (final txOut in tx.txOuts) {
+        if (txOut.scriptPubkey.commands[0] != OpCode.opReturn) {
+          numItems++;
+        }
+      }
+    }
+
+    return numItems;
+  }
+
+  Future<void> syncAddressTxs(
+    String address,
+    int blockHeight,
+    Hash256 blockHash,
+  ) async {
+    if (!handshakeCompleted) {
+      await _connectToNode();
+    }
+    // 1. compute numItems from blockHash
+    final numItems = await computeNumItems(blockHash);
+
+    print(numItems);
+
+    // 2. generate scriptPubKey from address
+    final scriptPubKey = ScriptPubKey.fromAddress(address);
+
+    // 3. fetch cfilter from blockHash
+    await fetchCFilters(Uint32le(blockHeight), blockHash);
+    if (_cfiltersMessage == null) {
+      print('_cfiltersMessage is null');
+      return;
+    }
+
+    print(_cfiltersMessage!.toJson());
+    print(
+      '_cfiltersMessage.blockHash: ,${Uint8List.fromList(_cfiltersMessage!.blockHash.bytes).toHex()}',
+    );
+    // print(scriptPubKey.toJson());
+
+    // 4. compute gcsMatch
+    // target is probably PubkeyHash or Previous Output Script
+    final target = scriptPubKey.getPubkeyHash();
+    final gcsFilter = GcsFilter();
+    final result = gcsFilter.gcsMatch(
+      Uint8List.fromList(blockHash.bytes.sublist(0, 16)),
+      _cfiltersMessage!.filterBytes,
+      target,
+      numItems,
+    );
+
+    print(
+      'Does the block with hash $blockHash contain a tx for the address $address? : $result',
+    );
+  }
+
   Future<void> sendPing() async {
     if (!handshakeCompleted) {
       await _connectToNode();
@@ -98,10 +177,11 @@ class SpvClient {
     await sendPingMessage(_socket);
   }
 
-  Future<void> searchTxHistory(Uint32le startHeight, Hash256 stopHash) async {
+  Future<void> fetchCFilters(Uint32le startHeight, Hash256 stopHash) async {
     if (!handshakeCompleted) {
       await _connectToNode();
     }
+    _cfiltersMessage = null;
     await sendGetCFiltersMessage(_socket, startHeight, stopHash);
   }
 
@@ -315,14 +395,14 @@ class SpvClient {
             break;
 
           case Command.cfilter:
-            final cfilterMessage = CFiltersMessage.deserialize(messageBytes);
+            _cfiltersMessage = CFiltersMessage.deserialize(messageBytes);
 
             if (verbose) {
               print(
                 jsonEncode({
                   messageHeader.command.string: {
                     'messageHeader': messageHeader.toJson(),
-                    'message': cfilterMessage.toJson()
+                    'message': _cfiltersMessage?.toJson()
                   },
                 }),
               );

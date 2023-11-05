@@ -47,4 +47,9 @@ Expected: ${bytesLength()}, Actual: ${bytes.length}''');
 
     return Uint8List.fromList(byteList);
   }
+
+  bool isCoinBase() {
+    return hash.bytes.every((element) => element == 0) &&
+        index.value == 0xffffffff;
+  }
 }
