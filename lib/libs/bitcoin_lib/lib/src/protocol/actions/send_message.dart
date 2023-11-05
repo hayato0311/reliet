@@ -2,12 +2,18 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import '../messages/get_c_f_checkpt_message.dart';
+import '../messages/get_c_f_header_message.dart';
+import '../messages/get_c_filters_message.dart';
 import '../messages/get_data_message.dart';
 import '../messages/ping_message.dart';
 import '../messages/pong_message.dart';
 import '../messages/version_message.dart';
 import '../types/bases/int32le.dart';
+import '../types/bases/uint32le.dart';
 import '../types/command.dart';
+import '../types/filter_type.dart';
+import '../types/hash256.dart';
 import '../types/inventory.dart';
 import '../types/ip_address.dart';
 import '../types/magic.dart';
@@ -24,8 +30,9 @@ Future<void> _sendMessage(
   Socket socket,
   Uint8List header,
   Uint8List payload,
-  Command command,
-) async {
+  Command command, {
+  int milliseconds = 500,
+}) async {
   late final Uint8List message;
   if (payload.isEmpty) {
     message = header;
@@ -34,7 +41,7 @@ Future<void> _sendMessage(
   }
   socket.add(message);
   print('Send: ${command.string}');
-  await Future<void>.delayed(const Duration(milliseconds: 500));
+  await Future<void>.delayed(Duration(milliseconds: milliseconds));
 }
 
 Future<void> sendVersionMessage(
@@ -210,6 +217,130 @@ Future<void> sendGetDataMessage(
         'getData': {
           'messageHeader': header.toJson(),
           'getDataMessage': payload.toJson()
+        },
+      }),
+    );
+  }
+
+  await _sendMessage(
+    socket,
+    header.serialize(),
+    serializedPayload,
+    command,
+    milliseconds: 2000,
+  );
+}
+
+Future<void> sendGetCFiltersMessage(
+  Socket socket,
+  Uint32le startHeight,
+  Hash256 stopHash, {
+  bool testnet = false,
+  bool verbose = false,
+  FilterType filterType = FilterType.basic,
+}) async {
+  const command = Command.getcfilters;
+  final magic = testnet ? Magic.testnet : Magic.mainnet;
+  final payload = GetCFiltersMessage(
+    filterType: filterType,
+    startHeight: startHeight,
+    stopHash: stopHash,
+  );
+
+  final serializedPayload = payload.serialize();
+
+  final header = MessageHeader.create(
+    magic: magic,
+    command: command,
+    payload: serializedPayload,
+  );
+
+  if (verbose) {
+    print(
+      jsonEncode({
+        'getCFilters': {
+          'messageHeader': header.toJson(),
+          'getCFiltersMessage': payload.toJson()
+        },
+      }),
+    );
+  }
+
+  await _sendMessage(
+    socket,
+    header.serialize(),
+    serializedPayload,
+    command,
+    milliseconds: 2000,
+  );
+}
+
+Future<void> sendGetCFHeadersMessage(
+  Socket socket,
+  Uint32le startHeight,
+  Hash256 stopHash, {
+  bool testnet = false,
+  bool verbose = false,
+  FilterType filterType = FilterType.basic,
+}) async {
+  const command = Command.getcfheaders;
+  final magic = testnet ? Magic.testnet : Magic.mainnet;
+  final payload = GetCFHeadersMessage(
+    filterType: filterType,
+    startHeight: startHeight,
+    stopHash: stopHash,
+  );
+
+  final serializedPayload = payload.serialize();
+
+  final header = MessageHeader.create(
+    magic: magic,
+    command: command,
+    payload: serializedPayload,
+  );
+
+  if (verbose) {
+    print(
+      jsonEncode({
+        'getCFHeaders': {
+          'messageHeader': header.toJson(),
+          'getCFHeadersMessage': payload.toJson()
+        },
+      }),
+    );
+  }
+
+  await _sendMessage(socket, header.serialize(), serializedPayload, command);
+}
+
+Future<void> sendGetCFCheckptMessage(
+  Socket socket,
+  Hash256 stopHash, {
+  bool testnet = false,
+  bool verbose = false,
+  FilterType filterType = FilterType.basic,
+}) async {
+  const command = Command.getcfcheckpt;
+  final magic = testnet ? Magic.testnet : Magic.mainnet;
+  final payload = GetCFCheckptMessage(
+    filterType: filterType,
+    stopHash: stopHash,
+  );
+
+  final serializedPayload = payload.serialize();
+
+  final header = MessageHeader.create(
+    magic: magic,
+    command: command,
+    payload: serializedPayload,
+  );
+
+  if (verbose) {
+    print(
+      jsonEncode({
+        'getCFCheckpt': {
+          'messageHeader': header.toJson(),
+          'getCFCheckptMessage': payload.toJson()
         },
       }),
     );
