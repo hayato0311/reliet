@@ -156,8 +156,7 @@ class SpvClient {
     // 4. compute gcsMatch
     // target is probably PubkeyHash or Previous Output Script
     final target = scriptPubKey.getPubkeyHash();
-    final gcsFilter = GcsFilter();
-    final result = gcsFilter.gcsMatch(
+    final result = gcsMatchFromBytes(
       Uint8List.fromList(blockHash.bytes.sublist(0, 16)),
       _cfiltersMessage!.filterBytes,
       target,

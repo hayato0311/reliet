@@ -286,7 +286,6 @@ void main() {
   group('create filter', () {
     test('with on chain data should produce valid filter', () {
       // use Bitcoin Block 700,000
-      final gcsFilter = GcsFilter();
       final key = Uint8List.fromList(
         cFiltersMessageOfBlock700000.blockHash.bytes.sublist(0, 16),
       );
@@ -307,9 +306,9 @@ void main() {
       }
 
       // Create filter test
-      gcsFilter.createFilter(key, items);
-      expect(gcsFilter.bitStream.value, isA<BigInt>());
-      expect(gcsFilter.bitStream.value > BigInt.zero, isTrue);
+      final filterResult = createGcsFilter(key, items);
+      expect(filterResult.value, isA<BigInt>());
+      expect(filterResult.value > BigInt.zero, isTrue);
     });
 
     test('with on chain data should match expected filter bytes', () {
@@ -329,14 +328,12 @@ void main() {
         }
       }
 
-      final gcsFilter = GcsFilter();
-      gcsFilter.createFilter(key, items);
+      final filterResult = createGcsFilter(key, items);
 
       // Expected filter bytes
       final expectedFilterBytes =
           cFiltersMessageOfBlock700000.filterBytes.bytes;
-      final actualFilterBytes =
-          VarBytes.fromBigInt(gcsFilter.bitStream.value).bytes;
+      final actualFilterBytes = VarBytes.fromBigInt(filterResult.value).bytes;
 
       // Verify filter is generated
       expect(actualFilterBytes.isNotEmpty, isTrue);
