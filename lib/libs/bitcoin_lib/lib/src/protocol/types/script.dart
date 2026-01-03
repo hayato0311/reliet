@@ -147,16 +147,28 @@ class Script {
         'type': type.toString(),
       };
 
+  Uint8List getPubkeyHash() {
+    if (type != ScriptType.p2pkh) {
+      throw ArgumentError('This is not P2PKH');
+    }
+    final pubkeyHash = commands[3];
+    if (pubkeyHash is List<int>) {
+      return Uint8List.fromList(pubkeyHash);
+    } else {
+      throw ArgumentError('The given pubkeyHash is unexpected type');
+    }
+  }
+
   Uint8List serialize() {
     final byteList = <int>[
       ...length.serialize(),
-      ..._serializeCommands(commands),
+      ...serializeCommands(commands),
     ];
 
     return Uint8List.fromList(byteList);
   }
 
-  List<int> _serializeCommands(List<dynamic> commands) {
+  static Uint8List serializeCommands(List<dynamic> commands) {
     final byteList = <int>[];
 
     for (final command in commands) {
@@ -181,6 +193,6 @@ class Script {
         throw ArgumentError('The given command is unexpected type');
       }
     }
-    return byteList;
+    return Uint8List.fromList(byteList);
   }
 }

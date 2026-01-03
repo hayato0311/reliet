@@ -1,7 +1,10 @@
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
+import 'package:fast_base58/fast_base58.dart';
 import 'package:meta/meta.dart';
 
+import '../../utils/hash256.dart';
 import 'op_code.dart';
 import 'script.dart';
 import 'script_type.dart';
@@ -44,6 +47,50 @@ class ScriptPubKey extends Script {
     commands.add(OpCode.opEqualVerify);
     commands.add(OpCode.opCheckSig);
     return ScriptPubKey._internal(VarInt(25), commands, ScriptType.p2pkh);
+  }
+
+  factory ScriptPubKey.fromAddress(String address) {
+    switch (address[0]) {
+      // mainnet
+      case '1':
+        return ScriptPubKey.fromP2PKHAddress(address);
+      case '3':
+        throw UnimplementedError('P2SH is not supported yet');
+      case 'xpub':
+        throw UnimplementedError('BIP32 is not supported yet');
+      case 'bc1':
+        throw UnimplementedError('Segwit is not supported yet');
+      // testnet
+      case 'm':
+      case 'n':
+        return ScriptPubKey.fromP2PKHAddress(address);
+      case '2':
+        throw UnimplementedError('P2SH is not supported yet');
+      case 'tpub':
+        throw UnimplementedError('BIP32 is not supported yet');
+      case 'tb1':
+        throw UnimplementedError('Segwit is not supported yet');
+      default:
+        throw ArgumentError('Invalid address');
+    }
+  }
+
+  factory ScriptPubKey.fromP2PKHAddress(String address) {
+    final decodedRaw = Base58Decode(address);
+    if (decodedRaw.length != 25) {
+      throw ArgumentError('Invalid address');
+    }
+    if (decodedRaw[0] != 0 && decodedRaw[0] != 111) {
+      throw ArgumentError('Invalid address');
+    }
+    final pubKeyHash = decodedRaw.sublist(1, 21);
+    final checksum = decodedRaw.sublist(21);
+    final calculatedChecksum = hash256(decodedRaw.sublist(0, 21)).bytes;
+
+    if (!isEqualList(checksum, calculatedChecksum.sublist(0, 4))) {
+      throw ArgumentError('Invalid address');
+    }
+    return ScriptPubKey.forP2PKH(pubKeyHash);
   }
 
   static ScriptType checkType(List<dynamic> commands) {
@@ -107,3 +154,6 @@ class ScriptPubKey extends Script {
 bool isOpPushBytes(OpCode command) {
   return command.value >= 1 && command.value <= 75;
 }
+
+bool Function(List<int>, List<int>) isEqualList =
+    const ListEquality<int>().equals;

@@ -77,4 +77,6 @@ class TxIn {
 
     return Uint8List.fromList(byteList);
   }
+
+  bool isCoinBase() => previousOutput.isCoinBase();
 }

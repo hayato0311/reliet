@@ -131,6 +131,39 @@ void main() {
     });
   });
 
+  group('create from address', () {
+    group('when the argument is valid P2PKH address', () {
+      group('for mainnet', () {
+        test('when the address starts with "1"', () {
+          const address = '1J9uwBYepTm5737RtzkSEePTevGgDGLP5S';
+          final scriptPubKey = ScriptPubKey.fromAddress(address);
+          expect(scriptPubKey, isA<ScriptPubKey>());
+          expect(scriptPubKey.type, ScriptType.p2pkh);
+        });
+      });
+      group('for testnet', () {
+        test('when the address starts with "m"', () {
+          const address = 'mkqUcBkGnsmM2uikVp7NmS66ztJx7fy42L';
+          final scriptPubKey = ScriptPubKey.fromAddress(address);
+          expect(scriptPubKey, isA<ScriptPubKey>());
+          expect(scriptPubKey.type, ScriptType.p2pkh);
+        });
+        test('when the address starts with "n"', () {
+          const address = 'n35iYtYsrVifCh9GWEu2CZJn3XVtEyL4EW';
+          final scriptPubKey = ScriptPubKey.fromAddress(address);
+          expect(scriptPubKey, isA<ScriptPubKey>());
+          expect(scriptPubKey.type, ScriptType.p2pkh);
+        });
+      });
+    });
+    group('when the argument is invalid address', () {
+      test('throw argument error', () {
+        const address = 'a35iYtYsrVifCh9GWEu2CZJn3XVtEyL4EW';
+        expect(() => ScriptPubKey.fromAddress(address), throwsArgumentError);
+      });
+    });
+  });
+
   group('deserialize from bytes to ScriptPubKey instance', () {
     group('with p2pk bytes', () {
       group('with compressed SEC pubKey', () {

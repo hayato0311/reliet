@@ -33,7 +33,13 @@ enum Command {
   sendcmpct('sendcmpct'),
   cmpctblock('cmpctblock'),
   getblocktxn('getblocktxn'),
-  blocktxn('blocktxn');
+  blocktxn('blocktxn'),
+  getcfilters('getcfilters'),
+  cfilter('cfilter'),
+  getcfheaders('getcfheaders'),
+  cfheaders('cfheaders'),
+  getcfcheckpt('getcfcheckpt'),
+  cfcheckpt('cfcheckpt');
 
   const Command(this.string);
 
@@ -130,6 +136,24 @@ enum Command {
 
       case 'blocktxn':
         return Command.blocktxn;
+
+      case 'getcfilters':
+        return Command.getcfilters;
+
+      case 'cfilter':
+        return Command.cfilter;
+
+      case 'getcfheaders':
+        return Command.getcfheaders;
+
+      case 'cfheaders':
+        return Command.cfheaders;
+
+      case 'getcfcheckpt':
+        return Command.getcfcheckpt;
+
+      case 'cfcheckpt':
+        return Command.cfcheckpt;
     }
 
     throw ArgumentError('Command "$commandValue" is undefined');

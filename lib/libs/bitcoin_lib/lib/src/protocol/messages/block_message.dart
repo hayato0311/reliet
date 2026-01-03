@@ -144,6 +144,7 @@ class BlockMessage {
       ...nonce.serialize(),
     ];
     final hash256 = Hash256.create(Uint8List.fromList(byteList));
-    return Uint8List.fromList(hash256.bytes.reversed.toList()).toHex();
+    return Uint8List.fromList(hash256.bytes.reversed.toList())
+        .toHex(prefix: false);
   }
 }

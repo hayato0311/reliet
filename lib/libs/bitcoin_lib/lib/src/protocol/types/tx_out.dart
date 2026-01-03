@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 
 import 'bases/int64le.dart';
 import 'script_pubkey.dart';
+import 'script_type.dart';
 
 @immutable
 class TxOut {
@@ -49,4 +50,6 @@ class TxOut {
 
     return Uint8List.fromList(byteList);
   }
+
+  bool empty() => scriptPubkey.type == ScriptType.empty;
 }
