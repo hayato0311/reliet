@@ -47,16 +47,16 @@ class BitStream {
       throw Exception('Number of bits in bitsToWrite exceeds numBits');
     }
 
+    // Add leading zero bits when current value is zero
+    if (value == BigInt.zero) {
+      numTopZeroBits += numBitsToWrite - bitsToWrite.bitLength;
+    }
+
     // Shift the current value to make room for the new bits
     value <<= numBitsToWrite;
 
     // OR the new bits onto the value
     value |= bitsToWrite;
-
-    // Update the numTopZeroBits
-    if (bitsToWrite == BigInt.zero && value == BigInt.zero) {
-      numTopZeroBits += numBitsToWrite;
-    }
   }
 
   void writeTailBits(BigInt bits, int numTailBits) {

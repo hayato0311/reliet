@@ -1,0 +1,26 @@
+# Reliet Project Rules
+
+## Language
+
+- All commit messages must be written in English
+- All code comments must be written in English
+- Variable names, function names, and class names should be in English
+
+## Development Process
+
+- Follow Test-Driven Development (TDD)
+  1. Write a failing test first
+  2. Run the test to confirm it fails
+  3. Implement the minimum code to make the test pass
+  4. Refactor if needed
+  5. Repeat
+
+- Work incrementally, step by step
+  - Start with simple cases
+  - Gradually add complexity
+  - Each step should be small and verifiable
+
+- When implementing complex features:
+  1. Break down into smaller testable units
+  2. Write tests for edge cases
+  3. Ensure each component works before integrating

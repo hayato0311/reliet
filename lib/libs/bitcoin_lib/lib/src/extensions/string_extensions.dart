@@ -28,8 +28,14 @@ extension StringExtensions on String {
     final bytes = <int>[];
     var string = this;
 
-    if ('0x' == substring(0, 2)) {
+    if (string.length >= 2 && '0x' == substring(0, 2)) {
       string = replaceFirst('0x', '');
+    }
+    // BigInt.toRadixString(16) returns minimal string, which may have odd length
+    // e.g., BigInt.from(256) → "100" (3 chars)
+    // Pad with leading 0 to normalize to even length for 2-char processing
+    if (string.length % 2 != 0) {
+      string = '0$string';
     }
     for (var i = 0; i < string.length; i += 2) {
       final byte = int.parse(string.substring(i, i + 2), radix: 16);

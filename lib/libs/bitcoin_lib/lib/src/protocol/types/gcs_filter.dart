@@ -48,27 +48,14 @@ class GcsFilter {
     }
     bitStream = BitStream(BigInt.parse(compressedSet.bytes.toHex()));
 
-    print('compressedSet.bytes.length: ${compressedSet.bytes.length}');
-    print('compressedSet.length.value: ${compressedSet.length.value}');
-
-    // final numItems = compressedSet.length.value;
-
     final f = BigInt.from(numItems) * BigInt.from(m);
     final targetHashValue = _hashToRange(target, f, key);
 
     var lastValue = BigInt.zero;
 
-    print('numItems: $numItems');
-    print('bitStream bitLength: ${bitStream.value.bitLength}');
-
     for (var i = 0; i < numItems; i++) {
       final delta = _golombRiceDecode();
       final setItem = lastValue + delta;
-      print('---');
-      print('i: $i');
-      print('delta: ${delta.toHex()}');
-      print('setItem: ${setItem.toHex()}');
-      print('targetHashValue: ${targetHashValue.toHex()}');
 
       if (setItem == targetHashValue) {
         return true;
@@ -77,15 +64,11 @@ class GcsFilter {
       // Since the values in the set are sorted, terminate the search once
       // the decoded value exceeds the target.
       if (setItem > targetHashValue) {
-        print(setItem);
-        print(targetHashValue);
         break;
       }
 
       lastValue = setItem;
     }
-    print('---');
-    print('bitStream.value.bitLength: ${bitStream.value.bitLength}');
     return false;
   }
 
@@ -114,16 +97,8 @@ class GcsFilter {
   }
 
   BigInt _hashToRange(Uint8List item, BigInt f, Uint8List key) {
-    print('item: $item');
-    print('f: ${f.toHex()}');
-    print('key: $key');
-
     final hash = SipHash(key: key, data: item).bytes;
-    print('hash: $hash');
-    print('hash.toHex(): ${hash.toHex()}');
     final multipliedHash = BigInt.parse(hash.toHex()) * (f & mask);
-    print('multipliedHash: ${multipliedHash.toHex()}');
-    print('(multipliedHash >> 64): ${(multipliedHash >> 64).toHex()}');
     return multipliedHash >> 64;
   }
 
@@ -148,7 +123,14 @@ class GcsFilter {
   }
 }
 
-BigInt createGcsFilter(Uint8List key, List<Uint8List> items) {
+/// Return value of createGcsFilter
+class GcsFilterResult {
+  GcsFilterResult(this.value, this.numTopZeroBits);
+  final BigInt value;
+  final int numTopZeroBits;
+}
+
+GcsFilterResult createGcsFilter(Uint8List key, List<Uint8List> items) {
   final hashedItems = _buildHashedItems(key, items);
   hashedItems.sort();
 
@@ -159,41 +141,29 @@ BigInt createGcsFilter(Uint8List key, List<Uint8List> items) {
     _golombRiceEncode(bitStream, delta);
     lastValue = value;
   }
-  return bitStream.value;
+  return GcsFilterResult(bitStream.value, bitStream.numTopZeroBits);
 }
 
 bool gcsMatch(
   Uint8List key,
-  VarBytes compressedSet,
+  GcsFilterResult filterResult,
   Uint8List target,
   int numItems,
 ) {
   if (key.length != 16) {
     throw ArgumentError('Key must be 16 bytes');
   }
-  final bitStream = BitStream(BigInt.parse(compressedSet.bytes.toHex()));
-
-  print('compressedSet.bytes.length: ${compressedSet.bytes.length}');
-  print('compressedSet.length.value: ${compressedSet.length.value}');
-
-  // final numItems = compressedSet.length.value;
+  final bitStream = BitStream(filterResult.value);
+  bitStream.numTopZeroBits = filterResult.numTopZeroBits;
 
   final f = BigInt.from(numItems) * BigInt.from(m);
   final targetHashValue = _hashToRange(target, f, key);
 
   var lastValue = BigInt.zero;
 
-  print('numItems: $numItems');
-  print('bitStream bitLength: ${bitStream.value.bitLength}');
-
   for (var i = 0; i < numItems; i++) {
     final delta = _golombRiceDecode(bitStream);
     final setItem = lastValue + delta;
-    print('---');
-    print('i: $i');
-    print('delta: ${delta.toHex()}');
-    print('setItem: ${setItem.toHex()}');
-    print('targetHashValue: ${targetHashValue.toHex()}');
 
     if (setItem == targetHashValue) {
       return true;
@@ -202,15 +172,11 @@ bool gcsMatch(
     // Since the values in the set are sorted, terminate the search once
     // the decoded value exceeds the target.
     if (setItem > targetHashValue) {
-      print(setItem);
-      print(targetHashValue);
       break;
     }
 
     lastValue = setItem;
   }
-  print('---');
-  print('bitStream.value.bitLength: ${bitStream.value.bitLength}');
   return false;
 }
 
@@ -227,28 +193,18 @@ void _golombRiceEncode(BitStream bitStream, BigInt x) {
 
 BigInt _golombRiceDecode(BitStream bitStream) {
   var q = BigInt.zero;
-  while (bitStream.read(1).toInt() == 1) {
+  while (bitStream.read(1) == BigInt.one) {
     q += BigInt.one;
   }
 
   final r = bitStream.read(p);
 
-  final x = (((q << p) & mask) + BigInt.parse(r.toHex())) & mask;
-
-  return x;
+  return ((q << p) | r) & mask;
 }
 
 BigInt _hashToRange(Uint8List item, BigInt f, Uint8List key) {
-  print('item: $item');
-  print('f: ${f.toHex()}');
-  print('key: $key');
-
   final hash = SipHash(key: key, data: item).bytes;
-  print('hash: $hash');
-  print('hash.toHex(): ${hash.toHex()}');
   final multipliedHash = BigInt.parse(hash.toHex()) * (f & mask);
-  print('multipliedHash: ${multipliedHash.toHex()}');
-  print('(multipliedHash >> 64): ${(multipliedHash >> 64).toHex()}');
   return multipliedHash >> 64;
 }
 
