@@ -398,8 +398,11 @@ void main() {
 
       for (final item in nonExistentItems) {
         final result = gcsMatch(key, filterResult, item, items.length);
-        expect(result, isFalse,
-            reason: 'Item ${item.toList()} should not match');
+        expect(
+          result,
+          isFalse,
+          reason: 'Item ${item.toList()} should not match',
+        );
       }
     });
 

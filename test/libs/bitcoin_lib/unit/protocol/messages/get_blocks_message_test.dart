@@ -38,7 +38,6 @@ void main() {
   group('deserialize bytes to GetBlocksMessage instance', () {
     test('with valid bytes', () {
       const version = ProtocolVersion.defaultVersion;
-      final locatorHashCount = VarInt(1);
       final locatorHashes = [
         Hash256.create(const [0, 1, 1, 1, 1])
       ];
